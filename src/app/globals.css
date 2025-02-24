@@ -7,7 +7,7 @@ body {
 }
 
 @layer base {
-  :root {
+  /* :root {
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
@@ -33,6 +33,53 @@ body {
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
+  } */
+  :root {
+    --background: 233 47% 14%;
+    --foreground: 0 0% 100%;
+
+    --card: 233 47% 14%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 233 47% 14%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 0 0% 100%;
+    --primary-foreground: 233 47% 14%;
+
+    --secondary: 233 47% 24%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 233 47% 24%;
+    --muted-foreground: 215.4 16.3% 75%;
+
+    --accent: 233 47% 24%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 233 47% 24%;
+    --input: 233 47% 24%;
+    --ring: 0 0% 100%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
   .dark {
     --background: 0 0% 3.9%;
@@ -59,12 +106,106 @@ body {
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
 @layer base {
   * {
     @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  h1,
+  .h1 {
+    @apply text-heading-1 font-bold tracking-tight mb-4;
+  }
+
+  h2,
+  .h2 {
+    @apply text-heading-2 font-semibold tracking-tight mb-4;
+  }
+
+  h3,
+  .h3 {
+    @apply text-heading-3 font-semibold mb-3;
+  }
+
+  h4,
+  .h4 {
+    @apply text-heading-4 font-semibold mb-3;
+  }
+
+  p,
+  .p {
+    @apply text-body-base mb-4;
+  }
+
+  .hero-text {
+    @apply text-heading-hero font-bold tracking-tighter mb-6;
+  }
+
+  .lead-text {
+    @apply text-body-large text-muted-foreground max-w-[750px];
+  }
+
+  .logo {
+    @apply text-heading-4 font-bold tracking-tight;
+  }
+
+  .button-text {
+    @apply text-body-base font-medium;
+  }
+}
+
+@layer utilities {
+  .animate-fade-up {
+    animation: fade-up 0.5s ease-out forwards;
+    opacity: 0;
+  }
+
+  .animate-fade-up:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  .animate-fade-up:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;

@@ -8,6 +8,13 @@ export default {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+  	container: {
+  		center: true,
+  		padding: '2rem',
+  		screens: {
+  			'2xl': '1400px'
+  		}
+  	},
   	extend: {
   		colors: {
   			background: 'hsl(var(--background))',
@@ -49,7 +56,82 @@ export default {
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
+  			},
+  			sidebar: {
+  				DEFAULT: 'hsl(var(--sidebar-background))',
+  				foreground: 'hsl(var(--sidebar-foreground))',
+  				primary: 'hsl(var(--sidebar-primary))',
+  				'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
+  				accent: 'hsl(var(--sidebar-accent))',
+  				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
+  				border: 'hsl(var(--sidebar-border))',
+  				ring: 'hsl(var(--sidebar-ring))'
   			}
+  		},
+  		fontSize: {
+  			'heading-hero': [
+  				'4.5rem',
+  				{
+  					lineHeight: '1.15',
+  					fontWeight: '700'
+  				}
+  			],
+  			'heading-1': [
+  				'3.5rem',
+  				{
+  					lineHeight: '1.2',
+  					fontWeight: '700'
+  				}
+  			],
+  			'heading-2': [
+  				'2.25rem',
+  				{
+  					lineHeight: '1.3',
+  					fontWeight: '600'
+  				}
+  			],
+  			'heading-3': [
+  				'1.875rem',
+  				{
+  					lineHeight: '1.4',
+  					fontWeight: '600'
+  				}
+  			],
+  			'heading-4': [
+  				'1.5rem',
+  				{
+  					lineHeight: '1.5',
+  					fontWeight: '600'
+  				}
+  			],
+  			'body-large': [
+  				'1.25rem',
+  				{
+  					lineHeight: '1.7',
+  					fontWeight: '400'
+  				}
+  			],
+  			'body-base': [
+  				'1rem',
+  				{
+  					lineHeight: '1.7',
+  					fontWeight: '400'
+  				}
+  			],
+  			'body-small': [
+  				'0.875rem',
+  				{
+  					lineHeight: '1.7',
+  					fontWeight: '400'
+  				}
+  			]
+  		},
+  		letterSpacing: {
+  			tighter: '-0.05em',
+  			tight: '-0.025em',
+  			normal: '0',
+  			wide: '0.025em',
+  			wider: '0.05em'
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
@@ -58,5 +140,5 @@ export default {
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate")],
+//   plugins: [require("tailwindcss-animate")],
 } satisfies Config;

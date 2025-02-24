@@ -1,0 +1,43 @@
+@layer base {
+    h1,
+    .h1 {
+      @apply text-heading-1 font-bold tracking-tight mb-4;
+    }
+  
+    h2,
+    .h2 {
+      @apply text-heading-2 font-semibold tracking-tight mb-4;
+    }
+  
+    h3,
+    .h3 {
+      @apply text-heading-3 font-semibold mb-3;
+    }
+  
+    h4,
+    .h4 {
+      @apply text-heading-4 font-semibold mb-3;
+    }
+  
+    p,
+    .p {
+      @apply text-body-base mb-4;
+    }
+  
+    .hero-text {
+      @apply text-heading-hero font-bold tracking-tighter mb-6;
+    }
+  
+    .lead-text {
+      @apply text-body-large text-muted-foreground max-w-[750px];
+    }
+  
+    .logo {
+      @apply text-heading-4 font-bold tracking-tight;
+    }
+  
+    .button-text {
+      @apply text-body-base font-medium;
+    }
+  }
+  

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { useToast } from "@/components/ui/use-toast"
+// import { useToast } from "@/components/ui/use-toast"
 
 interface GeneratedContent {
   content: string
@@ -18,7 +18,7 @@ export function ContentGenerator() {
   const [wordCount, setWordCount] = React.useState("")
   const [isLoading, setIsLoading] = React.useState(false)
   const [generatedContent, setGeneratedContent] = React.useState<GeneratedContent | null>(null)
-  const { toast } = useToast()
+  // const { toast } = useToast()
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -37,11 +37,11 @@ export function ContentGenerator() {
 
       setGeneratedContent(response)
     } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to generate content. Please try again.",
-      })
+      // toast({
+      //   variant: "destructive",
+      //   title: "Error",
+      //   description: "Failed to generate content. Please try again.",
+      // })
     } finally {
       setIsLoading(false)
     }

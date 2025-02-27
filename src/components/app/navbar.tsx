@@ -8,11 +8,11 @@ export function Navbar() {
         <Link href="/" className="logo flex items-center space-x-2">
           <span className="text-xl font-bold">Blogify</span>
         </Link>
-        <nav className="flex items-center gap-4">
+        {/* <nav className="flex items-center gap-4">
           <Button variant="outline" className="text-sm font-medium">
-            Contact us
-          </Button>
-        </nav>
+            
+          </Button> 
+        </nav> */}
       </div>
     </header>
   )

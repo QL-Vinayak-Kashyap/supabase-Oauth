@@ -3,13 +3,15 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface CurrentUser {
     isLoggedIn:boolean,
     email:string,
-    password:string
+    token:string,
+    full_name:string
 }
 
 const initialState : CurrentUser ={
     isLoggedIn :false,
     email:'',
-    password:''
+    token:'',
+    full_name:''
 }
 
 const currentUserSlice =createSlice({
@@ -22,10 +24,11 @@ const currentUserSlice =createSlice({
         setUser:(state,action:PayloadAction<CurrentUser>)=>{
             state.isLoggedIn = true
             state.email = action.payload.email
-            state.password = action.payload.password
+            state.token = action.payload.token
+            state.full_name=action.payload.full_name
         }
     }   
-}); 
+});
 
 export const {getUser,setUser} = currentUserSlice.actions
 export default currentUserSlice.reducer;

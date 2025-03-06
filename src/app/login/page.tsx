@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -38,6 +38,46 @@ export default function LoginPage() {
       setIsLoading(false)
     }
   }
+  const handleGoogleSignIn = async () => {
+    try {
+      const {data, error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+
+      console.log("data", data);
+
+    } catch (error) {
+      console.error("Google sign-in error:", error.message);
+      toast("Please check you creds...")
+    }
+    // const {data, error } = await supabase.auth.signInWithOAuth({
+    //   provider: "google",
+    //   options: {
+    //     redirectTo: `${window.location.origin}/auth/callback`,
+    //   },
+    // });
+
+    // if (error) console.error("Google sign-in error:", error.message);
+  };
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      console.log("session", session);
+
+      if (session) {
+        router.push("/dashboard"); // Redirect if already logged in
+      } else {
+        // setLoading(false);
+      }
+    };
+
+    checkSession();
+  }, [router]);
+
 
 
   return (
@@ -45,11 +85,6 @@ export default function LoginPage() {
       <div className="mx-auto w-full max-w-[400px] space-y-6 p-4">
         <div className="space-y-2 text-center">
           <h1 className="text-3xl font-bold">Login</h1>
-          {/* <p className="text-sm text-muted-foreground">
-            {showOtpInput
-              ? "Enter the verification code sent to your email"
-              : "Enter your email to receive a verification code"}
-          </p> */}
         </div>
 
           <form onSubmit={handlelogin} className="space-y-4">
@@ -82,6 +117,10 @@ export default function LoginPage() {
               {isLoading ? "Checking..." : "Submit"}
             </Button>
           </form>
+
+          <button onClick={handleGoogleSignIn} className="p-2 bg-blue-500 text-white">
+      Sign in with Google
+    </button>
         <div className="text-center">
           <p className="text-sm text-muted-foreground">
             Don't have an account?

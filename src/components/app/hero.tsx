@@ -15,7 +15,7 @@ export function Hero() {
           Transform your content strategy efficiently with the power of AI.
         </p>
       </div>
-      <Link href='/dashboard'>
+      <Link href='/login'>
       <Button size="lg" className="animate-fade-up bg-white text-background hover:bg-white/90" >
         Get Started
       </Button>
@@ -23,4 +23,4 @@ export function Hero() {
     </section>
   )
 }
-
+  

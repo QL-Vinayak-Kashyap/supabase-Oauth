@@ -1,9 +1,10 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, NextRequest } from "next/server";
+// import {createMiddlewareClient} from "@supabase/auth-helpers-nextjs"
 
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next();
-  const token = request.cookies.get("sb-access-token")?.value;
+  const token = request?.cookies.get("sb-access-token")?.value;
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -24,14 +25,21 @@ export async function middleware(request: NextRequest) {
   );
 
   // 🔹 Validate user with token
-  const { data, error } = await supabase.auth.getUser(token);
+  const { data } = await supabase.auth.getUser(token);
 
-  if (error || !data.user) {
-    console.log("Invalid token:", error);
-    return NextResponse.redirect(new URL("/login", request.url));
+  if (data) {
+    // Redirect logged-in users away from login page
+    if (request.nextUrl.pathname === "/login") {
+      return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
+  } else {
+    // Redirect unauthenticated users away from protected pages
+    if (request.nextUrl.pathname.startsWith("/dashboard")) {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
   }
 
-  return response;
+  return response;  
 }
 
 // 🔹 Apply middleware only to protected routes

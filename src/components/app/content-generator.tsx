@@ -1,133 +1,205 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Loader2 } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-// import { useToast } from "@/components/ui/use-toast"
+import * as React from "react";
+import { Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  useGenerateBlogQuery,
+  useGenerateBlogWithFeedbackQuery,
+} from "@/redux/api/api";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@reduxjs/toolkit/query";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { setCurrentBlog } from "@/redux/slices/currentBlogTopic";
+import GeneratedContentCard from "./GeneratedContentCard";
+import { highlightDifferencesMarkdown } from "@/lib/getDifferenceText";
 
 interface GeneratedContent {
-  content: string
-  wordCount: number
+  content: string;
+  markdown: string;
+  wordCount: number;
 }
 
 export function ContentGenerator() {
-  const [topic, setTopic] = React.useState("")
-  const [wordCount, setWordCount] = React.useState("")
-  const [isLoading, setIsLoading] = React.useState(false)
-  const [generatedContent, setGeneratedContent] = React.useState<GeneratedContent | null>(null)
-  // const { toast } = useToast()
+  const dispatch = useDispatch();
+  const [generatedContent, setGeneratedContent] =React.useState<GeneratedContent | null>(null);
+  const [reqData, setReqData] = React.useState({});
+  const [feedbackRequestData, setFeedbackRequestData] = React.useState({});
+  // const state =useSelector((state) => state.currentBlogTopic)
+  const state = useSelector((state: RootState) => state.currentBlogTopic);
 
-  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    setIsLoading(true)
+  const feedbackForm = useForm({
+    defaultValues: { feedback: "" },
+  });
 
-    try {
-      // Replace this with your actual API call
-      const response = await new Promise<GeneratedContent>((resolve) =>
-        setTimeout(() => {
-          resolve({
-            content: `Here is a sample generated content about "${topic}" with approximately ${wordCount} words. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.`,
-            wordCount: Number.parseInt(wordCount),
-          })
-        }, 2000),
-      )
+  const formSchema = z.object({
+    topic: z.string().min(3, "Topic must be at least 3 characters"),
+    word_count: z.string(),
+  });
 
-      setGeneratedContent(response)
-    } catch (error) {
-      // toast({
-      //   variant: "destructive",
-      //   title: "Error",
-      //   description: "Failed to generate content. Please try again.",
-      // })
-    } finally {
-      setIsLoading(false)
-    }
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      topic: "",
+      word_count: "",
+    },
+  });
+
+  const {
+    refetch: callGenerateBlogQuery,
+    data, isLoading:loadingFirstBlog
+  } = useGenerateBlogQuery(reqData);
+
+  const {
+    refetch: callGenerateBlogWithFeedbackQuery,
+    data: feedbackData,
+    isLoading:loadingGeneratingBlogAgain
+  } = useGenerateBlogWithFeedbackQuery(feedbackRequestData);
+
+  async function onSubmit(value: any) {
+    value["token"] = state?.blogToken || "";
+    setReqData(value);
+     await callGenerateBlogQuery();
   }
+
+  async function handleGenerateAgain(value: any) {
+    value["token"] = state?.blogToken || "";
+    value["blog_content"] = state?.content?.slice(-1)[0].blog  || "";
+    setFeedbackRequestData(value);
+    await callGenerateBlogWithFeedbackQuery(); 
+  }
+
+  React.useEffect(() => {
+    if (data) {
+      setGeneratedContent(data.data.blog);
+      const dispatchData = {
+        blogToken: state?.blogToken || "",
+        topic: reqData.topic,
+        wordsNumber: reqData.word_count,
+        content: {
+          blog: data.data.blog,
+          feedback: "",
+        },
+      };
+      dispatch(setCurrentBlog(dispatchData));
+    }
+  }, [data]);
+  React.useEffect(() => {
+    if (feedbackData) {
+      setGeneratedContent(feedbackData.data.blog);
+      const dispatchData = {
+        blogToken: state?.blogToken || "",
+        topic: reqData.topic,
+        wordsNumber: reqData.word_count,
+        content: {
+          blog: feedbackData.data.revised_blog,
+          feedback: feedbackRequestData.feedback,
+        },
+      };
+      dispatch(setCurrentBlog(dispatchData));
+    }
+  }, [feedbackData]);
 
   return (
     <div className="space-y-8">
-      <form onSubmit={onSubmit} className="space-y-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Generation Parameters</CardTitle>
-            <CardDescription>Enter the details for your content generation.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="topic">Topic</Label>
-              <Input
-                id="topic"
-                placeholder="Enter your topic"
-                value={topic}
-                onChange={(e) => setTopic(e.target.value)}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="wordCount">Number of Words</Label>
-              <Input
-                id="wordCount"
-                type="number"
-                placeholder="Enter desired word count"
-                value={wordCount}
-                onChange={(e) => setWordCount(e.target.value)}
-                min="50"
-                max="2000"
-                required
-              />
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {isLoading ? "Generating..." : "Generate Content"}
-            </Button>
-          </CardFooter>
-        </Card>
-      </form>
-
-      {generatedContent && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Generated Content</CardTitle>
-            <CardDescription>
-              Generated {generatedContent.wordCount} words about &quot;{topic}&quot;
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="rounded-md bg-muted p-4">
-              <div className="prose prose-gray dark:prose-invert max-w-none">
-                {generatedContent.content.split("\n").map((paragraph, index) => (
-                  <p key={index} className="mb-4 last:mb-0">
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
-            </div>
-          </CardContent>
-          <CardFooter className="justify-between">
-            <Button
-              variant="secondary"
-              onClick={() => {
-                navigator.clipboard.writeText(generatedContent.content)
-                toast({
-                  title: "Copied!",
-                  description: "Content copied to clipboard.",
-                })
-              }}
-            >
-              Copy to Clipboard
-            </Button>
-            <Button variant="outline" onClick={() => setGeneratedContent(null)}>
-              Clear
-            </Button>
-          </CardFooter>
-        </Card>
+      {!generatedContent && (state?.content.length === 0) && (
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Generation Parameters</CardTitle>
+                <CardDescription>
+                  Enter the details for your content generation.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="topic"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Topic</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter your topic" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="word_count"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Number of Words</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          placeholder="Enter desired word count"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </CardContent>
+              <CardFooter>
+                <Button type="submit" className="w-full" disabled={loadingFirstBlog}>
+                  {loadingFirstBlog && (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                  {loadingFirstBlog ? "Generating..." : "Generate Content"}
+                </Button>
+              </CardFooter>
+            </Card>
+          </form>
+        </Form>
+      )}
+      {(state?.content.length !== 0) && (
+        <div>
+          <h3>{state.topic}</h3>
+        {state?.content.map((item: any, index:number)=>{
+          let diffContent = item.blog;
+          if(index !== 0){
+             diffContent = highlightDifferencesMarkdown(state?.content[index-1].blog, item.blog);
+            console.log("diffContent",diffContent);
+          }
+        
+        return(
+          <div key={index} className="mb-4">
+            {item.feedback !=="" ? (
+              <Card>
+              <CardHeader>
+                <CardTitle>Your last Feedback:</CardTitle>
+                <CardDescription>"{item.feedback}"</CardDescription>
+              </CardHeader>
+            </Card>
+            ): null}
+          <GeneratedContentCard key={index} index={index} totalItems={state?.content.length} generatedContent={diffContent} setGeneratedContent={setGeneratedContent} feedbackForm={feedbackForm} handleGenerateAgain={handleGenerateAgain} loadingGeneratingBlogAgain={loadingGeneratingBlogAgain} />
+          </div>
+        )})}
+        </div>
       )}
     </div>
-  )
+  );
 }
-

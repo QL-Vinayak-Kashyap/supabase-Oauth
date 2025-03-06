@@ -6,9 +6,24 @@ type User = {
     email: string;
 };
 
+type Token = {
+    token:string
+}
+interface GenerateBlogRequest {
+    topic: string;
+    word_count: number;
+    token: string;
+  }
+  
+  interface GenerateBlogResponse {
+    id: string;
+    content: string;
+    topic: string;
+  }
+
 export const userApi = createApi({
     reducerPath: 'userApi',
-    baseQuery: fetchBaseQuery({ baseUrl: 'https://realtors-mounted-to-boss.trycloudflare.com/v1/' }), // Change this to your actual API base URL
+    baseQuery: fetchBaseQuery({ baseUrl: 'https://api-qlwritter.qkkalabs.com/' }), // Change this to your actual API base URL
     endpoints: (builder) => ({
         loginUser: builder.mutation<User,any>({
             query: (data) => ({
@@ -39,8 +54,40 @@ export const userApi = createApi({
                     'Content-Type':'application/json',
                 }
             })
+        }),
+        getToken :builder.query<Token,any>({
+            query:(data)=>({
+                url:'/token',
+                method:'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Token': data.uuid
+                },
+            })
+        }),
+        generateBlog: builder.query<GenerateBlogResponse, GenerateBlogRequest>({
+            query: (data) => ({
+              url: "/blogs",
+              method: "POST",
+              body: { topic: data.topic, word_count: data.word_count },
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${data.token}`,
+              },
+            }),
+        }),
+        generateBlogWithFeedback: builder.query<>({
+            query:(data)=>({
+                url:'/feedbacks',
+                method:'POST',
+                body:{"blog_content":data.blog_content,"feedback": data.feedback},
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${data.token}`
+                },
+            })
         })
     }),
 });
 
-export const { useCreateUserMutation, useLoginUserMutation, useResetPasswordMutation } = userApi;
+export const { useCreateUserMutation, useLoginUserMutation, useResetPasswordMutation, useGenerateBlogQuery, useGetTokenQuery, useGenerateBlogWithFeedbackQuery } = userApi;

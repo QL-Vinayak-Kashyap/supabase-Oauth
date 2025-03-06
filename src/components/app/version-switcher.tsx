@@ -14,6 +14,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import Link from "next/link"
 
 export function VersionSwitcher({
   versions,
@@ -36,14 +37,16 @@ export function VersionSwitcher({
               <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                 <GalleryVerticalEnd className="size-4" />
               </div>
+                <Link href ='/'>
               <div className="flex flex-col gap-0.5 leading-none">
                 <span className="font-semibold">Blogify-AI</span>
                 <span className="">v{selectedVersion}</span>
               </div>
-              <ChevronsUpDown className="ml-auto" />
+                </Link>
+              {/* <ChevronsUpDown className="ml-auto" /> */}
             </SidebarMenuButton>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
+          </DropdownMenuTrigger>  
+          {/* <DropdownMenuContent
             className="w-[--radix-dropdown-menu-trigger-width]"
             align="start"
           >
@@ -56,7 +59,7 @@ export function VersionSwitcher({
                 {version === selectedVersion && <Check className="ml-auto" />}
               </DropdownMenuItem>
             ))}
-          </DropdownMenuContent>
+          </DropdownMenuContent> */}
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>

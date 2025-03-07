@@ -6,6 +6,8 @@ import currentUserReducer from "./slices/currentUserSlice";
 import currentBlogTopic from "./slices/currentBlogTopic";
 import storage from "redux-persist/lib/storage"; // Local storage for persistence
 import { persistReducer, persistStore } from "redux-persist";
+import { ThunkMiddleware } from "redux-thunk"; // ✅ Import ThunkMiddleware type
+import { Middleware } from "@reduxjs/toolkit"; // ✅ Import Middleware type
 
 // ✅ Configure persistence
 const persistConfig = {
@@ -27,11 +29,9 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: false, // Required for Redux Persist
-    }).concat(userApi.middleware),
-});
+  middleware: (getDefaultMiddleware): Middleware[] =>
+    //@ts-ignore
+    getDefaultMiddleware({serializableCheck : {ignoredActions: ["persist/PERSIST"],},}).concat(userApi.middleware as ThunkMiddleware),});
 
 // ✅ Persistor for persisting state across refresh
 export const persistor = persistStore(store);

@@ -24,16 +24,16 @@ import { setBlogToken } from "@/redux/slices/currentBlogTopic";
 
 export default function Dashboard() {
   const dispatch =useDispatch();
-  const [userData, setUserData] =useState({});
+  const [userData, setUserData] =useState<any>();
   
   const {isFetching, data: tokenData, isSuccess, isError} = useGetTokenQuery({uuid:userData?.id});
 
   const getUser = async ()=>{
-    const token = JSON.parse(localStorage.getItem("sb-ggwdyutynlfgigfwmzug-auth-token")).access_token;
+    const token = JSON.parse(localStorage.getItem("sb-ggwdyutynlfgigfwmzug-auth-token") ?? "").access_token;
     const {data:{user}} = await supabase.auth.getUser(token);
     setUserData(user);
     dispatch(setUser({isLoggedIn:true,
-      email:user?.email || "",
+      email:user?.email ?? "",
       token:token,
       full_name:user?.user_metadata.full_name
     }));
@@ -50,7 +50,6 @@ export default function Dashboard() {
     if (isError) return;
   
     if (isSuccess && tokenData?.data?.token) {
-      console.log("token", tokenData.data.token);
       dispatch(setBlogToken({ blogToken: tokenData.data.token }));
     }
   }, [isSuccess, isFetching, isError, tokenData, dispatch]);

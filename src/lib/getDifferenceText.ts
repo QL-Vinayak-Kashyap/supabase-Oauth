@@ -1,7 +1,7 @@
 import { diffLines } from "diff";
 
-export function highlightDifferencesMarkdown(original, updated) {
-  let diff = diffLines(original, updated);
+export function highlightDifferencesMarkdown(original:any, updated:any) {
+  const diff = diffLines(original, updated);
   let markdownText = "";
 
   diff.forEach((part) => {
@@ -19,9 +19,3 @@ export function highlightDifferencesMarkdown(original, updated) {
 
   return markdownText.trim();
 }
-
-// // Example Usage
-// const originalText = "This is an example text.\nIt has multiple lines.\nThis line will be removed.";
-// const updatedText = "This is an example text.\nIt has multiple lines.\nThis line has been changed.";
-
-// console.log(highlightDifferencesMarkdown(originalText, updatedText));

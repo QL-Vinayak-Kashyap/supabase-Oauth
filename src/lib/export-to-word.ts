@@ -1,4 +1,4 @@
-import { Document, Packer, Paragraph, TextRun, HeadingLevel, Numbering, LevelFormat } from "docx";
+import { Document, Packer, Paragraph, TextRun, HeadingLevel } from "docx";
 import { marked } from "marked";
 
 export const exportToWord = async (markdownContent: string, topic: string) => {
@@ -20,7 +20,7 @@ export const exportToWord = async (markdownContent: string, topic: string) => {
     } else if (token.type === "list") {
       listLevel++; // Increase list level
 
-      token.items.forEach((item: any, index: number) => {
+      token.items.forEach((item: any) => {
         // Check for **bold** text in list items
         const boldMatches = item.text.match(/\*\*(.*?)\*\*/g);
         const children = [];

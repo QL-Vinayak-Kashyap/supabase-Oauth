@@ -42,10 +42,10 @@ interface GeneratedContent {
 export function ContentGenerator() {
   const dispatch = useDispatch();
   const [generatedContent, setGeneratedContent] =React.useState<GeneratedContent | null>(null);
-  const [reqData, setReqData] = React.useState({});
-  const [feedbackRequestData, setFeedbackRequestData] = React.useState({});
+  const [reqData, setReqData] = React.useState<any>({});
+  const [feedbackRequestData, setFeedbackRequestData] = React.useState<any>({});
   // const state =useSelector((state) => state.currentBlogTopic)
-  const state = useSelector((state: RootState) => state.currentBlogTopic);
+  const state = useSelector((state: any) => state.currentBlogTopic);
 
   const feedbackForm = useForm({
     defaultValues: { feedback: "" },
@@ -91,7 +91,7 @@ export function ContentGenerator() {
   React.useEffect(() => {
     if (data) {
       setGeneratedContent(data.data.blog);
-      const dispatchData = {
+      const dispatchData:any= {
         blogToken: state?.blogToken || "",
         topic: reqData.topic,
         wordsNumber: reqData.word_count,
@@ -106,7 +106,7 @@ export function ContentGenerator() {
   React.useEffect(() => {
     if (feedbackData) {
       setGeneratedContent(feedbackData.data.blog);
-      const dispatchData = {
+      const dispatchData :any = {
         blogToken: state?.blogToken || "",
         topic: reqData.topic,
         wordsNumber: reqData.word_count,
@@ -195,7 +195,7 @@ export function ContentGenerator() {
               </CardHeader>
             </Card>
             ): null}
-          <GeneratedContentCard key={index} index={index} totalItems={state?.content.length} generatedContent={diffContent} setGeneratedContent={setGeneratedContent} feedbackForm={feedbackForm} handleGenerateAgain={handleGenerateAgain} loadingGeneratingBlogAgain={loadingGeneratingBlogAgain} />
+          <GeneratedContentCard key={index} index={index} totalItems={state?.content.length} generatedContent={diffContent} forWord={item.blog} setGeneratedContent={setGeneratedContent} feedbackForm={feedbackForm} handleGenerateAgain={handleGenerateAgain} loadingGeneratingBlogAgain={loadingGeneratingBlogAgain} />
           </div>
         )})}
         </div>

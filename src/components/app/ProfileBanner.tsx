@@ -13,7 +13,7 @@ export default function ProfileBanner() {
   const dispatch =useDispatch()
     const router =useRouter();
     const [signOutLading, setSignOutLogin] = useState(false);
-    const [userdata, setUserData] =useState();
+    const [userdata, setUserData] =useState<any>();
 
     const handleLogout = async () => {
         setSignOutLogin(true);

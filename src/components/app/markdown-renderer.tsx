@@ -1,6 +1,8 @@
 "use client"
+
+import React from "react"
 import ReactMarkdown from "react-markdown"
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
+import { Prism as SyntaxHighlighter, SyntaxHighlighterProps } from "react-syntax-highlighter"
 import { vscDarkPlus } from "react-syntax-highlighter/dist/cjs/styles/prism"
 import remarkGfm from "remark-gfm"
 
@@ -27,11 +29,13 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           blockquote: ({ node, ...props }) => (
             <blockquote className="border-l-4 border-muted-foreground/20 pl-4 italic" {...props} />
           ),
-          code({ node, inline, className, children, ...props }) {
-            const match = /language-(\w+)/.exec(className || "")
+          //@ts-ignore
+          code({ inline, className = "", children, ...props }) {
+            const match = /language-(\w+)/.exec(className)
             return !inline && match ? (
               <SyntaxHighlighter
-                style={vscDarkPlus}
+                //@ts-ignore
+                style={vscDarkPlus as Readonly<SyntaxHighlighterProps>}
                 language={match[1]}
                 PreTag="div"
                 className="rounded-md border"
@@ -52,4 +56,3 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
     </div>
   )
 }
-

@@ -22,6 +22,7 @@ export default function GeneratedContentCard({
   index,
   totalItems,
   loadingGeneratingBlogAgain,
+  forWord
 }: any) {
   const [isExporting, setIsExporting] = React.useState(false);
 
@@ -30,7 +31,7 @@ export default function GeneratedContentCard({
 
     setIsExporting(true);
     try {
-      await exportToWord(generatedContent, "QUOKKA LABS");
+      await exportToWord(forWord, "QUOKKA LABS");
     } catch (error) { 
     } finally {
       setIsExporting(false);

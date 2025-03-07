@@ -1,14 +1,19 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-type User = {
+interface User  {
     id: number;
     name: string;
     email: string;
 };
 
-type Token = {
-    token:string
+interface TokenResponse  {
+    data:any
+    // token:string
 }
+interface TokenRequest {
+    uuid:string
+}
+
 interface GenerateBlogRequest {
     topic: string;
     word_count: number;
@@ -16,6 +21,20 @@ interface GenerateBlogRequest {
   }
   
   interface GenerateBlogResponse {
+    data:any;
+    id: string;
+    content: string;
+    topic: string;
+  }
+
+  interface GenerateBlogWithFeedbackRequest {
+    token: string;
+    blog_content: string;
+    feedback: string;
+  }
+  
+  interface GenerateBlogWithFeedbackResponse {
+    data:any;
     id: string;
     content: string;
     topic: string;
@@ -25,7 +44,7 @@ export const userApi = createApi({
     reducerPath: 'userApi',
     baseQuery: fetchBaseQuery({ baseUrl: 'https://api-qlwritter.qkkalabs.com/' }), // Change this to your actual API base URL
     endpoints: (builder) => ({
-        loginUser: builder.mutation<User,any>({
+        loginUser: builder.mutation<User,User>({
             query: (data) => ({
                 url: 'users/login',
                 method: 'POST',
@@ -35,7 +54,7 @@ export const userApi = createApi({
                 },
             }),
         }),
-        createUser: builder.mutation<User, any>({
+        createUser: builder.mutation<User, User>({
             query: (data) => ({
                 url: 'users/signup',
                 method: 'POST',
@@ -45,7 +64,7 @@ export const userApi = createApi({
                 },
             }),
         }),
-        resetPassword: builder.mutation<User,any>({
+        resetPassword: builder.mutation<User,User>({
             query:(data)=>({
                 url:'/reset-password',
                 method:'POST',
@@ -55,7 +74,7 @@ export const userApi = createApi({
                 }
             })
         }),
-        getToken :builder.query<Token,any>({
+        getToken :builder.query<TokenResponse,TokenRequest>({
             query:(data)=>({
                 url:'/token',
                 method:'GET',
@@ -76,7 +95,7 @@ export const userApi = createApi({
               },
             }),
         }),
-        generateBlogWithFeedback: builder.query<>({
+        generateBlogWithFeedback: builder.query<GenerateBlogWithFeedbackResponse,GenerateBlogWithFeedbackRequest>({
             query:(data)=>({
                 url:'/feedbacks',
                 method:'POST',

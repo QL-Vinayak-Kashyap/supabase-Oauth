@@ -7,12 +7,9 @@ import Link from "next/link"
 import { Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useToast } from "@/components/ui/use-toast"
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -21,7 +18,7 @@ import {
 
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { SubmitHandler, useForm } from "react-hook-form"
 
 const formSchema = z.object({
     email: z.string().min(2).max(50),
@@ -36,26 +33,27 @@ export default function ForgotPasswordPage() {
                 })
 
   const [isLoading, setIsLoading] = useState(false)
-  const { toast } = useToast()
+  // const { toast } = useToast()
 
-  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
+ const onSubmit:SubmitHandler<{email:string}> = async () =>{
+    // e.preventDefault()
     setIsLoading(true)
 
     try {
       // Replace this with your actual password reset logic
       await new Promise((resolve) => setTimeout(resolve, 1000))
 
-      toast({
-        title: "Check your email",
-        description: "We've sent you a password reset link.",
-      })
+      // toast({
+      //   title: "Check your email",
+      //   description: "We've sent you a password reset link.",
+      // })
     } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Something went wrong. Please try again.",
-      })
+      // toast({
+      //   variant: "destructive",
+      //   title: "Error",
+      //   description: "Something went wrong. Please try again.",
+      // })
+      console.log(error);
     } finally {
       setIsLoading(false)
     }
@@ -67,7 +65,7 @@ export default function ForgotPasswordPage() {
         <div className="space-y-2 text-center">
           <h1 className="text-3xl font-bold">Forgot Password</h1>
           <p className="text-muted-foreground">
-            Enter your email address and we'll send you a link to reset your password.
+            Enter your email address and we&apos;ll send you a link to reset your password.
           </p>
         </div>
         <Form {...form}>
@@ -81,9 +79,6 @@ export default function ForgotPasswordPage() {
               <FormControl>
                 <Input placeholder="Enter your email" {...field} />
               </FormControl>
-              {/* <FormDescription>
-                This is your public display name.
-              </FormDescription> */}
               <FormMessage />
             </FormItem>
           )}

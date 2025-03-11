@@ -45,7 +45,7 @@ export default function SignUpPage() {
           toast(insertError.message);
         }
       }
-      router.push("/login");
+      // router.push("/dashboard");
     } catch (error) {
       console.log(error)
       toast("Error in Login!");
@@ -63,7 +63,6 @@ export default function SignUpPage() {
         },
       });
 
-      console.log("data", data);
     } catch (error) {
       toast("Please check you creds...");
       console.log(error)
@@ -93,7 +92,6 @@ export default function SignUpPage() {
         <div className="space-y-2 text-center">
           <h1 className="text-3xl font-bold">Create Account</h1>
         </div>
-
         <form onSubmit={handleSendOtp} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="fullname">Full Name</Label>
@@ -135,7 +133,6 @@ export default function SignUpPage() {
             {isLoading ? "Creating..." : "Submit"}
           </Button>
         </form>
-
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-white/10"></div>
@@ -146,7 +143,6 @@ export default function SignUpPage() {
             </span>
           </div>
         </div>
-
         <Button
           type="button"
           variant="outline"
@@ -173,7 +169,6 @@ export default function SignUpPage() {
           </svg>
           Sign in with Google
         </Button>
-
         <div className="text-center">
           <Link
             href="/login"

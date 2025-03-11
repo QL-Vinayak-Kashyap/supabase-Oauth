@@ -22,37 +22,64 @@ export default function LoginPage() {
     e.preventDefault();
     setIsLoading(true);
 
-    try {
-      const { data } = await supabase.auth.signInWithPassword({
-        email: email,
-        password: password,
-      });
-      toast("Login Succesfully!");
+    let { data: users, error } = await supabase
+      .from("users")
+      .select("email,status");
 
-      Cookies.set("sb-access-token", data.session?.access_token || "", {
-        secure: true,
-      });
-      router.push("/dashboard");
-    } catch (err) {
-      toast("Please check you creds...");
-      console.log(err);
-    } finally {
+    const userIndex = users.findIndex((item)=>item.email === email);  
+    console.log("users and userIndex", userIndex, users);
+
+    console.log("users.email === email && users.status",users[userIndex].email === email && users[userIndex].status, users);
+
+    if (users[userIndex].email === email && users[userIndex].status) {
+      try {
+        const {
+          data: { user, session },
+          error,
+        } = await supabase.auth.signInWithPassword({
+          email: email,
+          password: password,
+        });
+        if (error) {
+          console.log("error", error);
+          toast(error.message);
+        }
+        if (user) {
+          toast("Login Succesfully!");
+          Cookies.set("sb-access-token", session?.access_token || "", {
+            secure: true,
+          });
+          router.push("/dashboard");
+        }
+      } catch (err) {
+        toast(err);
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
       setIsLoading(false);
+      toast("Sorry!!! Please contact the Admin.");
     }
   }
   const handleGoogleSignIn = async () => {
-    try {
-      const { data } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
+    let { data: users, error } = await supabase
+      .from("users")
+      .select("email,status");
 
-      console.log("data", data);
-    } catch (error) {
-      toast("Please check you creds...");
-      console.log(error);
+    if (users.email === email && users.status) {
+      try {
+        const { data } = await supabase.auth.signInWithOAuth({
+          provider: "google",
+          options: {
+            redirectTo: `${window.location.origin}/auth/callback`,
+          },
+        });
+      } catch (error) {
+        toast("Please check you creds...");
+        console.log(error);
+      }
+    } else {
+
     }
   };
 
@@ -109,6 +136,9 @@ export default function LoginPage() {
             {isLoading ? "Checking..." : "Submit"}
           </Button>
         </form>
+
+        {/* -------------------------GOOGLE LOGIN AND SIGNUP PAGE ROUTE --------------------------- */}
+
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-white/10"></div>

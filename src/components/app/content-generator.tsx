@@ -1,37 +1,20 @@
 "use client";
 
 import * as React from "react";
-import { Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Card,
-  CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  useGenerateBlogQuery,
-  useGenerateBlogWithFeedbackQuery,
-} from "@/redux/api/api";
+import { useGenerateBlogWithFeedbackQuery } from "@/redux/api/api";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@reduxjs/toolkit/query";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+
 import { setCurrentBlog } from "@/redux/slices/currentBlogTopic";
 import GeneratedContentCard from "./GeneratedContentCard";
 import { highlightDifferencesMarkdown } from "@/lib/getDifferenceText";
+import { supabase } from "@/lib/supabaseClient";
 
 interface GeneratedContent {
   content: string;
@@ -39,165 +22,138 @@ interface GeneratedContent {
   wordCount: number;
 }
 
-export function ContentGenerator() {
+export function ContentGenerator({ topicId }: any) {
   const dispatch = useDispatch();
-  const [generatedContent, setGeneratedContent] =React.useState<GeneratedContent | null>(null);
-  const [reqData, setReqData] = React.useState<any>({});
-  const [feedbackRequestData, setFeedbackRequestData] = React.useState<any>({});
-  // const state =useSelector((state) => state.currentBlogTopic)
+  const [feedbackRequestData, setFeedbackRequestData] = React.useState<any>();
+  const [topicContent, setTopicContent] = React.useState([]);
+  const [blogLoader, setBlogLoader] = React.useState(false);
+  const [blogs, setBlogs] = React.useState([]);
   const state = useSelector((state: any) => state.currentBlogTopic);
 
   const feedbackForm = useForm({
     defaultValues: { feedback: "" },
   });
 
-  const formSchema = z.object({
-    topic: z.string().min(3, "Topic must be at least 3 characters"),
-    word_count: z.string(),
-  });
-
-  const form = useForm({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      topic: "",
-      word_count: "",
-    },
-  });
-
-  const {
-    refetch: callGenerateBlogQuery,
-    data, isLoading:loadingFirstBlog
-  } = useGenerateBlogQuery(reqData);
-
   const {
     refetch: callGenerateBlogWithFeedbackQuery,
     data: feedbackData,
-    isLoading:loadingGeneratingBlogAgain
-  } = useGenerateBlogWithFeedbackQuery(feedbackRequestData);
-
-  async function onSubmit(value: any) {
-    value["token"] = state?.blogToken || "";
-    setReqData(value);
-     await callGenerateBlogQuery();
-  }
+    isLoading: loadingGeneratingBlogAgain,
+  } = useGenerateBlogWithFeedbackQuery(feedbackRequestData, {
+    skip: !feedbackRequestData,
+  });
 
   async function handleGenerateAgain(value: any) {
-    value["token"] = state?.blogToken || "";
-    value["blog_content"] = state?.content?.slice(-1)[0].blog  || "";
-    setFeedbackRequestData(value);
-    await callGenerateBlogWithFeedbackQuery(); 
+    try {
+      value["token"] = state?.blogToken || "";
+      value["blog_content"] = state?.content?.slice(-1)[0]?.blog || "";
+      setFeedbackRequestData(value);
+
+      const {
+        data: blogDataAfterFeedback,
+        error: errorBlogDataAfterFeedback,
+        isSuccess,
+      } = await callGenerateBlogWithFeedbackQuery();
+
+      if (!blogDataAfterFeedback || !isSuccess)
+        throw new Error("Blog generation failed");
+
+      if (errorBlogDataAfterFeedback) {
+        throw new Error(
+          `Error generating blog with feedback: ${errorBlogDataAfterFeedback?.message}`
+        );
+      }
+      if (!blogDataAfterFeedback || !blogDataAfterFeedback.data?.blog) {
+        throw new Error("Blog generation failed or returned empty content");
+      }
+    } catch (error) {
+      console.error("Error in Generating Again:", error);
+    }
   }
 
-  React.useEffect(() => {
-    if (data) {
-      setGeneratedContent(data.data.blog);
-      const dispatchData:any= {
-        blogToken: state?.blogToken || "",
-        topic: reqData.topic,
-        wordsNumber: reqData.word_count,
-        content: {
-          blog: data.data.blog,
-          feedback: "",
-        },
-      };
-      dispatch(setCurrentBlog(dispatchData));
-    }
-  }, [data]);
+  const insertDataInSupabase = async (data: any) => {
+    const dataToBeSent = {
+      topic_id: topicId,
+      content: data.content.blog,
+      feedback: data.content.feedback,
+    };
+
+    const { data: dataCreated } = await supabase
+      .from("Blogs")
+      .insert([dataToBeSent])
+      .select();
+  };
+
   React.useEffect(() => {
     if (feedbackData) {
-      setGeneratedContent(feedbackData.data.blog);
-      const dispatchData :any = {
+      const dispatchData: any = {
         blogToken: state?.blogToken || "",
-        topic: reqData.topic,
-        wordsNumber: reqData.word_count,
+        topic: state.topic,
+        wordsNumber: state.word_count,
         content: {
           blog: feedbackData.data.revised_blog,
           feedback: feedbackRequestData.feedback,
         },
       };
-      dispatch(setCurrentBlog(dispatchData));
+      insertDataInSupabase(dispatchData);
+      // dispatch(setCurrentBlog(dispatchData));
+    }
+  }, [feedbackData]);
+
+  const getContentFromSupabase = async () => {
+    let { data: blogs, error } = await supabase
+      .from("Blogs")
+      .select("*")
+      .eq("topic_id", topicId);
+    if (blogs) {
+      setBlogs(blogs);
+    }
+
+    console.log("Blogs", blogs);
+  };
+
+  React.useEffect(() => {
+    if (topicId) {
+      getContentFromSupabase();
     }
   }, [feedbackData]);
 
   return (
     <div className="space-y-8">
-      {!generatedContent && (state?.content.length === 0) && (
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Generation Parameters</CardTitle>
-                <CardDescription>
-                  Enter the details for your content generation.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="topic"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Topic</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter your topic" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="word_count"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Number of Words</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          placeholder="Enter desired word count"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </CardContent>
-              <CardFooter>
-                <Button type="submit" className="w-full" disabled={loadingFirstBlog}>
-                  {loadingFirstBlog && (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  )}
-                  {loadingFirstBlog ? "Generating..." : "Generate Content"}
-                </Button>
-              </CardFooter>
-            </Card>
-          </form>
-        </Form>
-      )}
-      {(state?.content.length !== 0) && (
+      {blogs.length !== 0 && (
         <div>
           <h3>{state.topic}</h3>
-        {state?.content.map((item: any, index:number)=>{
-          let diffContent = item.blog;
-          if(index !== 0){
-             diffContent = highlightDifferencesMarkdown(state?.content[index-1].blog, item.blog);
-            console.log("diffContent",diffContent);
-          }
-        
-        return(
-          <div key={index} className="mb-4">
-            {item.feedback !=="" ? (
-              <Card>
-              <CardHeader>
-                <CardTitle>Your last Feedback:</CardTitle>
-                <CardDescription>"{item.feedback}"</CardDescription>
-              </CardHeader>
-            </Card>
-            ): null}
-          <GeneratedContentCard key={index} index={index} totalItems={state?.content.length} generatedContent={diffContent} forWord={item.blog} setGeneratedContent={setGeneratedContent} feedbackForm={feedbackForm} handleGenerateAgain={handleGenerateAgain} loadingGeneratingBlogAgain={loadingGeneratingBlogAgain} />
-          </div>
-        )})}
+          {blogs.map((item: any, index: number) => {
+            let diffContent = item.content;
+            if (index !== 0) {
+              diffContent = highlightDifferencesMarkdown(
+                blogs[index - 1].content,
+                item.content
+              );
+            }
+            return (
+              <div key={index} className="mb-4">
+                {item.feedback !== "" ? (
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Your last Feedback:</CardTitle>
+                      <CardDescription>"{item.feedback}"</CardDescription>
+                    </CardHeader>
+                  </Card>
+                ) : null}
+                <GeneratedContentCard
+                  key={index}
+                  index={index}
+                  totalItems={blogs.length}
+                  generatedContent={diffContent}
+                  forWord={item.content}
+                  // setGeneratedContent={setGeneratedContent}
+                  feedbackForm={feedbackForm}
+                  handleGenerateAgain={handleGenerateAgain}
+                  loadingGeneratingBlogAgain={loadingGeneratingBlogAgain}
+                />
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

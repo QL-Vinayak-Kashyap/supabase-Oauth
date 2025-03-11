@@ -1,93 +1,192 @@
 "use client";
 
-import { AppSidebar } from "@/components/app/app-sidebar";
 import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-} from "@/components/ui/breadcrumb";
-import { Separator } from "@/components/ui/separator";
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
-import { ContentGenerator } from "@/components/app/content-generator";
-import ProfileBanner from "@/components/app/ProfileBanner";
-import { useEffect, useState } from "react";
-import { useGetTokenQuery } from "@/redux/api/api";
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 import { supabase } from "@/lib/supabaseClient";
-import { setUser } from "@/redux/slices/currentUserSlice";
-import { useDispatch } from "react-redux";
-import { setBlogToken } from "@/redux/slices/currentBlogTopic";
+import { useDispatch, useSelector } from "react-redux";
+import React from "react";
+import { useGenerateBlogQuery } from "@/redux/api/api";
+import { Loader2 } from "lucide-react";
+import { setCurrentBlog } from "@/redux/slices/currentBlogTopic";
+import { useRouter } from "next/navigation";
 
 export default function Dashboard() {
-  const dispatch =useDispatch();
-  const [userData, setUserData] =useState<any>();
-  
-  const {isFetching, data: tokenData, isSuccess, isError} = useGetTokenQuery({uuid:userData?.id});
+  const router =useRouter();
+  const dispatch = useDispatch();
+  const [reqData, setReqData] = React.useState<any>({});
+  const [topicData, setTopicData] = React.useState<any>({});
+  const userState = useSelector((state: any) => state.currentUser);
+  const state = useSelector((state: any) => state.currentBlogTopic);
+  const formSchema = z.object({
+    topic: z.string().min(3, "Topic must be at least 3 characters"),
+    word_count: z.string(),
+  });
 
-  const getUser = async ()=>{
-    const token = JSON.parse(localStorage.getItem("sb-ggwdyutynlfgigfwmzug-auth-token") ?? "").access_token;
-    const {data:{user}} = await supabase.auth.getUser(token);
-    setUserData(user);
-    dispatch(setUser({isLoggedIn:true,
-      email:user?.email ?? "",
-      token:token,
-      full_name:user?.user_metadata.full_name
-    }));
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      topic: "",
+      word_count: "",
+    },
+  });
+
+  const {
+    refetch: callGenerateBlogQuery,
+    data,
+    isLoading: loadingFirstBlog,
+  } = useGenerateBlogQuery(reqData);
+
+  async function onSubmit(value: any) {
+    try {
+      value["token"] = state?.blogToken || "";
+      setReqData(value);
+
+      const datatoInsert = {
+        user_id: userState.id,
+        topic_name: value.topic,
+        word_count: value.word_count,
+      };
+
+      // Insert into "Topics" table
+      const { data: topicDataInserted, error: topicInsertError } =
+        await supabase.from("Topics").insert([datatoInsert]).select();
+
+      if (topicInsertError)
+        throw new Error(`Error inserting topic: ${topicInsertError.message}`);
+      if (!topicDataInserted || topicDataInserted.length === 0)
+        throw new Error("Topic insertion failed");
+
+      setTopicData(topicDataInserted);
+
+      const { data: blogData, isSuccess } = await callGenerateBlogQuery();
+      if (!blogData || !isSuccess) throw new Error("Blog generation failed");
+
+      const { data, error: blogInsertError } = await supabase
+        .from("Blogs")
+        .insert([
+          {
+            topic_id: topicDataInserted[0]?.id,
+            content: blogData.data.blog,
+            feedback: blogData.data.feedback ?? "",
+          },
+        ])
+        .select();
+
+      if(!blogInsertError){
+        router.push(`/dashboard/${topicDataInserted[0]?.id}`);
+      }
+
+      if (blogInsertError)
+        throw new Error(`Error inserting blog: ${blogInsertError.message}`);
+    } catch (error) {
+      console.error("Error in onSubmit:", error);
+    }
   }
 
-
-  useEffect(() => {
-    (async () => {
-      await getUser();
-    })();
-  }, []);
-
-  useEffect(() => {
-    if (isError) return;
-  
-    if (isSuccess && tokenData?.data?.token) {
-      dispatch(setBlogToken({ blogToken: tokenData.data.token }));
+  React.useEffect(() => {
+    if (data) {
+      const dispatchData: any = {
+        blogToken: state?.blogToken || "",
+        topic: reqData.topic,
+        wordsNumber: reqData.word_count,
+        content: {
+          blog: data.data.blog,
+          feedback: "",
+        },
+      };
+      dispatch(setCurrentBlog(dispatchData));
     }
-  }, [isSuccess, isFetching, isError, tokenData, dispatch]);
+  }, [data]);
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <header className="flex justify-between h-16 shrink-0 items-center gap-2 border-b px-4 sticky top-[0px] bg-[#131734]">
-          <div className="flex flex-row items-center gap-2 ">
-          <SidebarTrigger className="-ml-1" />
-          <Separator orientation="vertical" className="mr-2 h-4" />
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="#">Dashboard</BreadcrumbLink>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
+    <div className="flex flex-1 flex-col gap-4 p-4">
+      <div className="container mx-auto py-10">
+        <div className="mx-auto max-w-5xl space-y-8">
+          <div className="space-y-2 text-center">
+            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+              Content/Blog Creator
+            </h1>
+            <p className="text-muted-foreground">
+              Enter your topic and desired word count to generate AI-powered
+              content.
+            </p>
           </div>
-          <ProfileBanner/>
-        </header>
-        <div className="flex flex-1 flex-col gap-4 p-4">
-          <div className="container mx-auto py-10">
-            <div className="mx-auto max-w-5xl space-y-8">
-              <div className="space-y-2 text-center">
-                <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-                  Content/Blog Creator
-                </h1>
-                <p className="text-muted-foreground">
-                  Enter your topic and desired word count to generate AI-powered
-                  content.
-                </p>
-              </div>
-              <ContentGenerator />
-            </div>
-          </div>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Generation Parameters</CardTitle>
+                  <CardDescription>
+                    Enter the details for your content generation.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="topic"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Topic</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter your topic" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="word_count"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Number of Words</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            placeholder="Enter desired word count"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </CardContent>
+                <CardFooter>
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={loadingFirstBlog}
+                  >
+                    {loadingFirstBlog && (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    )}
+                    {loadingFirstBlog ? "Generating..." : "Generate Content"}
+                  </Button>
+                </CardFooter>
+              </Card>
+            </form>
+          </Form>
         </div>
-      </SidebarInset>
-    </SidebarProvider>
+      </div>
+    </div>
   );
 }

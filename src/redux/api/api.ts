@@ -23,7 +23,7 @@ interface GenerateBlogRequest {
   interface GenerateBlogResponse {
     data:any;
     id: string;
-    content: string;
+    content: any;
     topic: string;
   }
 

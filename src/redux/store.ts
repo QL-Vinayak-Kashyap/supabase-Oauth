@@ -4,19 +4,17 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 import counterReducer from "./slices/counterSlices";
 import currentUserReducer from "./slices/currentUserSlice";
 import currentBlogTopic from "./slices/currentBlogTopic";
-import storage from "redux-persist/lib/storage"; // Local storage for persistence
+import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
-import { ThunkMiddleware } from "redux-thunk"; // ✅ Import ThunkMiddleware type
-import { Middleware } from "@reduxjs/toolkit"; // ✅ Import Middleware type
+import { ThunkMiddleware } from "redux-thunk";
+import { Middleware } from "@reduxjs/toolkit";
 
-// ✅ Configure persistence
 const persistConfig = {
   key: "root",
   storage,
   whitelist: ["currentUser", "currentBlogTopic"], // Persist these slices
 };
 
-// ✅ Combine reducers
 const rootReducer = combineReducers({
   counter: counterReducer,
   currentUser: currentUserReducer,
@@ -24,7 +22,6 @@ const rootReducer = combineReducers({
   [userApi.reducerPath]: userApi.reducer,
 });
 
-// ✅ Apply persistence
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
@@ -33,7 +30,6 @@ export const store = configureStore({
     //@ts-ignore
     getDefaultMiddleware({serializableCheck : {ignoredActions: ["persist/PERSIST"],},}).concat(userApi.middleware as ThunkMiddleware),});
 
-// ✅ Persistor for persisting state across refresh
 export const persistor = persistStore(store);
 
 // Infer the `RootState` and `AppDispatch` types

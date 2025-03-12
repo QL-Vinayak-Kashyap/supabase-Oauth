@@ -10,33 +10,33 @@ import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { resetCurrentBlogTopic } from "@/redux/slices/currentBlogTopic";
-import { useAppDispatch } from "@/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 
 export default function ProfileBanner() {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const [signOutLading, setSignOutLogin] = useState<boolean>(false);
-  const [userdata, setUserData] = useState<any>();
+  const [signOutLoading, setSignOutLoading] = useState<boolean>(false);
+  const [userData, setUserData] = useState<any>();
+  const userState = useAppSelector((state) => state.currentUser);
 
   const handleLogout = async () => {
-    setSignOutLogin(true);
+    setSignOutLoading(true);
     const { error } = await supabase.auth.signOut();
 
     if (!error) {
       dispatch(resetCurrentBlogTopic());
       Cookies.remove("sb-access-token");
       router.push("/login");
-      setSignOutLogin(false);
+      setSignOutLoading(false);
     }
   };
   useEffect(() => {
     const getUser = async () => {
-      const token = JSON.parse(
-        localStorage.getItem("sb-ggwdyutynlfgigfwmzug-auth-token") ?? ""
-      );
+      const token = userState.token;
+      console.log("token using redux", token);
       const {
         data: { user },
-      } = await supabase.auth.getUser(token?.access_token);
+      } = await supabase.auth.getUser(token);
       setUserData(user);
     };
     getUser();
@@ -59,17 +59,17 @@ export default function ProfileBanner() {
             <AvatarFallback>U</AvatarFallback>
           </Avatar>
           <h3 className="text-lg font-semibold">
-            {userdata?.identities[0]?.full_name ?? "Admin"}
+            {userData?.identities[0]?.full_name ?? "Admin"}
           </h3>
           <p className="text-sm text-gray-500">
-            {userdata?.identities[0]?.email}
+            {userData?.identities[0]?.email}
           </p>
           <Button
             onClick={handleLogout}
             variant="outline"
             className="w-full mt-2"
           >
-            {signOutLading ? "Loading..." : "Logout"}
+            {signOutLoading ? "Loading..." : "Logout"}
           </Button>
         </div>
       </PopoverContent>

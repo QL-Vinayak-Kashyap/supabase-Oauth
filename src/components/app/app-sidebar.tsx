@@ -41,7 +41,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const getTopics = async () => {
     try {
       setTopicLoading(true);
-      let { data: topics, error } = await supabase
+      const { data: topics } = await supabase
         .from("Topics")
         .select("*")
         .eq("user_id", state.id);

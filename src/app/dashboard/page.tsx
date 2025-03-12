@@ -60,9 +60,9 @@ export default function Dashboard() {
       setReqData(value);
 
       const datatoInsert = {
-        user_id: userState.id,
-        topic_name: value.topic,
-        word_count: value.word_count,
+        user_id: userState?.id,
+        topic_name: value?.topic,
+        word_count: value?.word_count,
       };
 
       // Insert into "Topics" table
@@ -101,10 +101,10 @@ export default function Dashboard() {
     if (data) {
       const dispatchData: any = {
         blogToken: state?.blogToken || "",
-        topic: reqData.topic,
-        wordsNumber: reqData.word_count,
+        topic: reqData?.topic,
+        wordsNumber: reqData?.word_count,
         content: {
-          blog: data.data.blog,
+          blog: data?.data?.blog,
           feedback: "",
         },
       };

@@ -24,9 +24,9 @@ import { useAppDispatch } from "@/hooks/hooks";
 
 export default function DashboardLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   const dispatch = useAppDispatch();
   const [userData, setUserData] = useState<any>();
 
@@ -50,7 +50,7 @@ export default function DashboardLayout({
         isLoggedIn: true,
         email: user?.email ?? "",
         token: token,
-        full_name: user?.user_metadata.full_name,
+        full_name: user?.user_metadata?.full_name,
         id: user?.id,
       })
     );

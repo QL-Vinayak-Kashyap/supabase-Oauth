@@ -87,7 +87,7 @@ export function ContentGenerator({ topicId }: any) {
   }, [feedbackData]);
 
   const getContentFromSupabase = async () => {
-    let { data: blogs } = await supabase
+    const { data: blogs } = await supabase
       .from("Blogs")
       .select("*")
       .eq("topic_id", topicId);

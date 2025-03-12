@@ -5,15 +5,22 @@ export const exportToWord = async (markdownContent: string, topic: string) => {
   const tokens = marked.lexer(markdownContent); // Tokenize Markdown
 
   const docChildren = [];
-  let listLevel =0;
+  let listLevel = 0;
 
   // Loop through parsed Markdown tokens and convert them to Word elements
   for (const token of tokens) {
     if (token.type === "heading") {
       docChildren.push(
         new Paragraph({
-          children: [new TextRun({ text: token.text, bold: true, size: token.depth === 2 ? 36 : 30 })],
-          heading: token.depth === 2 ? HeadingLevel.HEADING_2 : HeadingLevel.HEADING_3,
+          children: [
+            new TextRun({
+              text: token.text,
+              bold: true,
+              size: token.depth === 2 ? 36 : 30,
+            }),
+          ],
+          heading:
+            token.depth === 2 ? HeadingLevel.HEADING_2 : HeadingLevel.HEADING_3,
           spacing: { after: 100 },
         })
       );
@@ -30,30 +37,40 @@ export const exportToWord = async (markdownContent: string, topic: string) => {
           const parts = item.text.split(/\*\*(.*?)\*\*/);
           for (let i = 0; i < parts.length; i++) {
             if (i % 2 === 1) {
-              children.push(new TextRun({ text: parts[i], bold: true, size: 24 + listLevel * 2 }));
+              children.push(
+                new TextRun({
+                  text: parts[i],
+                  bold: true,
+                  size: 24 + listLevel * 2,
+                })
+              );
             } else {
-              children.push(new TextRun({ text: parts[i], size: 24 + listLevel * 2 }));
+              children.push(
+                new TextRun({ text: parts[i], size: 24 + listLevel * 2 })
+              );
             }
           }
         } else {
           // No bold text, add as normal text
-          children.push(new TextRun({ text: item.text, size: 24 + listLevel * 2 }));
+          children.push(
+            new TextRun({ text: item.text, size: 24 + listLevel * 2 })
+          );
         }
 
         docChildren.push(
           new Paragraph({
             children,
             spacing: { after: 100 },
+            indent: { left: listLevel * 720, hanging: 360 }, // Adding left indentation for list items
           })
         );
       });
 
       listLevel--;
-
     } else if (token.type === "paragraph") {
       docChildren.push(
         new Paragraph({
-          children: [new TextRun({ text: token.text, size: 28 })], 
+          children: [new TextRun({ text: token.text, size: 28 })],
           spacing: { after: 100 },
         })
       );
@@ -87,4 +104,3 @@ export const exportToWord = async (markdownContent: string, topic: string) => {
   document.body.removeChild(a);
   window.URL.revokeObjectURL(url);
 };
-

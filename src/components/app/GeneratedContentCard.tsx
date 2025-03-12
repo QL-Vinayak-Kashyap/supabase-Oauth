@@ -13,7 +13,6 @@ import { Copy, FileEdit, Loader2 } from "lucide-react";
 import { MarkdownRenderer } from "./markdown-renderer";
 import { exportToWord } from "@/lib/export-to-word";
 import React from "react";
-import { useAppSelector } from "@/hooks/hooks";
 
 export default function GeneratedContentCard({
   generatedContent,
@@ -23,16 +22,16 @@ export default function GeneratedContentCard({
   totalItems,
   loadingGeneratingBlogAgain,
   forWord,
+  topicName,
 }: any) {
   const [isExporting, setIsExporting] = React.useState(false);
-  const topicState = useAppSelector((state) => state.currentBlogTopic);
 
   const handleExportToWord = async () => {
     if (!generatedContent) return;
     setIsExporting(true);
 
     try {
-      await exportToWord(forWord, topicState.topic);
+      await exportToWord(forWord, topicName ?? "");
     } catch (error) {
     } finally {
       setIsExporting(false);

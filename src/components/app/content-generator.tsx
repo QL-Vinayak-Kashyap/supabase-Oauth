@@ -23,6 +23,7 @@ interface GeneratedContent {
 
 export function ContentGenerator({ topicId }: any) {
   const [feedbackRequestData, setFeedbackRequestData] = React.useState<any>();
+  const [topic, setTopic] = React.useState([]);
   const [blogs, setBlogs] = React.useState([]);
   const state = useAppSelector((state: any) => state.currentBlogTopic);
 
@@ -86,6 +87,17 @@ export function ContentGenerator({ topicId }: any) {
     }
   }, [feedbackData]);
 
+  const getTopicName = async () => {
+    const { data: Topic } = await supabase
+      .from("Topics")
+      .select("*")
+      .eq("id", topicId);
+
+    if (Topic) {
+      setTopic(Topic);
+    }
+  };
+
   const getContentFromSupabase = async () => {
     const { data: blogs } = await supabase
       .from("Blogs")
@@ -98,6 +110,7 @@ export function ContentGenerator({ topicId }: any) {
 
   React.useEffect(() => {
     if (topicId) {
+      getTopicName();
       getContentFromSupabase();
     }
   }, [feedbackData]);
@@ -135,6 +148,7 @@ export function ContentGenerator({ topicId }: any) {
                   feedbackForm={feedbackForm}
                   handleGenerateAgain={handleGenerateAgain}
                   loadingGeneratingBlogAgain={loadingGeneratingBlogAgain}
+                  topicName={topic[0]?.topic_name}
                 />
               </div>
             );

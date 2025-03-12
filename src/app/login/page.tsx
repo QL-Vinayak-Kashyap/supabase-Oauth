@@ -11,12 +11,15 @@ import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { toast } from "sonner";
+import { useAppDispatch } from "@/hooks/hooks";
+import { setUser } from "@/redux/slices/currentUserSlice";
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   async function handlelogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -39,6 +42,15 @@ export default function LoginPage() {
           throw new Error(error.message);
         }
         if (user) {
+          dispatch(
+            setUser({
+              isLoggedIn: true,
+              email: user?.email ?? "",
+              token: session?.access_token,
+              full_name: user?.user_metadata?.full_name,
+              id: user?.id,
+            })
+          );
           toast("Login Succesfully!");
           Cookies.set("sb-access-token", session?.access_token || "", {
             secure: true,

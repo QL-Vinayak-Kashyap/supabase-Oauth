@@ -80,7 +80,7 @@ export const userApi = createApi({
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Token: data.uuid,
+          Token: data?.uuid,
         },
       }),
     }),
@@ -88,10 +88,10 @@ export const userApi = createApi({
       query: (data) => ({
         url: "/blogs",
         method: "POST",
-        body: { topic: data.topic, word_count: data.word_count },
+        body: { topic: data?.topic, word_count: data?.word_count },
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${data.token}`,
+          Authorization: `Bearer ${data?.token}`,
         },
       }),
     }),
@@ -102,10 +102,10 @@ export const userApi = createApi({
       query: (data) => ({
         url: "/feedbacks",
         method: "POST",
-        body: { blog_content: data.blog_content, feedback: data.feedback },
+        body: { blog_content: data?.blog_content, feedback: data?.feedback },
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${data.token}`,
+          Authorization: `Bearer ${data?.token}`,
         },
       }),
     }),

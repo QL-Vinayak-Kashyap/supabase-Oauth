@@ -33,7 +33,6 @@ export default function ProfileBanner() {
   useEffect(() => {
     const getUser = async () => {
       const token = userState.token;
-      console.log("token using redux", token);
       const {
         data: { user },
       } = await supabase.auth.getUser(token);

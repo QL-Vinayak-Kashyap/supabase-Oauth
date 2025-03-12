@@ -77,7 +77,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarGroupContent>Loading...</SidebarGroupContent>
           )}
           {!topicLoading &&
-            topics?.map((item: Topics, index: number) => (
+            topics?.toReversed().map((item: Topics, index: number) => (
               <SidebarGroupContent
                 key={item.id}
                 className="group flex w-full items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900"

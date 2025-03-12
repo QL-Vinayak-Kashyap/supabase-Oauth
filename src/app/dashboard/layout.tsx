@@ -20,7 +20,7 @@ import { setUser } from "@/redux/slices/currentUserSlice";
 import { setBlogToken } from "@/redux/slices/currentBlogTopic";
 
 import { AppSidebar } from "@/components/app/app-sidebar";
-import { useAppDispatch } from "@/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 
 export default function DashboardLayout({
   children,
@@ -28,6 +28,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }>) {
   const dispatch = useAppDispatch();
+  const userState = useAppSelector((state) => state.currentUser);
   const [userData, setUserData] = useState<any>();
 
   const {
@@ -38,9 +39,7 @@ export default function DashboardLayout({
   } = useGetTokenQuery({ uuid: userData?.id }, { skip: !userData?.id });
 
   const getUser = async () => {
-    const token = JSON.parse(
-      localStorage.getItem("sb-ggwdyutynlfgigfwmzug-auth-token") ?? ""
-    ).access_token;
+    const token = userState.token;
     const {
       data: { user },
     } = await supabase.auth.getUser(token);

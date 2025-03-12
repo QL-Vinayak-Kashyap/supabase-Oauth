@@ -17,17 +17,17 @@ import { useEffect, useState } from "react";
 import { useGetTokenQuery } from "@/redux/api/api";
 import { supabase } from "@/lib/supabaseClient";
 import { setUser } from "@/redux/slices/currentUserSlice";
-import { useDispatch } from "react-redux";
 import { setBlogToken } from "@/redux/slices/currentBlogTopic";
 
 import { AppSidebar } from "@/components/app/app-sidebar";
+import { useAppDispatch } from "@/hooks/hooks";
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [userData, setUserData] = useState<any>();
 
   const {
@@ -35,7 +35,7 @@ export default function DashboardLayout({
     data: tokenData,
     isSuccess,
     isError,
-  } = useGetTokenQuery({ uuid: userData?.id }, {skip:!userData?.id}); 
+  } = useGetTokenQuery({ uuid: userData?.id }, { skip: !userData?.id });
 
   const getUser = async () => {
     const token = JSON.parse(
@@ -87,7 +87,7 @@ export default function DashboardLayout({
           </div>
           <ProfileBanner />
         </header>
-      <main className="flex-1 p-4">{children}</main>
+        <main className="flex-1 p-4">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   );

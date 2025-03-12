@@ -8,13 +8,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useGenerateBlogWithFeedbackQuery } from "@/redux/api/api";
-import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 
 import { setCurrentBlog } from "@/redux/slices/currentBlogTopic";
 import GeneratedContentCard from "./GeneratedContentCard";
 import { highlightDifferencesMarkdown } from "@/lib/getDifferenceText";
 import { supabase } from "@/lib/supabaseClient";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 
 interface GeneratedContent {
   content: string;
@@ -23,12 +23,11 @@ interface GeneratedContent {
 }
 
 export function ContentGenerator({ topicId }: any) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [feedbackRequestData, setFeedbackRequestData] = React.useState<any>();
-  const [topicContent, setTopicContent] = React.useState([]);
-  const [blogLoader, setBlogLoader] = React.useState(false);
+  // const [blogLoader, setBlogLoader] = React.useState(false);
   const [blogs, setBlogs] = React.useState([]);
-  const state = useSelector((state: any) => state.currentBlogTopic);
+  const state = useAppSelector((state: any) => state.currentBlogTopic);
 
   const feedbackForm = useForm({
     defaultValues: { feedback: "" },
@@ -58,9 +57,7 @@ export function ContentGenerator({ topicId }: any) {
         throw new Error("Blog generation failed");
 
       if (errorBlogDataAfterFeedback) {
-        throw new Error(
-          `Error generating blog with feedback: ${errorBlogDataAfterFeedback?.message}`
-        );
+        throw new Error(errorBlogDataAfterFeedback);
       }
       if (!blogDataAfterFeedback || !blogDataAfterFeedback.data?.blog) {
         throw new Error("Blog generation failed or returned empty content");
@@ -107,8 +104,6 @@ export function ContentGenerator({ topicId }: any) {
     if (blogs) {
       setBlogs(blogs);
     }
-
-    console.log("Blogs", blogs);
   };
 
   React.useEffect(() => {

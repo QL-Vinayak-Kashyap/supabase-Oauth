@@ -26,10 +26,7 @@ export default function LoginPage() {
       .from("users")
       .select("email,status");
 
-    const userIndex = users.findIndex((item)=>item.email === email);  
-    console.log("users and userIndex", userIndex, users);
-
-    console.log("users.email === email && users.status",users[userIndex].email === email && users[userIndex].status, users);
+    const userIndex = users.findIndex((item) => item.email === email);
 
     if (users[userIndex].email === email && users[userIndex].status) {
       try {
@@ -41,8 +38,7 @@ export default function LoginPage() {
           password: password,
         });
         if (error) {
-          console.log("error", error);
-          toast(error.message);
+          throw new Error(error.message);
         }
         if (user) {
           toast("Login Succesfully!");
@@ -62,11 +58,14 @@ export default function LoginPage() {
     }
   }
   const handleGoogleSignIn = async () => {
+    setIsLoading(true);
     let { data: users, error } = await supabase
       .from("users")
       .select("email,status");
 
-    if (users.email === email && users.status) {
+    const userIndex = users.findIndex((item) => item.email === email);
+
+    if (users[userIndex].email === email && users[userIndex].status) {
       try {
         const { data } = await supabase.auth.signInWithOAuth({
           provider: "google",
@@ -76,10 +75,10 @@ export default function LoginPage() {
         });
       } catch (error) {
         toast("Please check you creds...");
-        console.log(error);
       }
     } else {
-
+      setIsLoading(false);
+      toast("Sorry!!! Please contact the Admin.");
     }
   };
 

@@ -22,20 +22,19 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { supabase } from "@/lib/supabaseClient";
-import { useDispatch, useSelector } from "react-redux";
 import React from "react";
-import { useGenerateBlogQuery } from "@/redux/api/api";
+import { GenerateBlogRequest, useGenerateBlogQuery } from "@/redux/api/api";
 import { Loader2 } from "lucide-react";
 import { setCurrentBlog } from "@/redux/slices/currentBlogTopic";
 import { useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 
 export default function Dashboard() {
-  const router =useRouter();
-  const dispatch = useDispatch();
-  const [reqData, setReqData] = React.useState<any>({});
-  const [topicData, setTopicData] = React.useState<any>({});
-  const userState = useSelector((state: any) => state.currentUser);
-  const state = useSelector((state: any) => state.currentBlogTopic);
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const [reqData, setReqData] = React.useState<GenerateBlogRequest>();
+  const userState = useAppSelector((state) => state.currentUser);
+  const state = useAppSelector((state) => state.currentBlogTopic);
   const formSchema = z.object({
     topic: z.string().min(3, "Topic must be at least 3 characters"),
     word_count: z.string(),
@@ -70,12 +69,9 @@ export default function Dashboard() {
       const { data: topicDataInserted, error: topicInsertError } =
         await supabase.from("Topics").insert([datatoInsert]).select();
 
-      if (topicInsertError)
-        throw new Error(`Error inserting topic: ${topicInsertError.message}`);
+      if (topicInsertError) throw new Error(topicInsertError.message);
       if (!topicDataInserted || topicDataInserted.length === 0)
         throw new Error("Topic insertion failed");
-
-      setTopicData(topicDataInserted);
 
       const { data: blogData, isSuccess } = await callGenerateBlogQuery();
       if (!blogData || !isSuccess) throw new Error("Blog generation failed");
@@ -84,19 +80,18 @@ export default function Dashboard() {
         .from("Blogs")
         .insert([
           {
-            topic_id: topicDataInserted[0]?.id,
-            content: blogData.data.blog,
-            feedback: blogData.data.feedback ?? "",
+            topic_id: topicDataInserted?.[0]?.id,
+            content: blogData?.data?.blog,
+            feedback: blogData?.data?.feedback ?? "",
           },
         ])
         .select();
 
-      if(!blogInsertError){
+      if (!blogInsertError) {
         router.push(`/dashboard/${topicDataInserted[0]?.id}`);
       }
 
-      if (blogInsertError)
-        throw new Error(`Error inserting blog: ${blogInsertError.message}`);
+      if (blogInsertError) throw new Error(blogInsertError.message);
     } catch (error) {
       console.error("Error in onSubmit:", error);
     }

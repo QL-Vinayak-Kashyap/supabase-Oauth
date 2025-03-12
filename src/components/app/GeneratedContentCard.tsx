@@ -13,26 +13,27 @@ import { Copy, FileEdit, Loader2 } from "lucide-react";
 import { MarkdownRenderer } from "./markdown-renderer";
 import { exportToWord } from "@/lib/export-to-word";
 import React from "react";
+import { useAppSelector } from "@/hooks/hooks";
 
 export default function GeneratedContentCard({
   generatedContent,
-  setGeneratedContent,
   feedbackForm,
   handleGenerateAgain,
   index,
   totalItems,
   loadingGeneratingBlogAgain,
-  forWord
+  forWord,
 }: any) {
   const [isExporting, setIsExporting] = React.useState(false);
+  const topicState = useAppSelector((state) => state.currentBlogTopic);
 
   const handleExportToWord = async () => {
     if (!generatedContent) return;
-
     setIsExporting(true);
+
     try {
-      await exportToWord(forWord, "QUOKKA LABS");
-    } catch (error) { 
+      await exportToWord(forWord, topicState.topic);
+    } catch (error) {
     } finally {
       setIsExporting(false);
     }
@@ -40,7 +41,7 @@ export default function GeneratedContentCard({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{index+1}. Generated Content</CardTitle>
+        <CardTitle>{index + 1}. Generated Content</CardTitle>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="preview" className="w-full">

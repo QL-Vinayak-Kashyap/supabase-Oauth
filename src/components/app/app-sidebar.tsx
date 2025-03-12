@@ -7,30 +7,31 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { Button } from "../ui/button";
-import { useDispatch, useSelector } from "react-redux";
 import { resetCurrentBlogTopic } from "@/redux/slices/currentBlogTopic";
 import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+
+interface Topics {
+  id: string;
+  topic_name: string;
+}
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const [topicLoading, setTopicLoading] = React.useState(false);
-  const [topics, setTopics] = React.useState([]);
+  const [topicLoading, setTopicLoading] = React.useState<boolean>(false);
+  const [topics, setTopics] = React.useState<Topics[]>([]);
   const router = useRouter();
-  const state = useSelector((state) => state.currentUser);
-  const blogState = useSelector((state) => state.currentBlogTopic);
+  const state = useAppSelector((state) => state.currentUser);
+  const blogState = useAppSelector((state) => state.currentBlogTopic);
   const data = {
     versions: ["1.0.1", "1.1.0-alpha", "2.0.0-beta1"],
   };
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleNewTopicGnerator = () => {
     dispatch(resetCurrentBlogTopic());
@@ -40,7 +41,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const getTopics = async () => {
     try {
       setTopicLoading(true);
-      let { data: topics, error, } = await supabase
+      let { data: topics, error } = await supabase
         .from("Topics")
         .select("*")
         .eq("user_id", state.id);
@@ -51,8 +52,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       setTopicLoading(false);
     }
   };
-
-  console.log("topics", topics);
 
   React.useEffect(() => {
     getTopics();
@@ -65,17 +64,24 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           versions={data.versions}
           defaultVersion={data.versions[0]}
         />
-        {/* <SearchForm /> */}
       </SidebarHeader>
       <SidebarContent>
-        <Button onClick={handleNewTopicGnerator}>New Topic</Button>
+        <Button
+          onClick={handleNewTopicGnerator}
+          className="group flex w-full items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+        >
+          New Topic
+        </Button>
         <SidebarGroup>
           {topicLoading && (
             <SidebarGroupContent>Loading...</SidebarGroupContent>
           )}
           {!topicLoading &&
-            topics?.map((item: any, index: number) => (
-              <SidebarGroupContent key={index}>
+            topics?.map((item: Topics, index: number) => (
+              <SidebarGroupContent
+                key={item.id}
+                className="group flex w-full items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+              >
                 <Link href={`/dashboard/${item.id}`}>{item.topic_name}</Link>
               </SidebarGroupContent>
             ))}

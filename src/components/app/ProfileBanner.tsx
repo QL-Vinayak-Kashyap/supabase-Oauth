@@ -10,12 +10,12 @@ import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { resetCurrentBlogTopic } from "@/redux/slices/currentBlogTopic";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "@/hooks/hooks";
 
 export default function ProfileBanner() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const router = useRouter();
-  const [signOutLading, setSignOutLogin] = useState(false);
+  const [signOutLading, setSignOutLogin] = useState<boolean>(false);
   const [userdata, setUserData] = useState<any>();
 
   const handleLogout = async () => {

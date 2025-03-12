@@ -1,6 +1,9 @@
 import { diffLines } from "diff";
 
-export function highlightDifferencesMarkdown(original:any, updated:any) {
+export function highlightDifferencesMarkdown(
+  original: string,
+  updated: string
+) {
   const diff = diffLines(original, updated);
   let markdownText = "";
 

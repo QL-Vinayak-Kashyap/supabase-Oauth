@@ -1,33 +1,11 @@
 "use client";
 
 import { ContentGenerator } from "@/components/app/content-generator";
-import { supabase } from "@/lib/supabaseClient";
 import { useParams } from "next/navigation";
-import React, { useState } from "react";
+import React from "react";
 
 const page = () => {
   const { topic_id } = useParams();
-  // const [blogLoader, setBlogLoader] = useState(false);
-  // const [blogs, setBlogs] = useState([]);
-  console.log("topic_id", topic_id);
-
-  // const getContentFromSupabase = async () => {
-  //   let { data: blogs, error } = await supabase
-  //     .from("Blogs")
-  //     .select("*")
-  //     .eq("topic_id", topic_id);
-  //   if (blogs) {
-  //     setBlogs(blogs);
-  //   }
-
-  //   console.log("Blogs", blogs);
-  // };
-
-  // React.useEffect(() => {
-  //   if (topic_id) {
-  //     getContentFromSupabase();
-  //   }
-  // }, []);
 
   return (
     <div className="flex flex-1 flex-col gap-4 p-4">

@@ -68,29 +68,36 @@ export default function LoginPage() {
     }
   }
   const handleGoogleSignIn = async () => {
-    setIsLoading(true);
-    let { data: users } = await supabase.from("users").select("email,status");
+    // // setIsLoading(true);
+    // let { data: users } = await supabase.from("users").select("email,status");
 
-    const userIndex = users.findIndex((item) => item.email === email);
+    // const userIndex = users.findIndex((item) => item.email === email);
 
-    if (users[userIndex].email === email && users[userIndex].status) {
-      try {
-        const { error } = await supabase.auth.signInWithOAuth({
-          provider: "google",
-          options: {
-            redirectTo: `${window.location.origin}/auth/callback`,
-          },
-        });
-        if (error) {
-          throw new Error(error.message);
-        }
-      } catch (error) {
-        toast("Please check you creds...");
+    // // console.log(
+    // //   "(users[userIndex].email === email && users[userIndex].status)",
+    // //   users,
+    // //   users[userIndex]
+    // // );
+
+    // if (users[userIndex].email === email && users[userIndex].status) {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+      if (error) {
+        throw new Error(error.message);
       }
-    } else {
-      setIsLoading(false);
-      toast("Sorry!!! Please contact the Admin.");
+    } catch (error) {
+      toast("Please check you creds...");
     }
+    // }
+    // else {
+    //   // setIsLoading(false);
+    //   toast("Sorry!!! Please contact the Admin.");
+    // }
   };
 
   useEffect(() => {

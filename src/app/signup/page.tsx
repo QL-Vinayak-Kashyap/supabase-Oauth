@@ -45,9 +45,9 @@ export default function SignUpPage() {
           toast(insertError.message);
         }
       }
-      // router.push("/dashboard");
+      router.push("/dashboard");
     } catch (error) {
-      console.log(error)
+      console.log(error);
       toast("Error in Login!");
     } finally {
       setIsLoading(false);
@@ -62,10 +62,9 @@ export default function SignUpPage() {
           redirectTo: `${window.location.origin}/auth/callback`,
         },
       });
-
     } catch (error) {
       toast("Please check you creds...");
-      console.log(error)
+      console.log(error);
     }
   };
 
@@ -133,7 +132,7 @@ export default function SignUpPage() {
             {isLoading ? "Creating..." : "Submit"}
           </Button>
         </form>
-        <div className="relative">
+        {/* <div className="relative">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-white/10"></div>
           </div>
@@ -168,7 +167,7 @@ export default function SignUpPage() {
             />
           </svg>
           Sign in with Google
-        </Button>
+        </Button> */}
         <div className="text-center">
           <Link
             href="/login"

@@ -10,11 +10,10 @@ import {
 import { useGenerateBlogWithFeedbackQuery } from "@/redux/api/api";
 import { useForm } from "react-hook-form";
 
-import { setCurrentBlog } from "@/redux/slices/currentBlogTopic";
 import GeneratedContentCard from "./GeneratedContentCard";
 import { highlightDifferencesMarkdown } from "@/lib/getDifferenceText";
 import { supabase } from "@/lib/supabaseClient";
-import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { useAppSelector } from "@/hooks/hooks";
 
 interface GeneratedContent {
   content: string;
@@ -23,9 +22,7 @@ interface GeneratedContent {
 }
 
 export function ContentGenerator({ topicId }: any) {
-  const dispatch = useAppDispatch();
   const [feedbackRequestData, setFeedbackRequestData] = React.useState<any>();
-  // const [blogLoader, setBlogLoader] = React.useState(false);
   const [blogs, setBlogs] = React.useState([]);
   const state = useAppSelector((state: any) => state.currentBlogTopic);
 
@@ -59,9 +56,6 @@ export function ContentGenerator({ topicId }: any) {
       if (errorBlogDataAfterFeedback) {
         throw new Error(errorBlogDataAfterFeedback);
       }
-      if (!blogDataAfterFeedback || !blogDataAfterFeedback.data?.blog) {
-        throw new Error("Blog generation failed or returned empty content");
-      }
     } catch (error) {
       console.error("Error in Generating Again:", error);
     }
@@ -74,10 +68,7 @@ export function ContentGenerator({ topicId }: any) {
       feedback: data.content.feedback,
     };
 
-    const { data: dataCreated } = await supabase
-      .from("Blogs")
-      .insert([dataToBeSent])
-      .select();
+    await supabase.from("Blogs").insert([dataToBeSent]).select();
   };
 
   React.useEffect(() => {
@@ -92,12 +83,11 @@ export function ContentGenerator({ topicId }: any) {
         },
       };
       insertDataInSupabase(dispatchData);
-      // dispatch(setCurrentBlog(dispatchData));
     }
   }, [feedbackData]);
 
   const getContentFromSupabase = async () => {
-    let { data: blogs, error } = await supabase
+    let { data: blogs } = await supabase
       .from("Blogs")
       .select("*")
       .eq("topic_id", topicId);
@@ -126,7 +116,7 @@ export function ContentGenerator({ topicId }: any) {
               );
             }
             return (
-              <div key={index} className="mb-4">
+              <div key={item.id} className="mb-4">
                 {item.feedback !== "" ? (
                   <Card>
                     <CardHeader>
@@ -136,7 +126,7 @@ export function ContentGenerator({ topicId }: any) {
                   </Card>
                 ) : null}
                 <GeneratedContentCard
-                  key={index}
+                  key={item.id}
                   index={index}
                   totalItems={blogs.length}
                   generatedContent={diffContent}

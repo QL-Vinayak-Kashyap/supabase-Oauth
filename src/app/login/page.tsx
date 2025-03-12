@@ -22,9 +22,7 @@ export default function LoginPage() {
     e.preventDefault();
     setIsLoading(true);
 
-    let { data: users, error } = await supabase
-      .from("users")
-      .select("email,status");
+    let { data: users } = await supabase.from("users").select("email,status");
 
     const userIndex = users.findIndex((item) => item.email === email);
 
@@ -59,20 +57,21 @@ export default function LoginPage() {
   }
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
-    let { data: users, error } = await supabase
-      .from("users")
-      .select("email,status");
+    let { data: users } = await supabase.from("users").select("email,status");
 
     const userIndex = users.findIndex((item) => item.email === email);
 
     if (users[userIndex].email === email && users[userIndex].status) {
       try {
-        const { data } = await supabase.auth.signInWithOAuth({
+        const { error } = await supabase.auth.signInWithOAuth({
           provider: "google",
           options: {
             redirectTo: `${window.location.origin}/auth/callback`,
           },
         });
+        if (error) {
+          throw new Error(error.message);
+        }
       } catch (error) {
         toast("Please check you creds...");
       }
@@ -90,8 +89,6 @@ export default function LoginPage() {
 
       if (session) {
         router.push("/dashboard"); // Redirect if already logged in
-      } else {
-        // setLoading(false);
       }
     };
 

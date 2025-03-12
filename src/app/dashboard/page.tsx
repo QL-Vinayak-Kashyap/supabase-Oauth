@@ -76,7 +76,7 @@ export default function Dashboard() {
       const { data: blogData, isSuccess } = await callGenerateBlogQuery();
       if (!blogData || !isSuccess) throw new Error("Blog generation failed");
 
-      const { data, error: blogInsertError } = await supabase
+      const { error: blogInsertError } = await supabase
         .from("Blogs")
         .insert([
           {

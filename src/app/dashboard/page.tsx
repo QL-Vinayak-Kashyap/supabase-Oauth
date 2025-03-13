@@ -24,7 +24,7 @@ import * as z from "zod";
 import { supabase } from "@/lib/supabaseClient";
 import React from "react";
 import { GenerateBlogRequest, useGenerateBlogQuery } from "@/redux/api/api";
-import { Loader2 } from "lucide-react";
+import { Loader2, Zap } from "lucide-react";
 import { setCurrentBlog } from "@/redux/slices/currentBlogTopic";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
@@ -139,9 +139,15 @@ export default function Dashboard() {
                     name="topic"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Topic</FormLabel>
+                        <FormLabel className="block text-sm font-medium text-gray-700 mb-1">
+                          Topic
+                        </FormLabel>
                         <FormControl>
-                          <Input placeholder="Enter your topic" {...field} />
+                          <Input
+                            placeholder="Enter your topic"
+                            {...field}
+                            className="w-full rounded-md border border-border px-4 py-3 bg-white/70 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -152,12 +158,15 @@ export default function Dashboard() {
                     name="word_count"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Number of Words</FormLabel>
+                        <FormLabel className="block text-sm font-medium text-gray-700 mb-1">
+                          Number of Words
+                        </FormLabel>
                         <FormControl>
                           <Input
                             type="number"
                             placeholder="Enter desired word count"
                             {...field}
+                            className="w-full rounded-md border border-border px-4 py-3 bg-white/70 focus:outline-none focus:ring-2 focus:ring-purple-500"
                           />
                         </FormControl>
                         <FormMessage />
@@ -167,6 +176,17 @@ export default function Dashboard() {
                 </CardContent>
                 <CardFooter>
                   <Button
+                    disabled={loadingFirstBlog}
+                    type="submit"
+                    className="w-full bg-purple-600 text-white rounded-md py-3 px-4 font-medium hover:bg-purple-700 transition-colors flex items-center justify-center"
+                  >
+                    <Zap className="h-4 w-4 mr-2" />
+                    {loadingFirstBlog && (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    )}
+                    {loadingFirstBlog ? "Generating..." : "Generate Content"}
+                  </Button>
+                  {/* <Button
                     type="submit"
                     className="w-full"
                     disabled={loadingFirstBlog}
@@ -175,7 +195,7 @@ export default function Dashboard() {
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     )}
                     {loadingFirstBlog ? "Generating..." : "Generate Content"}
-                  </Button>
+                  </Button> */}
                 </CardFooter>
               </Card>
             </form>

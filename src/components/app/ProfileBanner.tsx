@@ -44,10 +44,15 @@ export default function ProfileBanner() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="ghost" className="rounded-full">
-          <Avatar>
+        <Button
+          variant="ghost"
+          className="flex items-center justify-center p-1 rounded-full bg-gradient-to-r from-purple-500 to-purple-700 hover:from-purple-600 hover:to-purple-800 transition-all duration-300 hover:shadow-md"
+        >
+          <Avatar className="h-8 w-8 border-2 border-purple-100 hover:border-purple-200 transition-colors">
             <AvatarImage src="/avatar.png" alt="User Avatar" />
-            <AvatarFallback>U</AvatarFallback>
+            <AvatarFallback className="bg-purple-100 text-purple-700 font-medium">
+              {userData?.identities[0]?.full_name?.charAt(0) ?? "A"}
+            </AvatarFallback>
           </Avatar>
         </Button>
       </PopoverTrigger>
@@ -55,7 +60,9 @@ export default function ProfileBanner() {
         <div className="flex flex-col items-center gap-2">
           <Avatar className="w-16 h-16">
             <AvatarImage src="/avatar.png" alt="User Avatar" />
-            <AvatarFallback>U</AvatarFallback>
+            <AvatarFallback>
+              {userData?.identities[0]?.full_name?.charAt(0) ?? "A"}
+            </AvatarFallback>
           </Avatar>
           <h3 className="text-lg font-semibold">
             {userData?.identities[0]?.full_name ?? "Admin"}

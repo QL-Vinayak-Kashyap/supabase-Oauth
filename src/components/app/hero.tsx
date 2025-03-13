@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 const Hero = () => {
   return (
@@ -30,18 +31,18 @@ const Hero = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4 stagger-animate-4">
-            <a href="#" className="button-primary w-full sm:w-auto">
+            <Link href="/dashboard" className="button-primary w-full sm:w-auto">
               Get Started
               <ArrowRight className="ml-2 h-4 w-4" />
-            </a>
-            <a href="#" className="button-secondary w-full sm:w-auto">
+            </Link>
+            <Link href="#" className="button-secondary w-full sm:w-auto">
               View Demo
-            </a>
+            </Link>
           </div>
         </div>
 
         {/* Dashboard Preview */}
-        <div
+        {/* <div
           className="mt-16 md:mt-24 animate-fade-in-up opacity-0"
           style={{ animationDelay: "0.5s" }}
         >
@@ -53,7 +54,7 @@ const Hero = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   );

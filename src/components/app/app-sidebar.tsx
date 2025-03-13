@@ -65,10 +65,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           defaultVersion={data.versions[0]}
         />
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="p-4">
         <Button
           onClick={handleNewTopicGnerator}
-          className="group flex w-full items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+          className="w-full bg-purple-600 text-white rounded-md py-3 px-4 font-medium hover:bg-purple-700 transition-colors"
         >
           New Topic
         </Button>
@@ -80,7 +80,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             topics?.toReversed().map((item: Topics, index: number) => (
               <SidebarGroupContent
                 key={item.id}
-                className="group flex w-full items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                className="group flex w-full items-center rounded-lg py-2 hover:bg-purple-50 text-sm text-gray-700 font-medium transition-colors"
               >
                 <Link href={`/dashboard/${item.id}`}>{item.topic_name}</Link>
               </SidebarGroupContent>

@@ -147,7 +147,7 @@ export default function LoginPage() {
 
         {/* -------------------------GOOGLE LOGIN AND SIGNUP PAGE ROUTE --------------------------- */}
 
-        <div className="relative">
+        {/* <div className="relative">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-white/10"></div>
           </div>
@@ -183,7 +183,7 @@ export default function LoginPage() {
             />
           </svg>
           Sign in with Google
-        </Button>
+        </Button> */}
         <div className="text-center">
           <p className="text-sm text-muted-foreground">
             Don&apos;t have an account?

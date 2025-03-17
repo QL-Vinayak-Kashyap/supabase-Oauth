@@ -26,7 +26,7 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      let { data: users, error: fetchError } = await supabase
+      const { data: users, error: fetchError } = await supabase
         .from("users")
         .select("email,status");
 
@@ -51,7 +51,6 @@ export default function LoginPage() {
         }
 
         if (data?.user) {
-          router.push("/dashboard");
           dispatch(
             setUser({
               isLoggedIn: true,
@@ -62,13 +61,10 @@ export default function LoginPage() {
             })
           );
 
-          toast("Login Successfully!");
           Cookies.set("sb-access-token", data.session?.access_token || "", {
             secure: true,
           });
-        }
-        if (!error) {
-          router.push("/dashboard");
+          toast("Login Successfully!");
         }
       } else {
         throw new Error("Sorry!!! Please contact the Admin.");
@@ -80,21 +76,21 @@ export default function LoginPage() {
     }
   }
 
-  const handleGoogleSignIn = async () => {
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
-      if (error) {
-        throw new Error(error.message);
-      }
-    } catch (error) {
-      toast("Please check you creds...");
-    }
-  };
+  // const handleGoogleSignIn = async () => {
+  //   try {
+  //     const { error } = await supabase.auth.signInWithOAuth({
+  //       provider: "google",
+  //       options: {
+  //         redirectTo: `${window.location.origin}/auth/callback`,
+  //       },
+  //     });
+  //     if (error) {
+  //       throw new Error(error.message);
+  //     }
+  //   } catch (error) {
+  //     toast("Please check you creds...");
+  //   }
+  // };
 
   useEffect(() => {
     const checkSession = async () => {

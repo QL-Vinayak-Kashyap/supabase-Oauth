@@ -13,10 +13,8 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import ProfileBanner from "@/components/app/ProfileBanner";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useGetTokenQuery } from "@/redux/api/api";
-import { supabase } from "@/lib/supabaseClient";
-import { setUser } from "@/redux/slices/currentUserSlice";
 import { setBlogToken } from "@/redux/slices/currentBlogTopic";
 
 import { AppSidebar } from "@/components/app/app-sidebar";
@@ -29,37 +27,13 @@ export default function DashboardLayout({
 }>) {
   const dispatch = useAppDispatch();
   const userState = useAppSelector((state) => state.currentUser);
-  const [userData, setUserData] = useState<any>();
 
   const {
     isFetching,
     data: tokenData,
     isSuccess,
     isError,
-  } = useGetTokenQuery({ uuid: userData?.id }, { skip: !userData?.id });
-
-  const getUser = async () => {
-    const token = userState.token;
-    const {
-      data: { user },
-    } = await supabase.auth.getUser(token);
-    setUserData(user);
-    dispatch(
-      setUser({
-        isLoggedIn: true,
-        email: user?.email ?? "",
-        token: token,
-        full_name: user?.user_metadata?.full_name,
-        id: user?.id,
-      })
-    );
-  };
-
-  useEffect(() => {
-    (async () => {
-      await getUser();
-    })();
-  }, []);
+  } = useGetTokenQuery({ uuid: userState?.id }, { skip: !userState?.id });
 
   useEffect(() => {
     if (isError) return;

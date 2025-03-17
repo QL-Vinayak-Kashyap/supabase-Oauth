@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { Eye, EyeOff, Loader2, Lock, Mail, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -68,23 +68,6 @@ export default function SignUpPage() {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    const checkSession = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      console.log("session", session);
-
-      if (session) {
-        router.push("/dashboard"); // Redirect if already logged in
-      } else {
-        // setLoading(false);
-      }
-    };
-
-    checkSession();
-  }, [router]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-indigo-50">

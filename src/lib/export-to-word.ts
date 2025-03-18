@@ -33,9 +33,6 @@ export const exportToWord = async (markdownContent: string, topic: string) => {
       listLevel++; // Increase list level
 
       token.items.forEach((item: any, index: number) => {
-        if (item.text.includes("- **")) {
-          console.log("item", item);
-        }
         const isOrdered = token.ordered;
         const prefix = isOrdered ? `${index + 1}. ` : "• ";
         const children = [new TextRun({ text: prefix, bold: true, size: 24 })]; // Bullet or Number prefix

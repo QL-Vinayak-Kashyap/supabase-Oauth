@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 const CallToAction = () => {
   return (
@@ -28,20 +29,20 @@ const CallToAction = () => {
               className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4 animate-fade-in"
               style={{ animationDelay: "0.2s" }}
             >
-              <a
-                href="#"
+              <Link
+                href="/dashboard"
                 className="py-3 px-8 rounded-md bg-white text-purple-700 font-medium transition-all hover:bg-white/90 shadow-lg hover:shadow-xl w-full sm:w-auto"
               >
                 Get Started for Free
                 <ArrowRight className="ml-2 h-4 w-4 inline-block" />
-              </a>
+              </Link>
 
-              <a
+              {/* <Link
                 href="#"
                 className="py-3 px-8 rounded-md bg-transparent border border-white/30 text-white font-medium transition-all hover:bg-white/10 w-full sm:w-auto"
               >
                 Request Demo
-              </a>
+              </Link> */}
             </div>
           </div>
         </div>

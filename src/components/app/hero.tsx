@@ -35,9 +35,9 @@ const Hero = () => {
               Get Started
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
-            <Link href="#" className="button-secondary w-full sm:w-auto">
+            {/* <Link  href="#" className="button-secondary w-full sm:w-auto">
               View Demo
-            </Link>
+            </Link> */}
           </div>
         </div>
 

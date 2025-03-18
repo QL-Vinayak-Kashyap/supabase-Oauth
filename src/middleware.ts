@@ -27,7 +27,9 @@ export async function middleware(request: NextRequest) {
   // 🔹 Validate user with token
   const { data } = await supabase.auth.getUser(token);
 
-  if (data) {
+  console.log("data", data);
+
+  if (data?.user) {
     // Redirect logged-in users away from login page
     if (request.nextUrl.pathname === "/login") {
       return NextResponse.redirect(new URL("/dashboard", request.url));

@@ -8,9 +8,26 @@ import {
 } from "docx";
 import { marked } from "marked";
 
+// Define types for tokens
+interface MarkdownToken {
+  type: string;
+  text?: string;
+  depth?: number;
+  ordered?: boolean;
+  items?: MarkdownListItem[];
+  tokens?: MarkdownToken[];
+}
+
+interface MarkdownListItem {
+  text: string;
+  tokens?: MarkdownToken[];
+}
+
 export const exportToWord = async (markdownContent: string, topic: string) => {
-  const tokens = marked.lexer(markdownContent);
-  const docChildren = [];
+  const tokens: MarkdownToken[] = marked.lexer(
+    markdownContent
+  ) as MarkdownToken[];
+  const docChildren: Paragraph[] = [];
   let listLevel = 0;
 
   for (const token of tokens) {
@@ -19,7 +36,7 @@ export const exportToWord = async (markdownContent: string, topic: string) => {
         new Paragraph({
           children: [
             new TextRun({
-              text: token.text,
+              text: token.text || "",
               bold: true,
               size: token.depth === 2 ? 36 : 30,
             }),
@@ -29,19 +46,21 @@ export const exportToWord = async (markdownContent: string, topic: string) => {
           spacing: { after: 100 },
         })
       );
-    } else if (token.type === "list") {
+    } else if (token.type === "list" && token.items) {
       listLevel++; // Increase list level
 
-      token.items.forEach((item: any, index: number) => {
+      token.items.forEach((item: MarkdownListItem, index: number) => {
         const isOrdered = token.ordered;
         const prefix = isOrdered ? `${index + 1}. ` : "• ";
-        const children = [new TextRun({ text: prefix, bold: true, size: 24 })]; // Bullet or Number prefix
+        const children: TextRun[] = [
+          new TextRun({ text: prefix, bold: true, size: 24 }),
+        ];
 
-        let parts = item.text.split(/\*\*(.*?)\*\*/);
-        if (item.text.includes("- **")) {
-          parts = item.tokens[0].text.split(/\*\*(.*?)\*\*/);
+        let parts = item.text?.split(/\*\*(.*?)\*\*/);
+        if (item.text?.includes("- **")) {
+          parts = item.tokens?.[0]?.text?.split(/\*\*(.*?)\*\*/) || [];
         }
-        for (let i = 0; i < parts.length; i++) {
+        for (let i = 0; i < parts?.length; i++) {
           if (i % 2 === 1) {
             children.push(
               new TextRun({ text: parts[i], bold: true, size: 24 })
@@ -59,21 +78,22 @@ export const exportToWord = async (markdownContent: string, topic: string) => {
           })
         );
 
-        // Handle nested lists properly
-        if (item.tokens) {
-          item.tokens.forEach((nestedToken: any) => {
-            if (nestedToken.type === "list") {
+        // Handle nested lists
+        if (item?.tokens) {
+          item?.tokens.forEach((nestedToken: MarkdownToken) => {
+            if (nestedToken?.type === "list" && nestedToken.items) {
               nestedToken.items.forEach(
-                (nestedItem: any, nestedIndex: number) => {
-                  const nestedPrefix = nestedToken.ordered
+                (nestedItem: MarkdownListItem, nestedIndex: number) => {
+                  const nestedPrefix = nestedToken?.ordered
                     ? `${nestedIndex + 1}. `
                     : "   • ";
 
-                  const nestedChildren = [
+                  const nestedChildren: TextRun[] = [
                     new TextRun({ text: nestedPrefix, bold: true, size: 22 }),
                   ];
 
-                  const nestedParts = nestedItem.text.split(/\*\*(.*?)\*\*/);
+                  const nestedParts =
+                    nestedItem.text?.split(/\*\*(.*?)\*\*/) || [];
                   for (let j = 0; j < nestedParts.length; j++) {
                     if (j % 2 === 1) {
                       nestedChildren.push(
@@ -106,8 +126,8 @@ export const exportToWord = async (markdownContent: string, topic: string) => {
 
       listLevel--; // Decrease after list ends
     } else if (token.type === "paragraph") {
-      if (!token.text.includes("- **")) {
-        const textRuns = parseMarkdownText(token.text);
+      if (!token.text?.includes("- **")) {
+        const textRuns = parseMarkdownText(token.text || "");
         docChildren.push(
           new Paragraph({
             children: textRuns,
@@ -144,23 +164,30 @@ export const exportToWord = async (markdownContent: string, topic: string) => {
   window.URL.revokeObjectURL(url);
 };
 
-function parseMarkdownText(text) {
+// Function to parse markdown links
+function parseMarkdownText(text: string): TextRun[] {
   const regex = /\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g;
-  let match;
-  const parts = [];
+  const match = regex?.exec(text);
+  const parts: TextRun[] = [];
   let lastIndex = 0;
 
-  while ((match = regex.exec(text)) !== null) {
+  while (match !== null) {
     if (match.index > lastIndex) {
       parts.push(new TextRun({ text: text.substring(lastIndex, match.index) }));
     }
-    parts.push(
-      new ExternalHyperlink({
-        children: [new TextRun({ text: match[1], style: "Hyperlink" })],
-        link: match[2],
-      })
-    );
-    lastIndex = regex.lastIndex;
+
+    const hyperlinkParagraph = new Paragraph({
+      children: [
+        new ExternalHyperlink({
+          children: [new TextRun({ text: match[1], style: "Hyperlink" })],
+          link: match[2],
+        }),
+      ],
+    });
+    //@ts-ignore
+    parts.push(hyperlinkParagraph);
+
+    lastIndex = regex?.lastIndex;
   }
 
   if (lastIndex < text.length) {

@@ -165,29 +165,25 @@ export const exportToWord = async (markdownContent: string, topic: string) => {
 };
 
 // Function to parse markdown links
-function parseMarkdownText(text: string): TextRun[] {
+
+function parseMarkdownText(text: string) {
   const regex = /\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g;
-  const match = regex?.exec(text);
-  const parts: TextRun[] = [];
+  let match = regex.exec(text);
+  const parts = [];
   let lastIndex = 0;
 
   while (match !== null) {
-    if (match.index > lastIndex) {
+    if (match?.index > lastIndex) {
       parts.push(new TextRun({ text: text.substring(lastIndex, match.index) }));
     }
-
-    const hyperlinkParagraph = new Paragraph({
-      children: [
-        new ExternalHyperlink({
-          children: [new TextRun({ text: match[1], style: "Hyperlink" })],
-          link: match[2],
-        }),
-      ],
-    });
-    //@ts-ignore
-    parts.push(hyperlinkParagraph);
-
-    lastIndex = regex?.lastIndex;
+    parts.push(
+      new ExternalHyperlink({
+        children: [new TextRun({ text: match[1], style: "Hyperlink" })],
+        link: match[2],
+      })
+    );
+    lastIndex = regex.lastIndex;
+    match = regex.exec(text);
   }
 
   if (lastIndex < text.length) {

@@ -142,12 +142,7 @@ export const exportToWord = async (markdownContent: string, topic: string) => {
     sections: [
       {
         properties: {},
-        children: [
-          new Paragraph({
-            children: [new TextRun({ text: topic, bold: true, size: 56 })],
-          }),
-          ...docChildren,
-        ],
+        children: [...docChildren],
       },
     ],
   });

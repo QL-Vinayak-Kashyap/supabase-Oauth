@@ -39,10 +39,10 @@ export function ContentGenerator({ topicId }: any) {
     skip: !feedbackRequestData,
   });
 
-  async function handleGenerateAgain(value: any) {
+  async function handleGenerateAgain(value: any, forWord: string) {
     try {
       value["token"] = state?.blogToken || "";
-      value["blog_content"] = state?.content?.slice(-1)[0]?.blog || "";
+      value["blog_content"] = state?.content?.slice(-1)[0]?.blog ?? forWord;
       setFeedbackRequestData(value);
 
       const {

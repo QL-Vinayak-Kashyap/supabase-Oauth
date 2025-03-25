@@ -13,6 +13,7 @@ import { Copy, FileEdit, Loader2 } from "lucide-react";
 import { MarkdownRenderer } from "./markdown-renderer";
 import { exportToWord } from "@/lib/export-to-word";
 import React from "react";
+import { toast } from "sonner";
 
 export default function GeneratedContentCard({
   generatedContent,
@@ -25,6 +26,10 @@ export default function GeneratedContentCard({
   topicName,
 }: any) {
   const [isExporting, setIsExporting] = React.useState(false);
+
+  const helperHandleGenerateAgain = async (value: any) => {
+    handleGenerateAgain(value, forWord);
+  };
 
   const handleExportToWord = async () => {
     if (!generatedContent) return;
@@ -63,11 +68,12 @@ export default function GeneratedContentCard({
           <Button
             variant="secondary"
             onClick={() => {
-              const activeTab = document.querySelector(
-                '[role="tabpanel"]:not([hidden])'
-              );
-              const content = activeTab?.textContent || generatedContent;
-              navigator.clipboard.writeText(content);
+              // const activeTab = document.querySelector(
+              //   '[role="tabpanel"]:not([hidden])'
+              // );
+              // const content = generatedContent;
+              navigator.clipboard.writeText(forWord);
+              toast("Copied!!!");
             }}
           >
             <Copy className="mr-2 h-4 w-4" />
@@ -90,7 +96,9 @@ export default function GeneratedContentCard({
           <div className="w-full mx-auto p-4 border rounded-lg shadow-md">
             <h2 className="text-xl font-semibold mb-2">Add Feedback</h2>
             <Form {...feedbackForm}>
-              <form onSubmit={feedbackForm.handleSubmit(handleGenerateAgain)}>
+              <form
+                onSubmit={feedbackForm.handleSubmit(helperHandleGenerateAgain)}
+              >
                 <FormField
                   control={feedbackForm.control}
                   name="feedback"

@@ -33,6 +33,9 @@ export default function LoginPage() {
       if (fetchError) throw new Error("Error fetching users");
       if (!users || users.length === 0) throw new Error("No users found");
       const userIndex = users.findIndex((item) => item.email === email);
+      if (userIndex === -1) {
+        throw new Error("User not exist with this email");
+      }
 
       if (
         userIndex !== -1 &&

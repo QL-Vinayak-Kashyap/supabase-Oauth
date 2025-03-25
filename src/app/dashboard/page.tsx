@@ -24,10 +24,27 @@ import * as z from "zod";
 import { supabase } from "@/lib/supabaseClient";
 import React from "react";
 import { GenerateBlogRequest, useGenerateBlogQuery } from "@/redux/api/api";
-import { Loader2, Zap } from "lucide-react";
+import { Loader2, PlusCircle, X, Zap } from "lucide-react";
 import { setCurrentBlog } from "@/redux/slices/currentBlogTopic";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+
+const formSchema = z.object({
+  // word_count: z.string(),
+  topic: z.string().min(3, { message: "Topic must be at least 3 characters" }),
+  word_count: z.coerce
+    .number()
+    .min(100, { message: "Minimum 100 words required" })
+    .max(10000, { message: "Maximum 10000 words allowed" }),
+  mainKeyword: z
+    .string()
+    .min(2, { message: "Main Keyword must be at least 2 characters" })
+    .max(20, { message: "Main Keyword must not greater than 20 characters" })
+    .optional(),
+  keywords: z.array(z.string()).optional(),
+});
+
+type FormValues = z.infer<typeof formSchema>;
 
 export default function Dashboard() {
   const router = useRouter();
@@ -35,16 +52,15 @@ export default function Dashboard() {
   const [reqData, setReqData] = React.useState<GenerateBlogRequest>();
   const userState = useAppSelector((state) => state.currentUser);
   const state = useAppSelector((state) => state.currentBlogTopic);
-  const formSchema = z.object({
-    topic: z.string().min(3, "Topic must be at least 3 characters"),
-    word_count: z.string(),
-  });
+  const [currentKeyword, setCurrentKeyword] = React.useState<string>("");
 
-  const form = useForm({
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       topic: "",
-      word_count: "",
+      word_count: 100,
+      mainKeyword: "",
+      keywords: [],
     },
   });
 
@@ -97,6 +113,32 @@ export default function Dashboard() {
     }
   }
 
+  const addKeyword = () => {
+    if (
+      currentKeyword.trim() &&
+      !form.getValues().keywords?.includes(currentKeyword.trim())
+    ) {
+      const currentKeywords = form.getValues().keywords || [];
+      form.setValue("keywords", [...currentKeywords, currentKeyword.trim()]);
+      setCurrentKeyword("");
+    }
+  };
+
+  const removeKeyword = (indexToRemove: number) => {
+    const tempCurrentKeywords = form.getValues().keywords || [];
+    const updatedKeywords = tempCurrentKeywords.filter(
+      (_, index) => index !== indexToRemove
+    );
+    form.setValue("keywords", updatedKeywords, { shouldValidate: true });
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      addKeyword();
+    }
+  };
+
   React.useEffect(() => {
     if (data) {
       const dispatchData: any = {
@@ -119,10 +161,6 @@ export default function Dashboard() {
             <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
               Content/Blog Creator
             </h1>
-            <p className="text-muted-foreground">
-              Enter your topic and desired word count to generate AI-powered
-              content.
-            </p>
           </div>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -173,6 +211,68 @@ export default function Dashboard() {
                       </FormItem>
                     )}
                   />
+                  <FormField
+                    control={form.control}
+                    name="mainKeyword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="block text-sm font-medium text-gray-700 mb-1">
+                          Main Keyword
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Enter Main Keyword"
+                            {...field}
+                            className="w-full rounded-md border border-border px-4 py-3 bg-white/70 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <div className="space-y-2">
+                    <FormLabel className="block text-sm font-medium text-gray-700 mb-1">
+                      Secondary Keywords
+                    </FormLabel>
+                    <div className="flex items-center">
+                      <Input
+                        value={currentKeyword}
+                        onChange={(e) => setCurrentKeyword(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        placeholder="Add keywords and press Enter"
+                        className="flex-1 rounded-md border border-border px-4 py-3 bg-white/70 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      />
+                      <Button
+                        type="button"
+                        onClick={addKeyword}
+                        variant="ghost"
+                        className="ml-2"
+                        disabled={!currentKeyword.trim()}
+                      >
+                        <PlusCircle className="h-5 w-5" />
+                      </Button>
+                    </div>
+                    {form.getValues().keywords &&
+                      form.getValues().keywords.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mt-3">
+                          {form.getValues().keywords.map((keyword, index) => (
+                            <div
+                              key={index}
+                              className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full flex items-center text-sm"
+                            >
+                              {keyword}
+                              <button
+                                type="button"
+                                onClick={() => removeKeyword(index)}
+                                className="ml-2 text-purple-600 hover:text-purple-800 focus:outline-none"
+                              >
+                                <X className="h-3 w-3" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                  </div>
                 </CardContent>
                 <CardFooter>
                   <Button
@@ -186,16 +286,6 @@ export default function Dashboard() {
                     )}
                     {loadingFirstBlog ? "Generating..." : "Generate Content"}
                   </Button>
-                  {/* <Button
-                    type="submit"
-                    className="w-full"
-                    disabled={loadingFirstBlog}
-                  >
-                    {loadingFirstBlog && (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    )}
-                    {loadingFirstBlog ? "Generating..." : "Generate Content"}
-                  </Button> */}
                 </CardFooter>
               </Card>
             </form>

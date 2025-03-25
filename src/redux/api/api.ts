@@ -18,6 +18,8 @@ export interface GenerateBlogRequest {
   topic: string;
   word_count: string;
   token: string;
+  main_keyword: string;
+  secondary_keywords: string;
 }
 
 interface GenerateBlogResponse {
@@ -39,7 +41,6 @@ interface GenerateBlogWithFeedbackResponse {
   content: string;
   topic: string;
 }
-
 export const userApi = createApi({
   reducerPath: "userApi",
   baseQuery: fetchBaseQuery({ baseUrl: "https://api-qlwritter.qkkalabs.com/" }), // Change this to your actual API base URL
@@ -88,7 +89,12 @@ export const userApi = createApi({
       query: (data) => ({
         url: "/blogs",
         method: "POST",
-        body: { topic: data?.topic, word_count: data?.word_count },
+        body: {
+          topic: data?.topic,
+          word_count: data?.word_count,
+          main_keyword: data?.main_keyword,
+          secondary_keywords: data?.secondary_keywords,
+        },
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${data?.token}`,

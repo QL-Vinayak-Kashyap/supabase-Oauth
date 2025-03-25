@@ -16,9 +16,9 @@ import ProfileBanner from "@/components/app/ProfileBanner";
 import { useEffect } from "react";
 import { useGetTokenQuery } from "@/redux/api/api";
 import { setBlogToken } from "@/redux/slices/currentBlogTopic";
-
 import { AppSidebar } from "@/components/app/app-sidebar";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { AppRoutes } from "@/lib/utils";
 
 export default function DashboardLayout({
   children,
@@ -47,13 +47,15 @@ export default function DashboardLayout({
       <AppSidebar />
       <SidebarInset>
         <header className="flex justify-between h-16 shrink-0 items-center gap-2 border-b px-4 sticky top-[0px] bg-white">
-          <div className="flex flex-row items-center gap-2 ">
+          <div className="flex flex-row items-center gap-2">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">Dashboard</BreadcrumbLink>
+                  <BreadcrumbLink href={AppRoutes.DASHBOARD}>
+                    Dashboard
+                  </BreadcrumbLink>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>

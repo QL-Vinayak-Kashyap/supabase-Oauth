@@ -71,6 +71,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   };
 
   const handleDeleteTopic = async (id: string) => {
+    setDeleteId(id);
     setDeleteConfirmOpen(true);
   };
 
@@ -88,6 +89,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   };
 
   const handleUpdateTopic = async () => {
+    setIsSaving(true);
     if (editingTopic.trim()) {
       const { data, error } = await supabase
         .from("Topics")
@@ -96,6 +98,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         .select("*");
       setDialogOpen(false);
     }
+    setIsSaving(false);
   };
 
   const getTopics = async () => {
@@ -115,7 +118,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   React.useEffect(() => {
     getTopics();
-  }, [blogState.topic, dialogOpen]);
+  }, [blogState.topic, dialogOpen, deleteConfirmOpen]);
 
   return (
     <>

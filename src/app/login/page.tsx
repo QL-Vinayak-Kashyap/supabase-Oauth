@@ -12,6 +12,15 @@ import { toast } from "sonner";
 import { useAppDispatch } from "@/hooks/hooks";
 import { setUser } from "@/redux/slices/currentUserSlice";
 import { useRouter } from "next/navigation";
+import { AppRoutes } from "@/lib/utils";
+// import bcrypt from "bcryptjs";
+
+// const comparePassword = async (
+//   password: string,
+//   hashedPassword: string
+// ): Promise<boolean> => {
+//   return await bcrypt.compare(password, hashedPassword);
+// };
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -102,7 +111,7 @@ export default function LoginPage() {
       } = await supabase.auth.getSession();
 
       if (session) {
-        router.push("/dashboard"); // Redirect if already logged in
+        router.push(AppRoutes.DASHBOARD); // Redirect if already logged in
       }
     };
 
@@ -244,7 +253,7 @@ export default function LoginPage() {
             <p className="text-sm text-gray-600">
               Don't have an account?{" "}
               <Link
-                href="/signup"
+                href={AppRoutes.SIGNUP}
                 className="font-medium text-purple-600 hover:text-purple-800"
               >
                 Sign up

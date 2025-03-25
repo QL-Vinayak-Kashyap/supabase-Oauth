@@ -9,6 +9,13 @@ import { Input } from "@/components/ui/input";
 import { supabase } from "@/lib/supabaseClient";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+// import bcrypt from "bcryptjs";
+
+// export const hashPassword = async (password: string): Promise<string> => {
+//   const saltRounds = 10; // Recommended salt rounds
+//   const hashedPassword = await bcrypt.hash(password, saltRounds);
+//   return hashedPassword;
+// };
 
 export default function SignUpPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -23,6 +30,7 @@ export default function SignUpPage() {
     setIsLoading(true);
 
     try {
+      // const hashedPassword = await hashPassword(password);
       const { data, error } = await supabase.auth.signUp({
         email: email,
         password: password,

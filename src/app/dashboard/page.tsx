@@ -36,12 +36,12 @@ const formSchema = z.object({
     .number()
     .min(100, { message: "Minimum 100 words required" })
     .max(10000, { message: "Maximum 10000 words allowed" }),
-  mainKeyword: z
+  main_keyword: z
     .string()
     .min(2, { message: "Main Keyword must be at least 2 characters" })
     .max(20, { message: "Main Keyword must not greater than 20 characters" })
     .optional(),
-  keywords: z.array(z.string()).optional(),
+  secondary_keywords: z.array(z.string()).optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -59,8 +59,8 @@ export default function Dashboard() {
     defaultValues: {
       topic: "",
       word_count: 100,
-      mainKeyword: "",
-      keywords: [],
+      main_keyword: "",
+      secondary_keywords: [],
     },
   });
 
@@ -71,8 +71,13 @@ export default function Dashboard() {
   } = useGenerateBlogQuery(reqData);
 
   async function onSubmit(value: any) {
+    console.log("value in onSubmit", value);
     try {
       value["token"] = state?.blogToken || "";
+      value["word_count"] = "" + value["word_count"];
+      value["secondary_keywords"] =
+        value["secondary_keywords"]?.join(", ") ?? "";
+      console.log("value", value);
       setReqData(value);
 
       const datatoInsert = {
@@ -116,20 +121,25 @@ export default function Dashboard() {
   const addKeyword = () => {
     if (
       currentKeyword.trim() &&
-      !form.getValues().keywords?.includes(currentKeyword.trim())
+      !form.getValues().secondary_keywords?.includes(currentKeyword.trim())
     ) {
-      const currentKeywords = form.getValues().keywords || [];
-      form.setValue("keywords", [...currentKeywords, currentKeyword.trim()]);
+      const currentKeywords = form.getValues().secondary_keywords || [];
+      form.setValue("secondary_keywords", [
+        ...currentKeywords,
+        currentKeyword.trim(),
+      ]);
       setCurrentKeyword("");
     }
   };
 
   const removeKeyword = (indexToRemove: number) => {
-    const tempCurrentKeywords = form.getValues().keywords || [];
+    const tempCurrentKeywords = form.getValues().secondary_keywords || [];
     const updatedKeywords = tempCurrentKeywords.filter(
       (_, index) => index !== indexToRemove
     );
-    form.setValue("keywords", updatedKeywords, { shouldValidate: true });
+    form.setValue("secondary_keywords", updatedKeywords, {
+      shouldValidate: true,
+    });
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -213,7 +223,7 @@ export default function Dashboard() {
                   />
                   <FormField
                     control={form.control}
-                    name="mainKeyword"
+                    name="main_keyword"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="block text-sm font-medium text-gray-700 mb-1">
@@ -252,24 +262,26 @@ export default function Dashboard() {
                         <PlusCircle className="h-5 w-5" />
                       </Button>
                     </div>
-                    {form.getValues().keywords &&
-                      form.getValues().keywords.length > 0 && (
+                    {form.getValues().secondary_keywords &&
+                      form.getValues().secondary_keywords.length > 0 && (
                         <div className="flex flex-wrap gap-2 mt-3">
-                          {form.getValues().keywords.map((keyword, index) => (
-                            <div
-                              key={index}
-                              className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full flex items-center text-sm"
-                            >
-                              {keyword}
-                              <button
-                                type="button"
-                                onClick={() => removeKeyword(index)}
-                                className="ml-2 text-purple-600 hover:text-purple-800 focus:outline-none"
+                          {form
+                            .getValues()
+                            .secondary_keywords.map((keyword, index) => (
+                              <div
+                                key={index}
+                                className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full flex items-center text-sm"
                               >
-                                <X className="h-3 w-3" />
-                              </button>
-                            </div>
-                          ))}
+                                {keyword}
+                                <button
+                                  type="button"
+                                  onClick={() => removeKeyword(index)}
+                                  className="ml-2 text-purple-600 hover:text-purple-800 focus:outline-none"
+                                >
+                                  <X className="h-3 w-3" />
+                                </button>
+                              </div>
+                            ))}
                         </div>
                       )}
                   </div>

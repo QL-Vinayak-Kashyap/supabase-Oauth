@@ -30,7 +30,6 @@ import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 
 const formSchema = z.object({
-  // word_count: z.string(),
   topic: z.string().min(3, { message: "Topic must be at least 3 characters" }),
   word_count: z.coerce
     .number()
@@ -71,13 +70,11 @@ export default function Dashboard() {
   } = useGenerateBlogQuery(reqData);
 
   async function onSubmit(value: any) {
-    console.log("value in onSubmit", value);
     try {
       value["token"] = state?.blogToken || "";
       value["word_count"] = "" + value["word_count"];
       value["secondary_keywords"] =
         value["secondary_keywords"]?.join(", ") ?? "";
-      console.log("value", value);
       setReqData(value);
 
       const datatoInsert = {
@@ -120,14 +117,11 @@ export default function Dashboard() {
 
   const addKeyword = () => {
     if (
-      currentKeyword.trim() &&
-      !form.getValues().secondary_keywords?.includes(currentKeyword.trim())
+      currentKeyword &&
+      !form.getValues().secondary_keywords?.includes(currentKeyword)
     ) {
       const currentKeywords = form.getValues().secondary_keywords || [];
-      form.setValue("secondary_keywords", [
-        ...currentKeywords,
-        currentKeyword.trim(),
-      ]);
+      form.setValue("secondary_keywords", [...currentKeywords, currentKeyword]);
       setCurrentKeyword("");
     }
   };
@@ -247,7 +241,9 @@ export default function Dashboard() {
                     <div className="flex items-center">
                       <Input
                         value={currentKeyword}
-                        onChange={(e) => setCurrentKeyword(e.target.value)}
+                        onChange={(e) =>
+                          setCurrentKeyword(e.target.value.trim())
+                        }
                         onKeyDown={handleKeyDown}
                         placeholder="Add keywords and press Enter"
                         className="flex-1 rounded-md border border-border px-4 py-3 bg-white/70 focus:outline-none focus:ring-2 focus:ring-purple-500"
@@ -257,7 +253,7 @@ export default function Dashboard() {
                         onClick={addKeyword}
                         variant="ghost"
                         className="ml-2"
-                        disabled={!currentKeyword.trim()}
+                        disabled={!currentKeyword}
                       >
                         <PlusCircle className="h-5 w-5" />
                       </Button>

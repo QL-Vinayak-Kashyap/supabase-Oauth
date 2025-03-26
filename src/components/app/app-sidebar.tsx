@@ -42,6 +42,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
+import { AppRoutes } from "@/lib/utils";
 
 interface Topics {
   id: string;
@@ -145,7 +146,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   key={index}
                   className="flex items-center w-full hover:bg-purple-50 p-1 px-2 rounded-lg"
                 >
-                  <Link href={`/dashboard/${item.id}`} className="w-full">
+                  <Link
+                    href={`${AppRoutes.DASHBOARD}/${item.id}`}
+                    className="w-full"
+                  >
                     <SidebarGroupContent
                       key={item.id}
                       className="group flex w-full items-center rounded-lg py-2 hover:bg-purple-50 text-sm text-gray-700 font-medium transition-colors"

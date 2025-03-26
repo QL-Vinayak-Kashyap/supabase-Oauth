@@ -15,6 +15,10 @@ import { exportToWord } from "@/lib/export-to-word";
 import React from "react";
 import { toast } from "sonner";
 
+type FeedbackTypes = {
+  feedback: string;
+};
+
 export default function GeneratedContentCard({
   generatedContent,
   feedbackForm,
@@ -27,7 +31,7 @@ export default function GeneratedContentCard({
 }: any) {
   const [isExporting, setIsExporting] = React.useState(false);
 
-  const helperHandleGenerateAgain = async (value: any) => {
+  const helperHandleGenerateAgain = async (value: FeedbackTypes) => {
     handleGenerateAgain(value, forWord);
   };
 

@@ -77,14 +77,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   };
 
   const confirmDeleteTopic = async () => {
-    const { error } = await supabase.from("Topics").delete().eq("id", deleteId);
+    const { error } = await supabase
+      .from("Topics")
+      .delete()
+      .eq("id", deleteId)
+      .select("*");
     if (error) {
       toast(error.message);
     }
     setDeleteConfirmOpen(false);
+    await getTopics();
+    router.push(AppRoutes.DASHBOARD);
   };
 
-  const handleOpenUpdateDialog = (id: string) => {
+  const handleOpenUpdateDialog = (id: string, name: string) => {
+    setEditingTopic(name);
     setEditingId(id);
     setDialogOpen(true);
   };
@@ -170,7 +177,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     <DropdownMenuContent align="end" className="bg-white">
                       <DropdownMenuItem
                         className="flex items-center cursor-pointer"
-                        onClick={() => handleOpenUpdateDialog(item.id)}
+                        onClick={() =>
+                          handleOpenUpdateDialog(item.id, item.topic_name)
+                        }
                       >
                         <Pencil className="h-4 w-4 mr-2" />
                         Edit Topic

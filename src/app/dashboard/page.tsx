@@ -116,12 +116,13 @@ export default function Dashboard() {
   }
 
   const addKeyword = () => {
+    const trimmedKeyword = currentKeyword?.trim();
     if (
-      currentKeyword &&
-      !form.getValues().secondary_keywords?.includes(currentKeyword)
+      trimmedKeyword &&
+      !form.getValues().secondary_keywords?.includes(trimmedKeyword)
     ) {
       const currentKeywords = form.getValues().secondary_keywords || [];
-      form.setValue("secondary_keywords", [...currentKeywords, currentKeyword]);
+      form.setValue("secondary_keywords", [...currentKeywords, trimmedKeyword]);
       setCurrentKeyword("");
     }
   };
@@ -241,9 +242,7 @@ export default function Dashboard() {
                     <div className="flex items-center">
                       <Input
                         value={currentKeyword}
-                        onChange={(e) =>
-                          setCurrentKeyword(e.target.value.trim())
-                        }
+                        onChange={(e) => setCurrentKeyword(e.target.value)}
                         onKeyDown={handleKeyDown}
                         placeholder="Add keywords and press Enter"
                         className="flex-1 rounded-md border border-border px-4 py-3 bg-white/70 focus:outline-none focus:ring-2 focus:ring-purple-500"
@@ -253,7 +252,7 @@ export default function Dashboard() {
                         onClick={addKeyword}
                         variant="ghost"
                         className="ml-2"
-                        disabled={!currentKeyword}
+                        disabled={!currentKeyword?.trim()}
                       >
                         <PlusCircle className="h-5 w-5" />
                       </Button>

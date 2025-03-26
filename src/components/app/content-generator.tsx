@@ -25,6 +25,7 @@ export function ContentGenerator({ topicId }: any) {
   const [feedbackRequestData, setFeedbackRequestData] = React.useState<any>();
   const [topic, setTopic] = React.useState([]);
   const [blogs, setBlogs] = React.useState([]);
+  const [blogInserted, setBlogInserted] = React.useState(false);
   const state = useAppSelector((state: any) => state.currentBlogTopic);
 
   const feedbackForm = useForm({
@@ -63,13 +64,19 @@ export function ContentGenerator({ topicId }: any) {
   }
 
   const insertDataInSupabase = async (data: any) => {
+    setBlogInserted(true);
     const dataToBeSent = {
       topic_id: topicId,
       content: data.content.blog,
       feedback: data.content.feedback,
     };
-
-    await supabase.from("Blogs").insert([dataToBeSent]).select();
+    const { data: insertedBlog } = await supabase
+      .from("Blogs")
+      .insert([dataToBeSent])
+      .select();
+    if (insertedBlog) {
+      setBlogInserted(false);
+    }
   };
 
   React.useEffect(() => {
@@ -113,7 +120,7 @@ export function ContentGenerator({ topicId }: any) {
       getTopicName();
       getContentFromSupabase();
     }
-  }, [feedbackData]);
+  }, [feedbackData, blogInserted]);
 
   return (
     <div className="space-y-8">

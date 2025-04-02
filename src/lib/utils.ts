@@ -11,3 +11,8 @@ export enum AppRoutes {
   LOGIN = "/login",
   SIGNUP = "/signup",
 }
+
+export enum TablesName {
+  BLOGS = "Blogs",
+  TOPICS = "Topics",
+}

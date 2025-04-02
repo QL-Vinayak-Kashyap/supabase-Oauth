@@ -14,6 +14,7 @@ import GeneratedContentCard from "./GeneratedContentCard";
 import { highlightDifferencesMarkdown } from "@/lib/getDifferenceText";
 import { supabase } from "@/lib/supabaseClient";
 import { useAppSelector } from "@/hooks/hooks";
+import { TablesName } from "@/lib/utils";
 
 interface GeneratedContent {
   content: string;
@@ -71,7 +72,7 @@ export function ContentGenerator({ topicId }: any) {
       feedback: data.content.feedback,
     };
     const { data: insertedBlog } = await supabase
-      .from("Blogs")
+      .from(TablesName.BLOGS)
       .insert([dataToBeSent])
       .select();
     if (insertedBlog) {
@@ -96,7 +97,7 @@ export function ContentGenerator({ topicId }: any) {
 
   const getTopicName = async () => {
     const { data: Topic } = await supabase
-      .from("Topics")
+      .from(TablesName.TOPICS)
       .select("*")
       .eq("id", topicId);
 
@@ -107,7 +108,7 @@ export function ContentGenerator({ topicId }: any) {
 
   const getContentFromSupabase = async () => {
     const { data: blogs } = await supabase
-      .from("Blogs")
+      .from(TablesName.BLOGS)
       .select("*")
       .eq("topic_id", topicId);
     if (blogs) {

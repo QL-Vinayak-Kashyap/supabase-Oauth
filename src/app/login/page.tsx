@@ -27,6 +27,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [cookies, setCokkies] = useState<any>();
   const router = useRouter();
   const dispatch = useAppDispatch();
 
@@ -78,9 +79,10 @@ export default function LoginPage() {
             data.session?.access_token || "",
             {
               secure: true,
-              path: "/dashboard",
+              path: AppRoutes.DASHBOARD,
             }
           );
+          setCokkies(returnValue);
           setTimeout(() => {
             router.push(AppRoutes.DASHBOARD);
           }, 1000);
@@ -124,7 +126,7 @@ export default function LoginPage() {
     };
 
     checkSession();
-  }, [router, isLoading]);
+  }, [router, isLoading, cookies]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-indigo-50">

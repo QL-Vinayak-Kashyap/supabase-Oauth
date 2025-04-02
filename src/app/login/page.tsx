@@ -73,9 +73,17 @@ export default function LoginPage() {
             })
           );
 
-          Cookies.set("sb-access-token", data.session?.access_token || "", {
-            secure: true,
-          });
+          const returnValue = Cookies.set(
+            "sb-access-token",
+            data.session?.access_token || "",
+            {
+              secure: true,
+              path: "/dashboard",
+            }
+          );
+          setTimeout(() => {
+            router.push(AppRoutes.DASHBOARD);
+          }, 1000);
           toast("Login Successfully!");
         }
       } else {

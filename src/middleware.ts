@@ -4,7 +4,7 @@ import { NextResponse, NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next();
-  const token = await request?.cookies.get("sb-access-token")?.value;
+  const token = request?.cookies.get("sb-access-token")?.value;
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -25,17 +25,20 @@ export async function middleware(request: NextRequest) {
   );
 
   // 🔹 Validate user with token
-  const { data } = await supabase.auth.getUser(token);
+  console.log("token", token);
+  if (token) {
+    const { data } = await supabase.auth.getUser(token);
 
-  if (data?.user) {
-    // Redirect logged-in users away from login page
-    if (request.nextUrl.pathname === "/login") {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
-    }
-  } else {
-    // Redirect unauthenticated users away from protected pages
-    if (request.nextUrl.pathname.startsWith("/dashboard")) {
-      return NextResponse.redirect(new URL("/login", request.url));
+    if (data?.user) {
+      // Redirect logged-in users away from login page
+      if (request.nextUrl.pathname === "/login") {
+        return NextResponse.redirect(new URL("/dashboard", request.url));
+      }
+    } else {
+      // Redirect unauthenticated users away from protected pages
+      if (request.nextUrl.pathname.startsWith("/dashboard")) {
+        return NextResponse.redirect(new URL("/login", request.url));
+      }
     }
   }
 
@@ -44,5 +47,5 @@ export async function middleware(request: NextRequest) {
 
 // 🔹 Apply middleware only to protected routes
 export const config = {
-  matcher: ["/dashboard/:path*"],
+  matcher: ["/dashboard/:path*", "/login"],
 };

@@ -159,31 +159,39 @@ export const exportToWord = async (markdownContent: string, topic: string) => {
   window.URL.revokeObjectURL(url);
 };
 
-// Function to parse markdown links
-
 function parseMarkdownText(text: string) {
-  const regex = /\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g;
-  let match = regex.exec(text);
+  const regex = /(\*\*(.*?)\*\*|\[([^\]]+)\]\((https?:\/\/[^\)]+)\))/g;
+  let match;
   const parts = [];
   let lastIndex = 0;
 
-  while (match !== null) {
-    if (match?.index > lastIndex) {
-      parts.push(new TextRun({ text: text.substring(lastIndex, match.index) }));
+  while ((match = regex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(
+        new TextRun({ text: text.substring(lastIndex, match.index), size: 24 })
+      );
     }
-    parts.push(
-      new ExternalHyperlink({
-        children: [new TextRun({ text: match[1], style: "Hyperlink" })],
-        link: match[2],
-      })
-    );
+
+    if (match[1]) {
+      parts.push(new TextRun({ text: match[2], bold: true, size: 24 }));
+    } else if (match[3] && match[4]) {
+      // Hyperlink ([text](https://link.com))
+      parts.push(
+        new ExternalHyperlink({
+          children: [
+            new TextRun({ text: match[3], style: "Hyperlink", size: 24 }),
+          ],
+          link: match[4],
+        })
+      );
+    }
+
     lastIndex = regex.lastIndex;
-    match = regex.exec(text);
   }
 
   if (lastIndex < text.length) {
-    parts.push(new TextRun({ text: text.substring(lastIndex) }));
+    parts.push(new TextRun({ text: text.substring(lastIndex), size: 24 }));
   }
 
-  return parts.length > 0 ? parts : [new TextRun({ text })];
+  return parts.length > 0 ? parts : [new TextRun({ text, size: 24 })];
 }

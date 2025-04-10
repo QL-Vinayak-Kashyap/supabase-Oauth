@@ -38,6 +38,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { AppRoutes, TablesName } from "@/lib/utils";
 
 const outLinrFormSchema = z.object({
   topic: z.string().min(3, { message: "Topic must be at least 3 characters" }),
@@ -116,7 +117,7 @@ export default function Dashboard() {
 
         if (topicDataInserted) {
           setReqOutlineData(value);
-          router.push(`/dashboard/${topicDataInserted[0]?.id}`);
+          router.push(`${AppRoutes.DASHBOARD}/${topicDataInserted[0]?.id}`);
         }
 
         if (topicInsertError) throw new Error(topicInsertError.message);

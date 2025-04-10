@@ -48,9 +48,6 @@ export default function GeneratedContentCard({
       setIsExporting(false);
     }
   };
-  // const openTheMardownEditor = () => {
-  //   handleOpenUpdateOutlineDailog();
-  // };
   return (
     <Card>
       <CardHeader>
@@ -79,10 +76,6 @@ export default function GeneratedContentCard({
           <Button
             variant="secondary"
             onClick={() => {
-              // const activeTab = document.querySelector(
-              //   '[role="tabpanel"]:not([hidden])'
-              // );
-              // const content = generatedContent;
               navigator.clipboard.writeText(forWord);
               toast("Copied!!!");
             }}

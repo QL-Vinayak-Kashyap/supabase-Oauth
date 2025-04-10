@@ -15,7 +15,6 @@ import { highlightDifferencesMarkdown } from "@/lib/getDifferenceText";
 import { supabase } from "@/lib/supabaseClient";
 import { useAppSelector } from "@/hooks/hooks";
 import { TablesName } from "@/lib/utils";
-import { BLOCKED_PAGES } from "next/dist/shared/lib/constants";
 
 interface GeneratedContent {
   content: string;

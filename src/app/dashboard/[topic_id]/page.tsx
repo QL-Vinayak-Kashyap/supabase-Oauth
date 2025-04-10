@@ -123,11 +123,6 @@ const page = () => {
     setDialogOpen(true);
   };
 
-  // const handleUpdateOutline = () => {
-  //   setDialogOpen(false);
-  //   console.log("updateOutline");
-  // };
-
   useEffect(() => {
     fetchTopicData();
   }, []);
@@ -236,16 +231,6 @@ const page = () => {
           </div>
         </div>
       )}
-      {/* <DialogFooter>
-              <DialogClose asChild>
-                <Button variant="outline" className="mr-2">
-                  Cancel
-                </Button>
-              </DialogClose>
-              <Button onClick={handleUpdateOutline}>Save Changes</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog> */}
     </div>
   );
 };

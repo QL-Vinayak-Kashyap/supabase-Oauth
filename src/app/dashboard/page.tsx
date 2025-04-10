@@ -23,93 +23,108 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { supabase } from "@/lib/supabaseClient";
 import React from "react";
-import { GenerateBlogRequest, useGenerateBlogQuery } from "@/redux/api/api";
+import {
+  GenerateOutlineRequest,
+  useLazyGenerateOutlineQuery,
+} from "@/redux/api/api";
 import { Loader2, PlusCircle, X, Zap } from "lucide-react";
 import { setCurrentBlog } from "@/redux/slices/currentBlogTopic";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-const formSchema = z.object({
+const outLinrFormSchema = z.object({
   topic: z.string().min(3, { message: "Topic must be at least 3 characters" }),
-  word_count: z.coerce
-    .number()
-    .min(100, { message: "Minimum 100 words required" })
-    .max(10000, { message: "Maximum 10000 words allowed" }),
   main_keyword: z
     .string()
     .min(2, { message: "Main Keyword must be at least 2 characters" })
-    .max(20, { message: "Main Keyword must not greater than 20 characters" })
+    .max(30, { message: "Main Keyword must not greater than 30 characters" })
     .optional(),
   secondary_keywords: z.array(z.string()).optional(),
+  tone: z.string().min(1, { message: "Please select a tone" }),
 });
 
-type FormValues = z.infer<typeof formSchema>;
+type OutLineFormValues = z.infer<typeof outLinrFormSchema>;
 
 export default function Dashboard() {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const [reqData, setReqData] = React.useState<GenerateBlogRequest>();
+  const [reqOutlineData, setReqOutlineData] =
+    React.useState<GenerateOutlineRequest>();
   const userState = useAppSelector((state) => state.currentUser);
   const state = useAppSelector((state) => state.currentBlogTopic);
   const [currentKeyword, setCurrentKeyword] = React.useState<string>("");
 
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+  const outLineForm = useForm<OutLineFormValues>({
+    resolver: zodResolver(outLinrFormSchema),
     defaultValues: {
       topic: "",
-      word_count: 100,
       main_keyword: "",
       secondary_keywords: [],
+      tone: "professional",
     },
   });
 
-  const {
-    refetch: callGenerateBlogQuery,
-    data,
-    isLoading: loadingFirstBlog,
-  } = useGenerateBlogQuery(reqData);
+  const tones = [
+    { value: "professional", label: "Professional" },
+    { value: "casual", label: "Casual" },
+    { value: "friendly", label: "Friendly" },
+    { value: "formal", label: "Formal" },
+    { value: "humorous", label: "Humorous" },
+    { value: "authoritative", label: "Authoritative" },
+    { value: "Conversational", label: "Conversational" },
+    { value: "Enthusiastic", label: "Enthusiastic" },
+    { value: "Informative", label: "Informative" },
+    { value: "objective", label: "objective" },
+  ];
 
-  async function onSubmit(value: any) {
+  const [
+    triggerGenerateOutline,
+    { data: generatedOutline, isLoading: loadingFirstOutline },
+  ] = useLazyGenerateOutlineQuery();
+
+  async function handleGenerateOutline(value: any) {
     try {
       value["token"] = state?.blogToken || "";
-      value["word_count"] = "" + value["word_count"];
       value["secondary_keywords"] =
         value["secondary_keywords"]?.join(", ") ?? "";
-      setReqData(value);
 
-      const datatoInsert = {
-        user_id: userState?.id,
-        topic_name: value?.topic,
-        word_count: value?.word_count,
-      };
+      const { data: outlineData, isSuccess } = await triggerGenerateOutline(
+        value
+      );
 
-      // Insert into "Topics" table
-      const { data: topicDataInserted, error: topicInsertError } =
-        await supabase.from("Topics").insert([datatoInsert]).select();
+      if (isSuccess && outlineData) {
+        const datatoInsert = {
+          user_id: userState?.id,
+          topic_name: value?.topic,
+          word_count: value?.word_count,
+          main_keyword: value?.main_keyword,
+          secondary_keywords: value?.secondary_keywords,
+          outline: outlineData?.data?.outline,
+          tone: value?.tone,
+        };
 
-      if (topicInsertError) throw new Error(topicInsertError.message);
-      if (!topicDataInserted || topicDataInserted.length === 0)
-        throw new Error("Topic insertion failed");
+        // Insert into "Topics" table
+        const { data: topicDataInserted, error: topicInsertError } =
+          await supabase.from("Topics").insert([datatoInsert]).select();
 
-      const { data: blogData, isSuccess } = await callGenerateBlogQuery();
-      if (!blogData || !isSuccess) throw new Error("Blog generation failed");
+        if (topicDataInserted) {
+          setReqOutlineData(value);
+          router.push(`/dashboard/${topicDataInserted[0]?.id}`);
+        }
 
-      const { error: blogInsertError } = await supabase
-        .from("Blogs")
-        .insert([
-          {
-            topic_id: topicDataInserted?.[0]?.id,
-            content: blogData?.data?.blog,
-            feedback: blogData?.data?.feedback ?? "",
-          },
-        ])
-        .select();
-
-      if (!blogInsertError) {
-        router.push(`/dashboard/${topicDataInserted[0]?.id}`);
+        if (topicInsertError) throw new Error(topicInsertError.message);
+        if (!topicDataInserted || topicDataInserted.length === 0)
+          throw new Error("Topic insertion failed");
+      } else {
+        throw new Error("Outline generation failed");
       }
-
-      if (blogInsertError) throw new Error(blogInsertError.message);
     } catch (error) {
       console.error("Error in onSubmit:", error);
     }
@@ -119,20 +134,24 @@ export default function Dashboard() {
     const trimmedKeyword = currentKeyword?.trim();
     if (
       trimmedKeyword &&
-      !form.getValues().secondary_keywords?.includes(trimmedKeyword)
+      !outLineForm.getValues().secondary_keywords?.includes(trimmedKeyword)
     ) {
-      const currentKeywords = form.getValues().secondary_keywords || [];
-      form.setValue("secondary_keywords", [...currentKeywords, trimmedKeyword]);
+      const currentKeywords = outLineForm.getValues().secondary_keywords || [];
+      outLineForm.setValue("secondary_keywords", [
+        ...currentKeywords,
+        trimmedKeyword,
+      ]);
       setCurrentKeyword("");
     }
   };
 
   const removeKeyword = (indexToRemove: number) => {
-    const tempCurrentKeywords = form.getValues().secondary_keywords || [];
+    const tempCurrentKeywords =
+      outLineForm.getValues().secondary_keywords || [];
     const updatedKeywords = tempCurrentKeywords.filter(
       (_, index) => index !== indexToRemove
     );
-    form.setValue("secondary_keywords", updatedKeywords, {
+    outLineForm.setValue("secondary_keywords", updatedKeywords, {
       shouldValidate: true,
     });
   };
@@ -145,40 +164,44 @@ export default function Dashboard() {
   };
 
   React.useEffect(() => {
-    if (data) {
+    if (reqOutlineData) {
       const dispatchData: any = {
         blogToken: state?.blogToken || "",
-        topic: reqData?.topic,
-        wordsNumber: reqData?.word_count,
-        content: {
-          blog: data?.data?.blog,
-          feedback: "",
-        },
+        topic: reqOutlineData?.topic,
+        wordsNumber: "",
       };
       dispatch(setCurrentBlog(dispatchData));
     }
-  }, [data]);
+  }, [reqOutlineData]);
+
   return (
     <div className="flex flex-1 flex-col gap-4 p-4">
       <div className="container mx-auto py-10">
         <div className="mx-auto max-w-5xl space-y-8">
           <div className="space-y-2 text-center">
             <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-              Content/Blog Creator
+              Content Creator
             </h1>
+            <p>
+              Enter your topic and desired word count to generate AI-powered
+              content.
+            </p>
           </div>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <Form {...outLineForm}>
+            <form
+              onSubmit={outLineForm.handleSubmit(handleGenerateOutline)}
+              className="space-y-6"
+            >
               <Card>
                 <CardHeader>
-                  <CardTitle>Generation Parameters</CardTitle>
+                  <CardTitle>Generation Outline</CardTitle>
                   <CardDescription>
-                    Enter the details for your content generation.
+                    Enter the details for your outline generation.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <FormField
-                    control={form.control}
+                    control={outLineForm.control}
                     name="topic"
                     render={({ field }) => (
                       <FormItem>
@@ -197,27 +220,40 @@ export default function Dashboard() {
                     )}
                   />
                   <FormField
-                    control={form.control}
-                    name="word_count"
+                    control={outLineForm.control}
+                    name="tone"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="block text-sm font-medium text-gray-700 mb-1">
-                          Number of Words
+                          Content Tone
                         </FormLabel>
-                        <FormControl>
-                          <Input
-                            type="number"
-                            placeholder="Enter desired word count"
-                            {...field}
-                            className="w-full rounded-md border border-border px-4 py-3 bg-white/70 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                          />
-                        </FormControl>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger className="w-full rounded-md border border-border px-4 py-3 bg-white/70 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                              <SelectValue placeholder="Select a tone" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent className="bg-white">
+                            {tones.map((tone) => (
+                              <SelectItem
+                                key={tone.value}
+                                value={tone.value}
+                                className="cursor-pointer"
+                              >
+                                {tone.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
                   <FormField
-                    control={form.control}
+                    control={outLineForm.control}
                     name="main_keyword"
                     render={({ field }) => (
                       <FormItem>
@@ -257,10 +293,10 @@ export default function Dashboard() {
                         <PlusCircle className="h-5 w-5" />
                       </Button>
                     </div>
-                    {form.getValues().secondary_keywords &&
-                      form.getValues().secondary_keywords.length > 0 && (
+                    {outLineForm.getValues().secondary_keywords &&
+                      outLineForm.getValues().secondary_keywords.length > 0 && (
                         <div className="flex flex-wrap gap-2 mt-3">
-                          {form
+                          {outLineForm
                             .getValues()
                             .secondary_keywords.map((keyword, index) => (
                               <div
@@ -283,15 +319,15 @@ export default function Dashboard() {
                 </CardContent>
                 <CardFooter>
                   <Button
-                    disabled={loadingFirstBlog}
+                    disabled={loadingFirstOutline}
                     type="submit"
                     className="w-full bg-purple-600 text-white rounded-md py-3 px-4 font-medium hover:bg-purple-700 transition-colors flex items-center justify-center"
                   >
                     <Zap className="h-4 w-4 mr-2" />
-                    {loadingFirstBlog && (
+                    {loadingFirstOutline && (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     )}
-                    {loadingFirstBlog ? "Generating..." : "Generate Content"}
+                    {loadingFirstOutline ? "Generating..." : "Generate Outline"}
                   </Button>
                 </CardFooter>
               </Card>

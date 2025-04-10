@@ -68,7 +68,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   const handleNewTopicGnerator = () => {
     dispatch(resetCurrentBlogTopic());
-    router.push("/dashboard");
+    router.push(AppRoutes.DASHBOARD);
   };
 
   const handleDeleteTopic = async (id: string) => {

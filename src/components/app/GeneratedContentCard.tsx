@@ -28,6 +28,8 @@ export default function GeneratedContentCard({
   loadingGeneratingBlogAgain,
   forWord,
   topicName,
+  isEditOutline,
+  handleOpenUpdateOutlineDailog,
 }: any) {
   const [isExporting, setIsExporting] = React.useState(false);
 
@@ -46,10 +48,15 @@ export default function GeneratedContentCard({
       setIsExporting(false);
     }
   };
+  // const openTheMardownEditor = () => {
+  //   handleOpenUpdateOutlineDailog();
+  // };
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{index + 1}. Generated Content</CardTitle>
+        <CardTitle>
+          {isEditOutline ? "Outline" : `${index + 1}  Content`}
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="preview" className="w-full">
@@ -68,7 +75,7 @@ export default function GeneratedContentCard({
         </Tabs>
       </CardContent>
       <CardFooter className="flex flex-col gap-2">
-        <div className=" flex flex-row w-[100%]">
+        <div className=" flex flex-row w-[100%] gap-2">
           <Button
             variant="secondary"
             onClick={() => {
@@ -95,6 +102,16 @@ export default function GeneratedContentCard({
             )}
             {isExporting ? "Exporting..." : "Export to Word"}
           </Button>
+          {isEditOutline && (
+            <Button
+              variant="outline"
+              onClick={handleOpenUpdateOutlineDailog}
+              disabled={isExporting}
+            >
+              <FileEdit className="mr-2 h-4 w-4" />
+              Edit
+            </Button>
+          )}
         </div>
         {index === totalItems - 1 && (
           <div className="w-full mx-auto p-4 border rounded-lg shadow-md">

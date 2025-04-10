@@ -14,15 +14,32 @@ interface TokenRequest {
   uuid: string;
 }
 
+export interface GenerateOutlineRequest {
+  topic: string;
+  token: string;
+  main_keyword: string;
+  secondary_keywords: string;
+  tone: string;
+}
+
+export interface GenerateOutlineResponse {
+  data: any;
+  id: string;
+  content: any;
+  topic: string;
+}
+
 export interface GenerateBlogRequest {
   topic: string;
   word_count: string;
   token: string;
   main_keyword: string;
   secondary_keywords: string;
+  tone: string;
+  outline: string;
 }
 
-interface GenerateBlogResponse {
+export interface GenerateBlogResponse {
   data: any;
   id: string;
   content: any;
@@ -85,13 +102,34 @@ export const userApi = createApi({
         },
       }),
     }),
+    generateOutline: builder.query<
+      GenerateOutlineResponse,
+      GenerateOutlineRequest
+    >({
+      query: (data) => ({
+        url: "/outline",
+        method: "POST",
+        body: {
+          topic: data?.topic,
+          tone: data?.tone,
+          main_keyword: data?.main_keyword,
+          secondary_keywords: data?.secondary_keywords,
+        },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${data?.token}`,
+        },
+      }),
+    }),
     generateBlog: builder.query<GenerateBlogResponse, GenerateBlogRequest>({
       query: (data) => ({
         url: "/blogs",
         method: "POST",
         body: {
           topic: data?.topic,
-          word_count: data?.word_count,
+          tone: data?.tone,
+          blog_outline: data?.outline,
+          word_count: "" + data?.word_count,
           main_keyword: data?.main_keyword,
           secondary_keywords: data?.secondary_keywords,
         },
@@ -122,7 +160,10 @@ export const {
   useCreateUserMutation,
   useLoginUserMutation,
   useResetPasswordMutation,
+  useGenerateOutlineQuery,
   useGenerateBlogQuery,
+  useLazyGenerateOutlineQuery,
+  useLazyGenerateBlogQuery,
   useGetTokenQuery,
   useGenerateBlogWithFeedbackQuery,
 } = userApi;

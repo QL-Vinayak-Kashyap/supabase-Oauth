@@ -15,6 +15,7 @@ import { highlightDifferencesMarkdown } from "@/lib/getDifferenceText";
 import { supabase } from "@/lib/supabaseClient";
 import { useAppSelector } from "@/hooks/hooks";
 import { TablesName } from "@/lib/utils";
+import { BLOCKED_PAGES } from "next/dist/shared/lib/constants";
 
 interface GeneratedContent {
   content: string;
@@ -22,7 +23,11 @@ interface GeneratedContent {
   wordCount: number;
 }
 
-export function ContentGenerator({ topicId }: any) {
+export function ContentGenerator({
+  topicId,
+  blogGeneratedState,
+  setBlogCount,
+}: any) {
   const [feedbackRequestData, setFeedbackRequestData] = React.useState<any>();
   const [topic, setTopic] = React.useState([]);
   const [blogs, setBlogs] = React.useState([]);
@@ -112,6 +117,7 @@ export function ContentGenerator({ topicId }: any) {
       .select("*")
       .eq("topic_id", topicId);
     if (blogs) {
+      setBlogCount(blogs.length);
       setBlogs(blogs);
     }
   };
@@ -121,7 +127,7 @@ export function ContentGenerator({ topicId }: any) {
       getTopicName();
       getContentFromSupabase();
     }
-  }, [feedbackData, blogInserted]);
+  }, [feedbackData, blogInserted, blogGeneratedState]);
 
   return (
     <div className="space-y-8">

@@ -1,55 +1,3 @@
-// "use client";
-
-// import { useState } from "react";
-// import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-// import { Button } from "@/components/ui/button";
-// import { Input } from "@/components/ui/input";
-// import { Plus } from "lucide-react";
-
-// export default function NewChatOverlay({ openDialog, setOpenDialog }) {
-//   const [search, setSearch] = useState("");
-
-//   return (
-//     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-//       <DialogTrigger asChild>
-//         <Button variant="ghost" className="gap-2">
-//           <Plus className="w-4 h-4" />
-//           Create New Chat
-//         </Button>
-//       </DialogTrigger>
-
-//       <DialogContent className="sm:max-w-md bg-muted text-muted-foreground border border-border">
-//         <div className="space-y-4">
-//           {/* <Input
-//             placeholder="Search..."
-//             value={search}
-//             onChange={(e) => setSearch(e.target.value)}
-//             className="bg-background text-foreground"
-//           /> */}
-
-//           <div className="text-sm text-muted-foreground">
-//             Recent Conversations
-//           </div>
-
-//           <ul className="space-y-2">
-//             {/* Example items — you can map over dynamic data here */}
-//             <li className="hover:bg-accent p-2 rounded cursor-pointer text-sm">
-//               Markdown to Word Document Converter
-//             </li>
-//             <li className="hover:bg-accent p-2 rounded cursor-pointer text-sm">
-//               Markdown Editor Cursor Misalignment Issue
-//             </li>
-//           </ul>
-
-//           <div className="text-xs text-muted-foreground text-right">
-//             6 days ago
-//           </div>
-//         </div>
-//       </DialogContent>
-//     </Dialog>
-//   );
-// }
-
 import React, { useState } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import {
@@ -77,7 +25,6 @@ interface SearchDialogProps {
 }
 
 const NewChatOverlay = ({ open, onOpenChange }: SearchDialogProps) => {
-  // Sample data for the dialog content
   const [chatGroups] = useState({
     yesterday: [
       {
@@ -99,25 +46,18 @@ const NewChatOverlay = ({ open, onOpenChange }: SearchDialogProps) => {
   });
 
   const handleEditChat = (chatId: string) => {
-    console.log("Edit chat:", chatId);
     onOpenChange(false);
   };
 
-  const handleDeleteChat = (chatId: string) => {
-    console.log("Delete chat:", chatId);
-  };
+  const handleDeleteChat = (chatId: string) => {};
 
-  const handleCopyLink = (chatId: string) => {
-    console.log("Copy link for chat:", chatId);
-  };
+  const handleCopyLink = (chatId: string) => {};
 
   const handleOpenInNewTab = (chatId: string) => {
-    console.log("Open in new tab:", chatId);
     onOpenChange(false);
   };
 
   const handleCreateNewChat = () => {
-    console.log("Create new chat");
     onOpenChange(false);
   };
 

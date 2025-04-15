@@ -23,9 +23,7 @@ const testimonials = [
 
 const StarRating = () => (
   <div className="flex text-yellow-400 mb-4">
-    {[...Array(5)].map((_, i) => (
-      <Star key={i} className="h-5 w-5 fill-current" />
-    ))}
+    {[...Array(5)].fill(<Star className="h-5 w-5 fill-current" />)}
   </div>
 );
 

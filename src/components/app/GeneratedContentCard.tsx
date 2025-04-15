@@ -23,7 +23,7 @@ export default function GeneratedContentCard({
   generatedContent,
   feedbackForm,
   handleGenerateAgain,
-  index,
+  index = NaN,
   totalItems,
   loadingGeneratingBlogAgain,
   forWord,
@@ -48,11 +48,14 @@ export default function GeneratedContentCard({
       setIsExporting(false);
     }
   };
+
+  console.log(" Number.isNaN(index)", Number.isNaN(index));
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>
-          {isEditOutline ? "Outline" : `${index + 1}  Content`}
+          {Number.isNaN(index) ? "Outline" : `${index + 1}.  Content`}
         </CardTitle>
       </CardHeader>
       <CardContent>

@@ -14,7 +14,7 @@ import { Button } from "../ui/button";
 import { resetCurrentBlogTopic } from "@/redux/slices/currentBlogTopic";
 import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import {
   DropdownMenu,
@@ -41,8 +41,16 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+
 import { toast } from "sonner";
-import { AppRoutes } from "@/lib/utils";
+import { AppRoutes, cn } from "@/lib/utils";
+import { Skeleton } from "../ui/skeleton";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 
 interface Topics {
   id: string;
@@ -65,6 +73,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     versions: ["1.0.1", "1.1.0-alpha", "2.0.0-beta1"],
   };
   const dispatch = useAppDispatch();
+  const pathName = usePathname();
 
   const handleNewTopicGnerator = () => {
     dispatch(resetCurrentBlogTopic());
@@ -144,57 +153,84 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           >
             New Topic
           </Button>
-          <SidebarGroup>
+          <SidebarGroup className="gap-1">
             {topicLoading ? (
-              <SidebarGroupContent>Loading...</SidebarGroupContent>
+              <SidebarGroupContent>
+                <Skeleton className="h-6 w-3/4 mb-2" />
+              </SidebarGroupContent>
             ) : (
-              topics?.toReversed().map((item: Topics, index: number) => (
-                <div
-                  key={index}
-                  className="flex items-center w-full hover:bg-purple-50 p-1 px-2 rounded-lg"
-                >
-                  <Link
-                    href={`${AppRoutes.DASHBOARD}/${item.id}`}
-                    className="w-full"
+              topics?.toReversed().map((item: Topics, index: number) => {
+                const isActive =
+                  pathName === `${AppRoutes.DASHBOARD}/${item.id}`;
+
+                return (
+                  <div
+                    key={index}
+                    className={cn(
+                      "group flex w-full items-center rounded-lg px-2 py-1 text-sm transition-colors",
+                      isActive
+                        ? "bg-purple-100 text-purple-700"
+                        : "hover:bg-purple-50 text-gray-700"
+                    )}
+                    // className="flex items-center w-full hover:bg-purple-50 p-1 px-2 rounded-lg"
                   >
-                    <SidebarGroupContent
-                      key={item.id}
-                      className="group flex w-full items-center rounded-lg py-2 hover:bg-purple-50 text-sm text-gray-700 font-medium transition-colors"
+                    <Link
+                      href={`${AppRoutes.DASHBOARD}/${item.id}`}
+                      className="w-full"
                     >
-                      {item.topic_name}
-                    </SidebarGroupContent>
-                  </Link>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 mr-2 text-gray-500 hover:text-purple-900 hover:bg-purple-50"
-                      >
-                        <MoreVertical className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="bg-white">
-                      <DropdownMenuItem
-                        className="flex items-center cursor-pointer"
-                        onClick={() =>
-                          handleOpenUpdateDialog(item.id, item.topic_name)
-                        }
-                      >
-                        <Pencil className="h-4 w-4 mr-2" />
-                        Edit Topic
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        className="flex items-center cursor-pointer text-red-600 hover:text-red-700 hover:bg-red-50"
-                        onClick={() => handleDeleteTopic(item.id)}
-                      >
-                        <Trash2 className="h-4 w-4 mr-2" />
-                        Delete Topic
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-              ))
+                      <TooltipProvider key={index}>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <SidebarGroupContent
+                              key={item.id}
+                              className={`group flex w-full items-center rounded-lg text-sm font-medium transition-colors ${
+                                isActive
+                                  ? "bg-purple-100 text-purple-700"
+                                  : "hover:bg-purple-50 text-gray-700"
+                              } max-w-[150px] overflow-hidden whitespace-nowrap text-ellipsis`}
+                              // className="group flex w-full items-center rounded-lg py-2 hover:bg-purple-50 text-sm text-gray-700 font-medium transition-colors"
+                            >
+                              {item.topic_name}
+                            </SidebarGroupContent>
+                          </TooltipTrigger>
+                          <TooltipContent side="bottom">
+                            {item.topic_name}
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </Link>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 mr-2 text-gray-500 hover:text-purple-900 hover:bg-purple-50"
+                        >
+                          <MoreVertical className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="bg-white">
+                        <DropdownMenuItem
+                          className="flex items-center cursor-pointer"
+                          onClick={() =>
+                            handleOpenUpdateDialog(item.id, item.topic_name)
+                          }
+                        >
+                          <Pencil className="h-4 w-4 mr-2" />
+                          Edit Topic
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="flex items-center cursor-pointer text-red-600 hover:text-red-700 hover:bg-red-50"
+                          onClick={() => handleDeleteTopic(item.id)}
+                        >
+                          <Trash2 className="h-4 w-4 mr-2" />
+                          Delete Topic
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                );
+              })
             )}
           </SidebarGroup>
         </SidebarContent>

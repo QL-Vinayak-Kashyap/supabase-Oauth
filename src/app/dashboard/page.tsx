@@ -180,13 +180,10 @@ export default function Dashboard() {
       <div className="container mx-auto py-10">
         <div className="mx-auto max-w-5xl space-y-8">
           <div className="space-y-2 text-center">
-            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl shimmer">
               Content Creator
             </h1>
-            <p>
-              Enter your topic and desired word count to generate AI-powered
-              content.
-            </p>
+            <p>Generate AI-powered content.</p>
           </div>
           <Form {...outLineForm}>
             <form
@@ -195,7 +192,7 @@ export default function Dashboard() {
             >
               <Card>
                 <CardHeader>
-                  <CardTitle>Generation Outline</CardTitle>
+                  <CardTitle>Outline Generation</CardTitle>
                   <CardDescription>
                     Enter the details for your outline generation.
                   </CardDescription>

@@ -2,15 +2,19 @@
 
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+// import ParticlesBackground from "./ParticlesBackground";
 
 const Hero = () => {
   return (
     <section className="relative overflow-hidden pt-32 pb-16 md:pt-40 md:pb-24">
+      {/* <div className="absolute inset-0 -z-10">
+        <ParticlesBackground />
+      </div> */}
       {/* Background Elements */}
-      <div className="absolute inset-0 -z-10 overflow-hidden">
+      {/* <div className="absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute left-1/3 top-1/4 h-64 w-64 rounded-full bg-purple-200/50 blur-3xl"></div>
         <div className="absolute right-1/4 bottom-1/3 h-96 w-96 rounded-full bg-purple-100/40 blur-3xl"></div>
-      </div>
+      </div> */}
 
       <div className="container">
         <div className="mx-auto max-w-4xl text-center">

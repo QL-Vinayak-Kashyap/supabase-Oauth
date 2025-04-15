@@ -64,6 +64,7 @@ export default function LoginPage() {
         }
 
         if (data?.user) {
+          Cookies.remove("sb-access-token");
           dispatch(
             setUser({
               isLoggedIn: true,

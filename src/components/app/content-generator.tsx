@@ -132,7 +132,7 @@ export function ContentGenerator({
     <div className="space-y-8">
       {blogs.length !== 0 && (
         <div>
-          <h3>{state.topic}</h3>
+          {/* <h3>{state.topic}</h3> */}
           {blogs.map((item: any, index: number) => {
             let diffContent = item.content;
             if (index !== 0) {

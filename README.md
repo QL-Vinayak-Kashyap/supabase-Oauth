@@ -37,3 +37,10 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+COLORS:
+
+1. DARK -> "#2E073F"
+2. Primary -> "#7A1CAC"
+3. secondary -> "#AD49E1"
+4. LIGHT -> "#EBD3F8"

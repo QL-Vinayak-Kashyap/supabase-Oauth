@@ -111,7 +111,6 @@ const page = () => {
           },
         ])
         .select();
-
       if (blogData) {
         setBlogGeneratedState(true);
         toast("Blog Generated");

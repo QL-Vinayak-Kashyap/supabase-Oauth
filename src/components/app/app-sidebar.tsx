@@ -204,7 +204,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-8 w-8 mr-2 text-gray-500 hover:text-purple-900 hover:bg-purple-50"
+                          className="h-8 w-8 text-gray-500 hover:text-purple-900 hover:bg-purple-50"
                         >
                           <MoreVertical className="h-4 w-4" />
                         </Button>

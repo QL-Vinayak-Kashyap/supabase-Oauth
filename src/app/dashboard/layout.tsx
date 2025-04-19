@@ -24,8 +24,9 @@ import { useRouter } from "next/navigation";
 import { resetCurrentBlogTopic } from "@/redux/slices/currentBlogTopic";
 import NewChatOverlay from "@/components/app/NewChatOverlay";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Plus } from "lucide-react";
+import { Plus, Timer } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
 
 export default function DashboardLayout({
   children,

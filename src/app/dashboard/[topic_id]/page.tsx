@@ -21,7 +21,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useAppSelector } from "@/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { supabase } from "@/lib/supabaseClient";
 import { TablesName } from "@/lib/utils";
 import { useLazyGenerateBlogQuery } from "@/redux/api/api";
@@ -34,6 +34,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { MdEditor } from "md-editor-rt";
 import "md-editor-rt/lib/style.css";
+import { setUserLimit } from "@/redux/slices/currentUserSlice";
 
 const blogFormSchema = z.object({
   word_count: z.coerce
@@ -53,7 +54,9 @@ const page = () => {
   const [dialogOpen, setDialogOpen] = useState<boolean>();
   const [blogCount, setBlogCount] = useState<Number>();
   const [blogGeneratedState, setBlogGeneratedState] = useState<boolean>(false);
+  const userState = useAppSelector((state) => state.currentUser);
   const state = useAppSelector((state) => state.currentBlogTopic);
+  const dispatch = useAppDispatch();
 
   const [
     triggerGenerateBlog,
@@ -85,6 +88,10 @@ const page = () => {
   };
 
   async function handleGenerateBlog(value: any) {
+    if (userState.limitLeft === 0) {
+      toast("Limit reached!!!");
+      return;
+    }
     try {
       value["token"] = state?.blogToken || "";
       const requestData = {
@@ -99,6 +106,16 @@ const page = () => {
       const { data: blogData, isSuccess } = await triggerGenerateBlog(
         requestData
       );
+      const { data: limit, error } = await supabase
+        .from("users")
+        .update({ limitLeft: userState.limitLeft - 1 })
+        .eq("uuid", userState.id)
+        .select();
+
+      if (!error) {
+        dispatch(setUserLimit({ limitLeft: limit[0]?.limitLeft }));
+      }
+
       if (!blogData || !isSuccess) throw new Error("Blog generation failed");
 
       const { error: blogInsertError } = await supabase
@@ -125,6 +142,8 @@ const page = () => {
   useEffect(() => {
     fetchTopicData();
   }, []);
+
+  console.log("userState", userState);
 
   return (
     <div className="container mx-auto">

@@ -11,6 +11,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { resetCurrentBlogTopic } from "@/redux/slices/currentBlogTopic";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { Timer } from "lucide-react";
+import { Progress } from "../ui/progress";
 
 export default function ProfileBanner() {
   const dispatch = useAppDispatch();
@@ -18,6 +20,11 @@ export default function ProfileBanner() {
   const [signOutLoading, setSignOutLoading] = useState<boolean>(false);
   const [userData, setUserData] = useState<any>();
   const userState = useAppSelector((state) => state.currentUser);
+
+  const dailyLimit = {
+    used: 5 - userState.limitLeft,
+    total: 5,
+  };
 
   const handleLogout = async () => {
     setSignOutLoading(true);
@@ -70,6 +77,21 @@ export default function ProfileBanner() {
           <p className="text-sm text-gray-500">
             {userData?.identities[0]?.email}
           </p>
+          <div className="flex items-center gap-3 px-4 py-2 bg-purple-50 rounded-full">
+            <Timer className="h-4 w-4 text-purple-600" />
+            <div className="flex flex-col">
+              <div className="flex items-center gap-1">
+                <span className="text-xs text-purple-600">Daily Credits</span>
+                <span className="text-sm font-medium text-purple-700">
+                  {dailyLimit.used}/{dailyLimit.total}
+                </span>
+              </div>
+              <Progress
+                value={(dailyLimit.used / dailyLimit.total) * 100}
+                className="h-1 w-15"
+              />
+            </div>
+          </div>
           <Button
             onClick={handleLogout}
             variant="outline"

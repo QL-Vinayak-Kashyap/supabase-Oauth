@@ -70,7 +70,7 @@ const Footer = () => {
                   Pricing
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link
                   href="#"
                   className="text-muted-foreground hover:text-purple-600 transition-colors"
@@ -85,7 +85,7 @@ const Footer = () => {
                 >
                   Changelog
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </div>
 

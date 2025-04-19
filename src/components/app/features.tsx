@@ -96,8 +96,8 @@ const Features = () => {
             className="heading-lg mb-4 animate-fade-in"
             style={{ animationDelay: "0.1s" }}
           >
-            Powerful Features{" "}
-            <span className="text-purple-600">for Content Creators</span>
+            Top Reasons{" "}
+            <span className="text-purple-600">for best Content Creator</span>
           </h2>
           <p
             className="text-lg text-muted-foreground animate-fade-in"

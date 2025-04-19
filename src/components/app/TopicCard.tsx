@@ -19,7 +19,7 @@ export default function TopicCard({
           <>
             <h2 className="text-2xl font-semibold">{topicData?.topic_name}</h2>
             <p className="text-sm text-gray-500">
-              {topicData?.tone.toUpperCase()}
+              {topicData?.tone?.toUpperCase()}
             </p>
           </>
         )}

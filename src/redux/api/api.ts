@@ -166,4 +166,5 @@ export const {
   useLazyGenerateBlogQuery,
   useGetTokenQuery,
   useGenerateBlogWithFeedbackQuery,
+  useLazyGenerateBlogWithFeedbackQuery,
 } = userApi;

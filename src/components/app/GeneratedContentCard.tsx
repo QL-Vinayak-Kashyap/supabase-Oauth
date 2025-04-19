@@ -49,8 +49,6 @@ export default function GeneratedContentCard({
     }
   };
 
-  console.log(" Number.isNaN(index)", Number.isNaN(index));
-
   return (
     <Card>
       <CardHeader>
@@ -111,7 +109,9 @@ export default function GeneratedContentCard({
         </div>
         {index === totalItems - 1 && (
           <div className="w-full mx-auto p-4 border rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold mb-2">Add Feedback</h2>
+            <h2 className="text-xl font-semibold mb-2">
+              Provide Ideas for Regeneration
+            </h2>
             <Form {...feedbackForm}>
               <form
                 onSubmit={feedbackForm.handleSubmit(helperHandleGenerateAgain)}
@@ -140,8 +140,8 @@ export default function GeneratedContentCard({
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   )}
                   {loadingGeneratingBlogAgain
-                    ? "Generating..."
-                    : "Generate Content"}
+                    ? "Regenerating..."
+                    : "Regenerate Content"}
                 </Button>
               </form>
             </Form>

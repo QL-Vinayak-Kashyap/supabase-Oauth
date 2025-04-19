@@ -64,7 +64,14 @@ const AgentNetwork = () => {
     <section className="py-20 bg-gray-50">
       <div className="container">
         <div className="text-center mb-16">
-          <h2 className="heading-lg mb-4">Specialized Agent Network</h2>
+          <h2
+            className="heading-lg mb-4 animate-fade-in"
+            style={{ animationDelay: "0.1s" }}
+          >
+            Specialized{" "}
+            <span className="text-purple-600">Intelligence Grid</span>{" "}
+          </h2>
+          {/* <h2 className="heading-lg mb-4">Specialized Intelligence Grid</h2> */}
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
             Each piece of content is crafted by a team of specialized AI agents,
             each with their own expertise and focus.

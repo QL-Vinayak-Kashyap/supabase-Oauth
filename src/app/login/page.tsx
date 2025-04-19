@@ -207,7 +207,7 @@ export default function LoginPage() {
               <Button
                 disabled={isLoading}
                 type="submit"
-                className="w-full py-6 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-medium rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
+                className="w-full py-6 bg-purple-500 hover:bg-purple-600 text-white font-medium rounded-lg transition-colors"
               >
                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 {isLoading ? "Checking..." : "Submit"}

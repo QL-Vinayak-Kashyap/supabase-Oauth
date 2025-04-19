@@ -22,18 +22,16 @@ const Hero = () => {
             <span className="flex h-2 w-2 rounded-full bg-purple-500 mr-2"></span>
             Introducing Blogify SEO Tools
           </div>
-
+          {/* Boost Your Blog Traffic with Powerful SEO Strategies */}
           <h1 className="heading-xl mb-6 text-balance stagger-animate-2">
-            Boost Your Blog <br className="hidden sm:inline" />
-            <span className="text-glow text-primary">Traffic Today</span>
+            Boost Your Blog Traffic with <br className="hidden sm:inline" />
+            <span className="text-glow text-primary">SEO Strategies</span>
           </h1>
-
           <p className="mx-auto max-w-2xl text-lg text-muted-foreground mb-10 text-balance stagger-animate-3">
             Leverage Blogify's AI-driven SEO tools to enhance your blog's
             visibility and rank higher in search results. Transform your content
             strategy efficiently with the power of AI.
           </p>
-
           <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4 stagger-animate-4">
             <Link href="/dashboard" className="button-primary w-full sm:w-auto">
               Get Started

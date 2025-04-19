@@ -20,7 +20,7 @@ const Process = () => {
             <div className="w-20 h-20 rounded-full bg-purple-200 flex items-center justify-center mb-6">
               <FileText className="h-10 w-10 text-purple-700" />
             </div>
-            <h3 className="text-xl font-semibold mb-3">Input Your Brief</h3>
+            <h3 className="text-xl font-semibold mb-3">Inputs</h3>
             <p className="text-muted-foreground">
               Enter your topic, keywords, and any specific requirements for your
               content.
@@ -32,9 +32,7 @@ const Process = () => {
             <div className="w-20 h-20 rounded-full bg-purple-200 flex items-center justify-center mb-6">
               <Edit className="h-10 w-10 text-purple-700" />
             </div>
-            <h3 className="text-xl font-semibold mb-3">
-              AI Agents Collaborate
-            </h3>
+            <h3 className="text-xl font-semibold mb-3">AI Agents</h3>
             <p className="text-muted-foreground">
               Our specialized AI agents work together to draft, review, and
               optimize your content.
@@ -46,7 +44,7 @@ const Process = () => {
             <div className="w-20 h-20 rounded-full bg-purple-200 flex items-center justify-center mb-6">
               <CheckCircle className="h-10 w-10 text-purple-700" />
             </div>
-            <h3 className="text-xl font-semibold mb-3">Review</h3>
+            <h3 className="text-xl font-semibold mb-3">Preview</h3>
             <p className="text-muted-foreground">
               Receive your finished content, make any final adjustments
             </p>

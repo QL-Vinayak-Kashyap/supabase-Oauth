@@ -82,7 +82,7 @@ export default function SignUpPage() {
       <div className="w-full max-w-md px-6">
         <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-6">
+            <h1 className="text-3xl font-bold text-purple-800 mb-1">
               Create Account
             </h1>
           </div>

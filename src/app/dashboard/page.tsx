@@ -22,12 +22,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { supabase } from "@/lib/supabaseClient";
-import React from "react";
+import React, { useState } from "react";
 import {
   GenerateOutlineRequest,
   useLazyGenerateOutlineQuery,
 } from "@/redux/api/api";
-import { Loader2, PlusCircle, X, Zap } from "lucide-react";
+import { AlertTriangle, Loader2, PlusCircle, X, Zap } from "lucide-react";
 import { setCurrentBlog } from "@/redux/slices/currentBlogTopic";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
@@ -39,6 +39,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { AppRoutes, TablesName } from "@/lib/utils";
+import { toast } from "sonner";
+import { setUserLimit } from "@/redux/slices/currentUserSlice";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const outLinrFormSchema = z.object({
   topic: z.string().min(3, { message: "Topic must be at least 3 characters" }),
@@ -53,6 +56,8 @@ const outLinrFormSchema = z.object({
 
 type OutLineFormValues = z.infer<typeof outLinrFormSchema>;
 
+const RECAPTCHA_SITE_KEY = "6Le93xwrAAAAAGRMp9ec8lN70oPplVaSramuN0ET";
+
 export default function Dashboard() {
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -61,6 +66,9 @@ export default function Dashboard() {
   const userState = useAppSelector((state) => state.currentUser);
   const state = useAppSelector((state) => state.currentBlogTopic);
   const [currentKeyword, setCurrentKeyword] = React.useState<string>("");
+  const [limitLeftState, setLimitLeftState] = useState<number>();
+  const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null);
+  const [recaptchaError, setRecaptchaError] = useState(false);
 
   const outLineForm = useForm<OutLineFormValues>({
     resolver: zodResolver(outLinrFormSchema),
@@ -90,7 +98,20 @@ export default function Dashboard() {
     { data: generatedOutline, isLoading: loadingFirstOutline },
   ] = useLazyGenerateOutlineQuery();
 
+  const handleSubmit = (data: any) => {
+    // if (!recaptchaValue) {
+    //   setRecaptchaError(true);
+    //   return;
+    // }
+    setRecaptchaError(false);
+    handleGenerateOutline(data);
+  };
+
   async function handleGenerateOutline(value: any) {
+    if (!limitLeftState) {
+      toast("Your Limit reached. Please upgrade or contact org.");
+      return;
+    }
     try {
       value["token"] = state?.blogToken || "";
       value["secondary_keywords"] =
@@ -110,6 +131,15 @@ export default function Dashboard() {
           outline: outlineData?.data?.outline,
           tone: value?.tone,
         };
+
+        // decresing the limit
+        setLimitLeftState((val) => val - 1);
+
+        const { data, error } = await supabase
+          .from("users")
+          .update({ limitLeft: limitLeftState - 1 })
+          .eq("uuid", userState.id)
+          .select();
 
         // Insert into "Topics" table
         const { data: topicDataInserted, error: topicInsertError } =
@@ -163,8 +193,18 @@ export default function Dashboard() {
       addKeyword();
     }
   };
+  const checkLimit = async () => {
+    const { data: limit, error } = await supabase
+      .from("users")
+      .select("limitLeft")
+      .eq("uuid", userState.id);
+
+    setLimitLeftState(limit[0]?.limitLeft);
+    dispatch(setUserLimit({ limitLeft: limit[0]?.limitLeft }));
+  };
 
   React.useEffect(() => {
+    checkLimit();
     if (reqOutlineData) {
       const dispatchData: any = {
         blogToken: state?.blogToken || "",
@@ -187,7 +227,7 @@ export default function Dashboard() {
           </div>
           <Form {...outLineForm}>
             <form
-              onSubmit={outLineForm.handleSubmit(handleGenerateOutline)}
+              onSubmit={outLineForm.handleSubmit(handleSubmit)}
               className="space-y-6"
             >
               <Card>
@@ -316,17 +356,40 @@ export default function Dashboard() {
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button
-                    disabled={loadingFirstOutline}
-                    type="submit"
-                    className="w-full bg-purple-600 text-white rounded-md py-3 px-4 font-medium hover:bg-purple-700 transition-colors flex items-center justify-center"
-                  >
-                    <Zap className="h-4 w-4 mr-2" />
-                    {loadingFirstOutline && (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    )}
-                    {loadingFirstOutline ? "Generating..." : "Generate Outline"}
-                  </Button>
+                  <div className="w-full flex flex-col gap-2 mt-2">
+                    <div className="flex flex-col gap-4">
+                      <ReCAPTCHA
+                        sitekey={RECAPTCHA_SITE_KEY}
+                        onChange={(value) => {
+                          setRecaptchaValue(value);
+                          setRecaptchaError(false);
+                        }}
+                        theme="light"
+                        className="transform scale-[0.95] -ml-3"
+                      />
+                      {recaptchaError && (
+                        <div className="flex items-center gap-2 text-destructive">
+                          <AlertTriangle className="h-4 w-4" />
+                          <span className="text-sm">
+                            Please complete the reCAPTCHA
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                    <Button
+                      disabled={loadingFirstOutline && limitLeftState === 0}
+                      type="submit"
+                      className="w-full bg-purple-600 text-white rounded-md py-3 px-4 font-medium hover:bg-purple-700 transition-colors flex items-center justify-center"
+                    >
+                      <Zap className="h-4 w-4 mr-2" />
+                      {loadingFirstOutline && (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      )}
+                      {loadingFirstOutline
+                        ? "Generating..."
+                        : "Generate Outline"}
+                    </Button>
+                  </div>
                 </CardFooter>
               </Card>
             </form>

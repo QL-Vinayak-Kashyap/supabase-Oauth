@@ -7,14 +7,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useGenerateBlogWithFeedbackQuery } from "@/redux/api/api";
+import { useLazyGenerateBlogWithFeedbackQuery } from "@/redux/api/api";
 import { useForm } from "react-hook-form";
 
 import GeneratedContentCard from "./GeneratedContentCard";
 import { highlightDifferencesMarkdown } from "@/lib/getDifferenceText";
 import { supabase } from "@/lib/supabaseClient";
-import { useAppSelector } from "@/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { TablesName } from "@/lib/utils";
+import { toast } from "sonner";
+import { setUserLimit } from "@/redux/slices/currentUserSlice";
 
 interface GeneratedContent {
   content: string;
@@ -32,20 +34,23 @@ export function ContentGenerator({
   const [blogs, setBlogs] = React.useState([]);
   const [blogInserted, setBlogInserted] = React.useState(false);
   const state = useAppSelector((state: any) => state.currentBlogTopic);
+  const userState = useAppSelector((state: any) => state.currentUser);
+  const dispatch = useAppDispatch();
 
   const feedbackForm = useForm({
     defaultValues: { feedback: "" },
   });
 
-  const {
-    refetch: callGenerateBlogWithFeedbackQuery,
-    data: feedbackData,
-    isLoading: loadingGeneratingBlogAgain,
-  } = useGenerateBlogWithFeedbackQuery(feedbackRequestData, {
-    skip: !feedbackRequestData,
-  });
+  const [
+    triggerGenerateBlogWithFeedback,
+    { data: feedbackData, isLoading: loadingGeneratingBlogAgain },
+  ] = useLazyGenerateBlogWithFeedbackQuery();
 
   async function handleGenerateAgain(value: any, forWord: string) {
+    if (userState.limitLeft === 0) {
+      toast("Your Limit reached. Please upgrade or contact org.");
+      return;
+    }
     try {
       value["token"] = state?.blogToken || "";
       value["blog_content"] = state?.content?.slice(-1)[0]?.blog ?? forWord;
@@ -55,7 +60,17 @@ export function ContentGenerator({
         data: blogDataAfterFeedback,
         error: errorBlogDataAfterFeedback,
         isSuccess,
-      } = await callGenerateBlogWithFeedbackQuery();
+      } = await triggerGenerateBlogWithFeedback(value);
+
+      const { data: limit, error } = await supabase
+        .from("users")
+        .update({ limitLeft: userState.limitLeft - 1 })
+        .eq("uuid", userState.id)
+        .select();
+
+      if (!error) {
+        dispatch(setUserLimit({ limitLeft: limit[0]?.limitLeft }));
+      }
 
       if (!blogDataAfterFeedback || !isSuccess)
         throw new Error("Blog generation failed");
@@ -132,7 +147,6 @@ export function ContentGenerator({
     <div className="space-y-8">
       {blogs.length !== 0 && (
         <div>
-          {/* <h3>{state.topic}</h3> */}
           {blogs.map((item: any, index: number) => {
             let diffContent = item.content;
             if (index !== 0) {
@@ -146,7 +160,7 @@ export function ContentGenerator({
                 {item.feedback !== "" ? (
                   <Card>
                     <CardHeader>
-                      <CardTitle>Your last Feedback:</CardTitle>
+                      <CardTitle>Earlier Recommendation:</CardTitle>
                       <CardDescription>"{item.feedback}"</CardDescription>
                     </CardHeader>
                   </Card>

@@ -71,7 +71,6 @@ const AgentNetwork = () => {
             Specialized{" "}
             <span className="text-purple-600">Intelligence Grid</span>{" "}
           </h2>
-          {/* <h2 className="heading-lg mb-4">Specialized Intelligence Grid</h2> */}
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
             Each piece of content is crafted by a team of specialized AI agents,
             each with their own expertise and focus.

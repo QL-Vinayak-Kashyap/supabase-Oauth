@@ -143,8 +143,6 @@ const page = () => {
     fetchTopicData();
   }, []);
 
-  console.log("userState", userState);
-
   return (
     <div className="container mx-auto">
       <div className="mx-auto space-y-8">

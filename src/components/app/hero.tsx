@@ -20,14 +20,14 @@ const Hero = () => {
         <div className="mx-auto max-w-4xl text-center">
           <div className="inline-flex items-center rounded-full bg-secondary px-3 py-1 text-sm font-medium text-secondary-foreground mb-8 stagger-animate-1">
             <span className="flex h-2 w-2 rounded-full bg-purple-500 mr-2"></span>
-            Introducing Blogify SEO Tools
+            Introducing WriteEasy SEO Tools
           </div>
           <h1 className="heading-xl mb-6 text-balance stagger-animate-2">
             Boost Your Blog Traffic with <br className="hidden sm:inline" />
             <span className="text-glow text-primary">SEO Strategies</span>
           </h1>
           <p className="mx-auto max-w-2xl text-lg text-muted-foreground mb-10 text-balance stagger-animate-3">
-            Leverage Blogify's AI-driven SEO tools to enhance your blog's
+            Leverage WriteEasy's AI-driven SEO tools to enhance your blog's
             visibility and rank higher in search results. Transform your content
             strategy efficiently with the power of AI.
           </p>

@@ -5,9 +5,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ReduxProvider } from "@/redux/provider";
 
 export const metadata = {
-  title: "Blogify - Boost Your Blog Traffic Today",
+  title: "WriteEasy - Boost Your Blog Traffic Today",
   description:
-    "Leverage Blogify's AI-driven SEO tools to enhance your blog's visibility and rank higher in search results.",
+    "Leverage WriteEasy's AI-driven SEO tools to enhance your blog's visibility and rank higher in search results.",
 };
 
 export default function RootLayout({

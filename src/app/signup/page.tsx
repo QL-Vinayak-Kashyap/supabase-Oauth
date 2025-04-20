@@ -238,7 +238,7 @@ export default function SignUpPage() {
           <p className="text-xs text-gray-500">
             &copy; 2025{" "}
             <span>
-              <Link href="/">Blogify</Link>
+              <Link href="/">WriteEasy</Link>
             </span>
             . All rights reserved.
           </p>

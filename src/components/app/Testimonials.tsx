@@ -3,7 +3,7 @@ import { Star } from "lucide-react";
 const testimonials = [
   {
     quote:
-      "Blogify has completely transformed our content creation process. The quality of writing is indistinguishable from our in-house team, but it's produced in a fraction of the time.",
+      "WriteEasy has completely transformed our content creation process. The quality of writing is indistinguishable from our in-house team, but it's produced in a fraction of the time.",
     author: "Sarah Johnson",
     title: "Content Director, TechInsight",
   },
@@ -15,7 +15,7 @@ const testimonials = [
   },
   {
     quote:
-      "We've tried other AI writing tools, but none come close to the human-like quality we get with Blogify. Our SEO has improved significantly since we started using it.",
+      "We've tried other AI writing tools, but none come close to the human-like quality we get with WriteEasy. Our SEO has improved significantly since we started using it.",
     author: "Alex Rivera",
     title: "Digital Strategist, Innovation Hub",
   },
@@ -37,8 +37,8 @@ const Testimonials = () => {
           </div>
           <h2 className="heading-lg mb-4">What Our Users Say</h2>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            Discover how Blogify is helping content creators and marketing teams
-            deliver exceptional results.
+            Discover how WriteEasy is helping content creators and marketing
+            teams deliver exceptional results.
           </p>
         </div>
 

@@ -23,7 +23,7 @@ const Footer = () => {
           <div className="col-span-1 lg:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
               <span className="text-2xl font-bold text-purple-600">
-                Blogify
+                WriteEasy
               </span>
             </div>
             <p className="text-muted-foreground max-w-md mb-6">
@@ -168,7 +168,7 @@ const Footer = () => {
 
         <div className="pt-8 mt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Blogify. All rights reserved.
+            © {new Date().getFullYear()} WriteEasy. All rights reserved.
           </p>
 
           <div className="flex space-x-6 mt-4 md:mt-0">

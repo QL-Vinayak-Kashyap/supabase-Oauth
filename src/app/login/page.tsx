@@ -141,7 +141,7 @@ export default function LoginPage() {
             <h1 className="text-3xl font-bold text-purple-800 mb-1">
               Welcome Back
             </h1>
-            <p className="text-gray-500">Log in to your Blogify account</p>
+            <p className="text-gray-500">Log in to your WriteEasy account</p>
           </div>
 
           {/* Form */}
@@ -276,7 +276,7 @@ export default function LoginPage() {
         {/* Footer */}
         <div className="mt-6 text-center">
           <p className="text-xs text-gray-500">
-            &copy; 2025 Blogify. All rights reserved.
+            &copy; 2025 WriteEasy. All rights reserved.
           </p>
         </div>
       </div>

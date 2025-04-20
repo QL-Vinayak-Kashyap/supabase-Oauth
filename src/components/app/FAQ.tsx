@@ -7,9 +7,9 @@ import {
 
 const faqs = [
   {
-    question: "How does Blogify differ from other AI writing tools?",
+    question: "How does WriteEasy differ from other AI writing tools?",
     answer:
-      "Blogify uses a specialized agent network where multiple AI experts collaborate on your content. Unlike single-model tools, our platform combines the strengths of different AI specialists focusing on writing quality, SEO optimization, fact-checking, and more to produce content that's more comprehensive, accurate, and engaging.",
+      "WriteEasy uses a specialized agent network where multiple AI experts collaborate on your content. Unlike single-model tools, our platform combines the strengths of different AI specialists focusing on writing quality, SEO optimization, fact-checking, and more to produce content that's more comprehensive, accurate, and engaging.",
   },
   {
     question: "Will the content pass AI detection tools?",
@@ -32,9 +32,9 @@ const faqs = [
       "Yes, all generated content is fully editable. After receiving your content, you can make any adjustments, add personal insights, or modify sections as needed through our user-friendly editor before publishing or exporting it.",
   },
   {
-    question: "What types of content can Blogify create?",
+    question: "What types of content can WriteEasy create?",
     answer:
-      "Blogify can create a wide range of content including blog posts, articles, product descriptions, social media posts, newsletters, and more. The platform is versatile enough to handle various content formats and topics across different industries.",
+      "WriteEasy can create a wide range of content including blog posts, articles, product descriptions, social media posts, newsletters, and more. The platform is versatile enough to handle various content formats and topics across different industries.",
   },
 ];
 

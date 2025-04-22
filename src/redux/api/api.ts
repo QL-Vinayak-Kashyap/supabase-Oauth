@@ -60,7 +60,7 @@ interface GenerateBlogWithFeedbackResponse {
 }
 export const userApi = createApi({
   reducerPath: "userApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "https://api-qlwritter.qkkalabs.com/" }), // Change this to your actual API base URL
+  baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_URL }), // Change this to your actual API base URL
   endpoints: (builder) => ({
     loginUser: builder.mutation<User, User>({
       query: (data) => ({

@@ -22,7 +22,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { supabase } from "@/lib/supabaseClient";
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   GenerateOutlineRequest,
   useLazyGenerateOutlineQuery,
@@ -56,16 +56,16 @@ const outLinrFormSchema = z.object({
 
 type OutLineFormValues = z.infer<typeof outLinrFormSchema>;
 
-const RECAPTCHA_SITE_KEY = "6Le93xwrAAAAAGRMp9ec8lN70oPplVaSramuN0ET";
+const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
 export default function Dashboard() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [reqOutlineData, setReqOutlineData] =
-    React.useState<GenerateOutlineRequest>();
+    useState<GenerateOutlineRequest>();
   const userState = useAppSelector((state) => state.currentUser);
   const state = useAppSelector((state) => state.currentBlogTopic);
-  const [currentKeyword, setCurrentKeyword] = React.useState<string>("");
+  const [currentKeyword, setCurrentKeyword] = useState<string>("");
   const [limitLeftState, setLimitLeftState] = useState<number>();
   const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null);
   const [recaptchaError, setRecaptchaError] = useState(false);
@@ -193,6 +193,12 @@ export default function Dashboard() {
       addKeyword();
     }
   };
+
+  const handleRecaptchaOnChange = (value) => {
+    setRecaptchaValue(value);
+    setRecaptchaError(false);
+  };
+
   const checkLimit = async () => {
     const { data: limit, error } = await supabase
       .from("users")
@@ -203,7 +209,7 @@ export default function Dashboard() {
     dispatch(setUserLimit({ limitLeft: limit[0]?.limitLeft }));
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     checkLimit();
     if (reqOutlineData) {
       const dispatchData: any = {
@@ -360,10 +366,7 @@ export default function Dashboard() {
                     <div className="flex flex-col gap-4">
                       <ReCAPTCHA
                         sitekey={RECAPTCHA_SITE_KEY}
-                        onChange={(value) => {
-                          setRecaptchaValue(value);
-                          setRecaptchaError(false);
-                        }}
+                        onChange={handleRecaptchaOnChange}
                         theme="light"
                         className="transform scale-[0.95] -ml-3"
                       />

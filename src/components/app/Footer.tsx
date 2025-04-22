@@ -4,9 +4,12 @@ import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { toast } from "sonner";
+import useCurrentYear from "@/utils/customHooks/useCurrentYear";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
+
+  const year = useCurrentYear();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -168,7 +171,7 @@ const Footer = () => {
 
         <div className="pt-8 mt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} WriteEasy. All rights reserved.
+            © {year} WriteEasy. All rights reserved.
           </p>
 
           <div className="flex space-x-6 mt-4 md:mt-0">

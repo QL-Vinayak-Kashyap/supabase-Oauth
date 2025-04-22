@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
+    "dev": "cross-env dotenv -e .env.local next dev",
+    "dev:prod": "cross-env dotenv -e .env.prod next dev",
+    "dev:stage": "cross-env dotenv -e .env.stage next dev",
+    "build": "cross-env dotenv -e .env.prod next build",
+    "start": "cross-env dotenv -e .env.prod next start",
     "lint": "next lint"
   },
   "dependencies": {
@@ -67,6 +69,8 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/react-syntax-highlighter": "^15.5.13",
+    "cross-env": "^7.0.3",
+    "dotenv-cli": "^8.0.0",
     "eslint": "^9",
     "eslint-config-next": "15.1.7",
     "postcss": "^8",

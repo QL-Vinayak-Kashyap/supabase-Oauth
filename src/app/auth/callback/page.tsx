@@ -47,6 +47,10 @@ export default function AuthCallback() {
         secure: true,
       });
 
+      Cookies.set("sb-access-token", session?.access_token || "", {
+        secure: true,
+      });
+
       if (error) console.error("Error getting user:", error.message);
       if (session?.access_token) router.push("/dashboard");
       else router.push("/login");

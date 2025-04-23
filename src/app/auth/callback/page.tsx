@@ -23,15 +23,11 @@ export default function AuthCallback() {
 
         if (error) {
           throw new Error("Failed to authenticate");
-          toast.error("Failed to authenticate");
-          router.push("/login");
         }
         const user = session?.user;
 
         if (user) {
           const { id, email, user_metadata } = user;
-
-          console.log("user in callback", id, email, user_metadata);
 
           const { error: insertError } = await supabase.from("users").upsert(
             [
@@ -48,7 +44,6 @@ export default function AuthCallback() {
           );
 
           if (insertError) {
-            console.error("Error inserting Google user:", insertError.message);
             toast.error("Failed to save user info");
           }
 

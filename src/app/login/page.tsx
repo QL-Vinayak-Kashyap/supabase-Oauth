@@ -32,7 +32,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [cookies, setCokkies] = useState<any>();
   const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null);
-  const [recaptchaError, setRecaptchaError] = useState(false);
+  const [recaptchaError, setRecaptchaError] = useState(true);
   const router = useRouter();
   const dispatch = useAppDispatch();
 
@@ -150,7 +150,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-indigo-50">
       <div className="w-full max-w-md">
-        <div className="glass-card p-8 rounded-2xl">
+        <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
           {/* Logo and Header */}
           <div className="text-center mb-8">
             <div className="mx-auto w-16 h-16 mb-4 rounded-full bg-gradient-to-r from-purple-500 to-purple-700 flex items-center justify-center">
@@ -228,12 +228,6 @@ export default function LoginPage() {
                 theme="light"
                 className="transform scale-[0.95] -ml-3"
               />
-              {recaptchaError && (
-                <div className="flex items-center gap-2 text-destructive">
-                  <AlertTriangle className="h-4 w-4" />
-                  <span className="text-sm">Please complete the reCAPTCHA</span>
-                </div>
-              )}
             </div>
             <div className="pt-2">
               <Button

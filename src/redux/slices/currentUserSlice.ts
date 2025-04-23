@@ -39,8 +39,10 @@ const currentUserSlice = createSlice({
         limitLeft: action.payload.limitLeft,
       };
     },
+    resetCurrentUser: () => initialState,
   },
 });
 
-export const { getUser, setUser, setUserLimit } = currentUserSlice.actions;
+export const { getUser, setUser, setUserLimit, resetCurrentUser } =
+  currentUserSlice.actions;
 export default currentUserSlice.reducer;

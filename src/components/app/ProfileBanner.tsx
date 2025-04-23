@@ -13,6 +13,7 @@ import { resetCurrentBlogTopic } from "@/redux/slices/currentBlogTopic";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { Timer } from "lucide-react";
 import { Progress } from "../ui/progress";
+import { resetCurrentUser } from "@/redux/slices/currentUserSlice";
 
 export default function ProfileBanner() {
   const dispatch = useAppDispatch();
@@ -22,8 +23,8 @@ export default function ProfileBanner() {
   const userState = useAppSelector((state) => state.currentUser);
 
   const dailyLimit = {
-    used: 5 - userState.limitLeft,
-    total: 5,
+    used: 20 - userState.limitLeft,
+    total: 20,
   };
 
   const handleLogout = async () => {
@@ -32,6 +33,7 @@ export default function ProfileBanner() {
 
     if (!error) {
       dispatch(resetCurrentBlogTopic());
+      dispatch(resetCurrentUser());
       Cookies.remove("sb-access-token");
       router.push("/login");
       setSignOutLoading(false);

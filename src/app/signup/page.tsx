@@ -202,12 +202,6 @@ export default function SignUpPage() {
                 theme="light"
                 className="transform scale-[0.95] -ml-3"
               />
-              {recaptchaError && (
-                <div className="flex items-center gap-2 text-destructive">
-                  <AlertTriangle className="h-4 w-4" />
-                  <span className="text-sm">Please complete the reCAPTCHA</span>
-                </div>
-              )}
             </div>
             <div className="pt-4">
               <Button
@@ -237,15 +231,16 @@ export default function SignUpPage() {
                 onClick={handleGoogleSignIn}
                 type="button"
                 variant="outline"
-                className="py-5 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50"
+                className="flex items-center justify-center gap-3 w-full py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white hover:bg-gray-50 transition"
               >
-                <svg
+                <img
+                  src="https://developers.google.com/identity/images/g-logo.png"
+                  alt="Google"
                   className="h-5 w-5"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
-                  <path d="M12.545 10.239v3.821h5.445c-0.712 2.315-2.647 3.972-5.445 3.972-3.332 0-6.033-2.701-6.033-6.033s2.701-6.032 6.033-6.032c1.498 0 2.866 0.549 3.921 1.453l2.814-2.814c-1.787-1.676-4.139-2.701-6.735-2.701-5.522 0-10.011 4.489-10.011 10.011s4.489 10.011 10.011 10.011c8.025 0 9.939-7.381 9.939-12.467 0-0.772-0.098-1.533-0.214-2.246h-9.725z" />
-                </svg>
+                />
+                <span className="text-sm font-medium text-gray-700">
+                  Continue with Google
+                </span>
               </Button>
               {/* <Button
                 disabled

@@ -370,14 +370,6 @@ export default function Dashboard() {
                         theme="light"
                         className="transform scale-[0.95] -ml-3"
                       />
-                      {recaptchaError && (
-                        <div className="flex items-center gap-2 text-destructive">
-                          <AlertTriangle className="h-4 w-4" />
-                          <span className="text-sm">
-                            Please complete the reCAPTCHA
-                          </span>
-                        </div>
-                      )}
                     </div>
                     <Button
                       disabled={

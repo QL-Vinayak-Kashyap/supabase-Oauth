@@ -26,19 +26,17 @@ export async function middleware(request: NextRequest) {
   );
 
   // 🔹 Validate user with token
-  if (token) {
-    const { data } = await supabase.auth.getUser(token);
+  const { data } = await supabase.auth.getUser(token);
 
-    if (data?.user) {
-      // Redirect logged-in users away from login page
-      if (request.nextUrl.pathname === AppRoutes.LOGIN) {
-        return NextResponse.redirect(new URL(AppRoutes.DASHBOARD, request.url));
-      }
-    } else {
-      // Redirect unauthenticated users away from protected pages
-      if (request.nextUrl.pathname.startsWith(AppRoutes.DASHBOARD)) {
-        return NextResponse.redirect(new URL(AppRoutes.LOGIN, request.url));
-      }
+  if (data?.user) {
+    // Redirect logged-in users away from login page
+    if (request.nextUrl.pathname === AppRoutes.LOGIN) {
+      return NextResponse.redirect(new URL(AppRoutes.DASHBOARD, request.url));
+    }
+  } else {
+    // Redirect unauthenticated users away from protected pages
+    if (request.nextUrl.pathname.startsWith(AppRoutes.DASHBOARD)) {
+      return NextResponse.redirect(new URL(AppRoutes.LOGIN, request.url));
     }
   }
 

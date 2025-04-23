@@ -3,12 +3,21 @@
 import type React from "react";
 import { useState } from "react";
 import Link from "next/link";
-import { Eye, EyeOff, Loader2, Lock, Mail, User } from "lucide-react";
+import {
+  AlertTriangle,
+  Eye,
+  EyeOff,
+  Loader2,
+  Lock,
+  Mail,
+  User,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/lib/supabaseClient";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import ReCAPTCHA from "react-google-recaptcha";
 // import bcrypt from "bcryptjs";
 
 // export const hashPassword = async (password: string): Promise<string> => {
@@ -17,6 +26,8 @@ import { useRouter } from "next/navigation";
 //   return hashedPassword;
 // };
 
+const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+
 export default function SignUpPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
@@ -24,6 +35,17 @@ export default function SignUpPage() {
   const [fullName, setFullName] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null);
+  const [recaptchaError, setRecaptchaError] = useState(true);
+
+  const handleSubmit = (data: any) => {
+    if (!recaptchaValue) {
+      setRecaptchaError(true);
+      return;
+    }
+    setRecaptchaError(false);
+    handleSendOtp(data);
+  };
 
   async function handleSendOtp(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -69,12 +91,20 @@ export default function SignUpPage() {
         provider: "google",
         options: {
           redirectTo: `${window.location.origin}/auth/callback`,
+          queryParams: {
+            prompt: "consent", // forces consent screen even if already authenticated
+          },
         },
       });
     } catch (error) {
       toast("Please check you creds...");
       console.log(error);
     }
+  };
+
+  const handleRecaptchaOnChange = (value) => {
+    setRecaptchaValue(value);
+    setRecaptchaError(false);
   };
 
   return (
@@ -87,7 +117,7 @@ export default function SignUpPage() {
             </h1>
           </div>
 
-          <form onSubmit={handleSendOtp} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
               <label
                 htmlFor="fullName"
@@ -165,10 +195,23 @@ export default function SignUpPage() {
                 </div>
               </div>
             </div>
-
+            <div className="flex flex-col gap-4">
+              <ReCAPTCHA
+                sitekey={RECAPTCHA_SITE_KEY}
+                onChange={handleRecaptchaOnChange}
+                theme="light"
+                className="transform scale-[0.95] -ml-3"
+              />
+              {recaptchaError && (
+                <div className="flex items-center gap-2 text-destructive">
+                  <AlertTriangle className="h-4 w-4" />
+                  <span className="text-sm">Please complete the reCAPTCHA</span>
+                </div>
+              )}
+            </div>
             <div className="pt-4">
               <Button
-                disabled={isLoading}
+                disabled={isLoading || recaptchaError}
                 type="submit"
                 className="w-full py-6 bg-purple-500 hover:bg-purple-600 text-white font-medium rounded-lg transition-colors"
               >
@@ -189,9 +232,9 @@ export default function SignUpPage() {
               </div>
             </div>
 
-            <div className="mt-6 grid grid-cols-2 gap-3">
+            <div className="mt-6 grid grid-cols-1 gap-3">
               <Button
-                disabled
+                onClick={handleGoogleSignIn}
                 type="button"
                 variant="outline"
                 className="py-5 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50"
@@ -204,7 +247,7 @@ export default function SignUpPage() {
                   <path d="M12.545 10.239v3.821h5.445c-0.712 2.315-2.647 3.972-5.445 3.972-3.332 0-6.033-2.701-6.033-6.033s2.701-6.032 6.033-6.032c1.498 0 2.866 0.549 3.921 1.453l2.814-2.814c-1.787-1.676-4.139-2.701-6.735-2.701-5.522 0-10.011 4.489-10.011 10.011s4.489 10.011 10.011 10.011c8.025 0 9.939-7.381 9.939-12.467 0-0.772-0.098-1.533-0.214-2.246h-9.725z" />
                 </svg>
               </Button>
-              <Button
+              {/* <Button
                 disabled
                 type="button"
                 variant="outline"
@@ -217,7 +260,7 @@ export default function SignUpPage() {
                 >
                   <path d="M9.677 20.895v-7.745H7.687V10.2h1.99V7.86c0-1.97 1.204-3.045 2.965-3.045.84 0 1.562.062 1.77.09v2.054h-1.215c-.95 0-1.135.45-1.135 1.11v2.13h2.273l-.296 2.95h-1.977v7.745" />
                 </svg>
-              </Button>
+              </Button> */}
             </div>
           </div>
 

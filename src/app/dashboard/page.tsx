@@ -68,7 +68,7 @@ export default function Dashboard() {
   const [currentKeyword, setCurrentKeyword] = useState<string>("");
   const [limitLeftState, setLimitLeftState] = useState<number>();
   const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null);
-  const [recaptchaError, setRecaptchaError] = useState(false);
+  const [recaptchaError, setRecaptchaError] = useState(true);
 
   const outLineForm = useForm<OutLineFormValues>({
     resolver: zodResolver(outLinrFormSchema),
@@ -99,10 +99,10 @@ export default function Dashboard() {
   ] = useLazyGenerateOutlineQuery();
 
   const handleSubmit = (data: any) => {
-    // if (!recaptchaValue) {
-    //   setRecaptchaError(true);
-    //   return;
-    // }
+    if (!recaptchaValue) {
+      setRecaptchaError(true);
+      return;
+    }
     setRecaptchaError(false);
     handleGenerateOutline(data);
   };
@@ -380,7 +380,11 @@ export default function Dashboard() {
                       )}
                     </div>
                     <Button
-                      disabled={loadingFirstOutline && limitLeftState === 0}
+                      disabled={
+                        recaptchaError ||
+                        limitLeftState === 0 ||
+                        loadingFirstOutline
+                      }
                       type="submit"
                       className="w-full bg-purple-600 text-white rounded-md py-3 px-4 font-medium hover:bg-purple-700 transition-colors flex items-center justify-center"
                     >

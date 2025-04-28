@@ -94,9 +94,9 @@ export default function LoginPage() {
             }
           );
           setCokkies(returnValue);
-          setTimeout(() => {
-            router.push(AppRoutes.DASHBOARD);
-          }, 1000);
+          // setTimeout(() => {
+          router.push(AppRoutes.DASHBOARD);
+          // }, 1000);
           toast("Login Successfully!");
         }
       } else {

@@ -60,7 +60,8 @@ export default function ProfileBanner() {
           <Avatar className="h-8 w-8 border-2 border-purple-100 hover:border-purple-200 transition-colors">
             <AvatarImage src="/avatar.png" alt="User Avatar" />
             <AvatarFallback className="bg-purple-100 text-purple-700 font-medium">
-              {userData?.identities[0]?.full_name?.charAt(0) ?? "A"}
+              {userData?.identities[0]?.identity_data?.full_name?.charAt(0) ??
+                "A"}
             </AvatarFallback>
           </Avatar>
         </Button>
@@ -70,14 +71,15 @@ export default function ProfileBanner() {
           <Avatar className="w-16 h-16">
             <AvatarImage src="/avatar.png" alt="User Avatar" />
             <AvatarFallback>
-              {userData?.identities[0]?.full_name?.charAt(0) ?? "A"}
+              {userData?.identities[0]?.identity_data?.full_name?.charAt(0) ??
+                "A"}
             </AvatarFallback>
           </Avatar>
           <h3 className="text-lg font-semibold">
-            {userData?.identities[0]?.full_name ?? "Admin"}
+            {userData?.identities[0]?.identity_data?.full_name ?? "Admin"}
           </h3>
           <p className="text-sm text-gray-500">
-            {userData?.identities[0]?.email}
+            {userData?.identities[0]?.identity_data?.email}
           </p>
           <div className="flex items-center gap-3 px-4 py-2 bg-purple-50 rounded-full">
             <Timer className="h-4 w-4 text-purple-600" />

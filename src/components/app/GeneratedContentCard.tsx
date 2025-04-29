@@ -9,11 +9,14 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { Copy, FileEdit, Loader2 } from "lucide-react";
+import { Copy, FileEdit, FileIcon, Loader2 } from "lucide-react";
 import { MarkdownRenderer } from "./markdown-renderer";
 import { exportToWord } from "@/lib/export-to-word";
-import React from "react";
+import React, { useRef } from "react";
 import { toast } from "sonner";
+import html2pdf from "html2pdf.js";
+import { marked } from "marked";
+import { handleExportPDF } from "@/lib/exportToPDF";
 
 type FeedbackTypes = {
   feedback: string;
@@ -48,6 +51,13 @@ export default function GeneratedContentCard({
       setIsExporting(false);
     }
   };
+
+  const handleExportToPdf = async () => {
+    if (!forWord) return;
+    try{
+      await handleExportPDF(forWord, topicName ?? "");
+    }catch(err){toast("Error in exporting in PDF.")}
+  }
 
   return (
     <Card>
@@ -96,6 +106,14 @@ export default function GeneratedContentCard({
             )}
             {isExporting ? "Exporting..." : "Export to Word"}
           </Button>
+         {!Number.isNaN(index) && <Button
+          variant="outline"
+          className="text-sm"
+          onClick={handleExportToPdf}
+        >
+          <FileIcon className="mr-2 h-4 w-4" />
+          Export as PDF
+        </Button>}
           {isEditOutline && (
             <Button
               variant="outline"
@@ -148,6 +166,11 @@ export default function GeneratedContentCard({
           </div>
         )}
       </CardFooter>
+      {/* <div
+              ref={contentRef}
+              className="prose prose-lg max-w-none mt-4 p-4 bg-white hidden"
+              dangerouslySetInnerHTML={{ __html: marked(forWord ?? "") }}
+            /> */}
     </Card>
   );
 }

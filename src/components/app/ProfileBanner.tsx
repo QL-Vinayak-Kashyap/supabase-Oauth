@@ -23,8 +23,8 @@ export default function ProfileBanner() {
   const userState = useAppSelector((state) => state.currentUser);
 
   const dailyLimit = {
-    used: 20 - userState.limitLeft,
-    total: 20,
+    used: 5 - userState.limitLeft,
+    total: 5,
   };
 
   const handleLogout = async () => {

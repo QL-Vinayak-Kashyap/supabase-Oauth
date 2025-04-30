@@ -144,7 +144,7 @@ export default function GeneratedContentCard({
                           className="w-full p-2 border rounded-lg"
                           placeholder="Enter your feedback..."
                           {...field}
-                        />
+                        />  
                       </FormControl>
                     </FormItem>
                   )}
@@ -166,11 +166,6 @@ export default function GeneratedContentCard({
           </div>
         )}
       </CardFooter>
-      {/* <div
-              ref={contentRef}
-              className="prose prose-lg max-w-none mt-4 p-4 bg-white hidden"
-              dangerouslySetInnerHTML={{ __html: marked(forWord ?? "") }}
-            /> */}
     </Card>
   );
 }

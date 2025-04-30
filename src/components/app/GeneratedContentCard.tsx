@@ -53,10 +53,10 @@ export default function GeneratedContentCard({
   };
 
   const handleExportToPdf = async () => {
-    if (!forWord) return;
-    try{
+    if (!forWord) throw new Error("Missing required parameter: forWord");
+    try {
       await handleExportPDF(forWord, topicName ?? "");
-    }catch(err){toast("Error in exporting in PDF.")}
+    } catch (err) { toast("Error in exporting in PDF.") }
   }
 
   return (
@@ -106,14 +106,14 @@ export default function GeneratedContentCard({
             )}
             {isExporting ? "Exporting..." : "Export to Word"}
           </Button>
-         {!Number.isNaN(index) && <Button
-          variant="outline"
-          className="text-sm"
-          onClick={handleExportToPdf}
-        >
-          <FileIcon className="mr-2 h-4 w-4" />
-          Export as PDF
-        </Button>}
+          {!Number.isNaN(index) && <Button
+            variant="outline"
+            className="text-sm"
+            onClick={handleExportToPdf}
+          >
+            <FileIcon className="mr-2 h-4 w-4" />
+            Export as PDF
+          </Button>}
           {isEditOutline && (
             <Button
               variant="outline"

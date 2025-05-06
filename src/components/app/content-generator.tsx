@@ -143,6 +143,8 @@ export function ContentGenerator({
     }
   }, [feedbackData, blogInserted, blogGeneratedState]);
 
+  console.log("blogs", blogs);
+
   return (
     <div className="space-y-8">
       {blogs.length !== 0 && (

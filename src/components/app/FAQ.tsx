@@ -4,79 +4,65 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { HelpCircle } from "lucide-react";
 
-const faqs = [
+const faqItems = [
   {
     question: "How does WriteEasy differ from other AI writing tools?",
-    answer:
-      "WriteEasy uses a specialized agent network where multiple AI experts collaborate on your content. Unlike single-model tools, our platform combines the strengths of different AI specialists focusing on writing quality, SEO optimization, fact-checking, and more to produce content that's more comprehensive, accurate, and engaging.",
+    answer: "WriteEasy uses a team of specialized AI agents for writing, SEO optimization, human-like tone, and legal checks — delivering content that's not only well-written but also SEO-ready and compliant."
   },
   {
     question: "Will the content pass AI detection tools?",
-    answer:
-      "Yes, our Humanization Agent specifically works to ensure content reads naturally and authentically human. We regularly test against popular AI detection tools and optimize our system to produce content that passes these checks while maintaining high quality and readability.",
+    answer: "Yes, WriteEasy includes a Humanization Agent that transforms generated content to mimic human writing style, helping it pass most AI detection tools."
   },
   {
     question: "Can I customize the tone and style of the content?",
-    answer:
-      "Absolutely! When creating your content brief, you can specify your preferred tone (professional, conversational, authoritative, etc.) and style. Our AI agents will tailor the content to match your brand voice and audience expectations.",
+    answer: "Absolutely. You can input your preferred tone, style, and keywords, and edit the outline before the AI begins writing."
   },
   {
     question: "How does the SEO optimization work?",
-    answer:
-      "Our dedicated SEO Agent analyzes your target keywords and topic, then strategically incorporates them throughout the content in a natural, non-forced way. It also optimizes header structure, meta descriptions, and ensures proper keyword density to maximize search engine visibility without compromising readability.",
+    answer: "An SEO Agent integrates primary and secondary keywords naturally into your content, improving chances of ranking higher on search engines."
   },
   {
     question: "Can I edit the content after it's generated?",
-    answer:
-      "Yes, all generated content is fully editable. After receiving your content, you can make any adjustments, add personal insights, or modify sections as needed through our user-friendly editor before publishing or exporting it.",
+    answer: "Yes, you can review, modify, and fine-tune the content before finalizing or publishing it."
   },
   {
     question: "What types of content can WriteEasy create?",
-    answer:
-      "WriteEasy can create a wide range of content including blog posts, articles, product descriptions, social media posts, newsletters, and more. The platform is versatile enough to handle various content formats and topics across different industries.",
-  },
+    answer: "WriteEasy is optimized for blog posts, but can also handle guides, thought leadership articles, SEO content, and more."
+  }
 ];
 
 const Faq = () => {
   return (
-    <section id="faq" className="py-20 bg-gray-50">
-      <div className="container">
-        <div className="text-center mb-16">
-          <div className="inline-block rounded-full bg-purple-100 px-3 py-1 text-sm font-medium text-purple-700 mb-4">
-            Questions & Answers
-          </div>
-          <h2 className="heading-lg mb-4">Frequently Asked Questions</h2>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            Find answers to common questions about our AI content creation
-            platform.
-          </p>
+    <section id="faq" className="py-16 md:py-24 px-4 md:px-8 lg:px-16 bg-white">
+    <div className="container mx-auto">
+      <div className="text-center mb-12 animate-fade-in">
+        <div className="inline-flex items-center justify-center mb-4 bg-gray-100 p-3 rounded-full">
+          <HelpCircle className="h-8 w-8 text-gray-700" />
         </div>
-
-        <div className="max-w-3xl mx-auto">
-          <Accordion
-            type="single"
-            collapsible
-            className="bg-white rounded-lg shadow-sm"
-          >
-            {faqs.map((faq, index) => (
-              <AccordionItem
-                key={index}
-                value={`item-${index}`}
-                className="border-b border-gray-200 last:border-b-0"
-              >
-                <AccordionTrigger className="py-5 px-6 hover:no-underline hover:bg-gray-50 text-left font-medium">
-                  {faq.question}
-                </AccordionTrigger>
-                <AccordionContent className="px-6 pb-5 pt-0 text-gray-600">
-                  {faq.answer}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </div>
+        <h2 className="text-3xl md:text-4xl font-bold mb-4">Frequently Asked Questions</h2>
+        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          Get answers to common questions about WriteEasy
+        </p>
       </div>
-    </section>
+      
+      <div className="max-w-3xl mx-auto animate-fade-up">
+        <Accordion type="single" collapsible className="w-full">
+          {faqItems.map((item, index) => (
+            <AccordionItem key={index} value={`item-${index}`} className="border-b border-gray-200">
+              <AccordionTrigger className="py-6 text-left font-semibold text-lg hover:no-underline">
+                {item.question}
+              </AccordionTrigger>
+              <AccordionContent className="text-gray-600 pb-6 text-base">
+                {item.answer}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </div>
+    </div>
+  </section>
   );
 };
 

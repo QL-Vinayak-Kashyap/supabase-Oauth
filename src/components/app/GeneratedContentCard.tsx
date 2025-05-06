@@ -12,10 +12,8 @@ import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Copy, FileEdit, FileIcon, Loader2 } from "lucide-react";
 import { MarkdownRenderer } from "./markdown-renderer";
 import { exportToWord } from "@/lib/export-to-word";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { toast } from "sonner";
-import html2pdf from "html2pdf.js";
-import { marked } from "marked";
 import { handleExportPDF } from "@/lib/exportToPDF";
 
 type FeedbackTypes = {
@@ -77,7 +75,7 @@ export default function GeneratedContentCard({
           </TabsContent>
           <TabsContent value="markdown" className="rounded-md bg-muted p-4">
             <pre className="overflow-x-auto whitespace-pre-wrap break-words font-mono text-sm">
-              {generatedContent}
+              {generatedContent} 
             </pre>
           </TabsContent>
         </Tabs>
@@ -144,7 +142,7 @@ export default function GeneratedContentCard({
                           className="w-full p-2 border rounded-lg"
                           placeholder="Enter your feedback..."
                           {...field}
-                        />  
+                        />
                       </FormControl>
                     </FormItem>
                   )}

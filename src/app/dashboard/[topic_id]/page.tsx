@@ -26,7 +26,7 @@ import { supabase } from "@/lib/supabaseClient";
 import { TablesName } from "@/lib/utils";
 import { useLazyGenerateBlogQuery } from "@/redux/api/api";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Zap } from "lucide-react";
+import { Info, Loader2, Zap } from "lucide-react";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -35,6 +35,9 @@ import { z } from "zod";
 import { MdEditor } from "md-editor-rt";
 import "md-editor-rt/lib/style.css";
 import { setUserLimit } from "@/redux/slices/currentUserSlice";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import TopicDescriptionDialog from "@/components/app/TopicDescriptionDialog";
+import StickySupportButton from "@/components/app/StickySUpportButton";
 
 const blogFormSchema = z.object({
   word_count: z.coerce
@@ -125,14 +128,31 @@ const page = () => {
             topic_id: topic_id,
             content: blogData?.data?.blog,
             feedback: blogData?.data?.feedback ?? "",
+            // banner_description: blogData?.data?.banner_description,
+            // meta_description: blogData?.data?.meta_description
           },
         ])
         .select();
+
+      const { error: descriptionInsertError, data: updatedTopicData } = await supabase
+        .from(TablesName.TOPICS)
+        .update([
+          {
+            // topic_id: topic_id,
+            // content: blogData?.data?.blog,
+            // feedback: blogData?.data?.feedback ?? "",
+            banner_description: blogData?.data?.banner_description,
+            meta_description: blogData?.data?.meta_description
+          },
+        ])
+        .eq('id', topic_id)
+        .select()
+        setTopicData(updatedTopicData[0]);
       if (blogData) {
-        setBlogGeneratedState(true);
+        setBlogGeneratedState(true);  
         toast("Blog Generated");
       }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   const handleOpenUpdateOutlineDailog = () => {
@@ -146,7 +166,12 @@ const page = () => {
   return (
     <div className="container mx-auto">
       <div className="mx-auto space-y-8">
+        {/* data for the topic */}
         <TopicCard topicData={topicData} isLoading={isTopicDataLoading} />
+         {/* add the static data of description */}
+         <StickySupportButton name={topicData?.topic_name}
+        bannerDescription={topicData?.banner_description}
+        metaDescription={topicData?.meta_description}/>
         <GeneratedContentCard
           generatedContent={topicData?.outline}
           isEditOutline={!blogCount}

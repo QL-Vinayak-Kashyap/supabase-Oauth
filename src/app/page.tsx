@@ -41,18 +41,28 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col">
+      {/* <div className="min-h-screen flex flex-col">
+      <Header />
+      <Hero />
+      <HowItWorks />
+      <Features />
+      <FAQ />
+      <Testimonials />
+      <CallToAction />
+      <Footer />
+    </div> */}
+
       <Navbar />
-      {/* <ParticlesBackground /> */}
       <main className="flex-grow">
         <Hero />
-        <Features />
         <Process />
-        <AgentNetwork />
-        <Testimonials />
+        <Features />
+        {/* <AgentNetwork /> */}
         <Faq />
+        <Testimonials />
         <CallToAction />
       </main>
-      <Footer />
+      <Footer /> 
     </div>
   );
 }

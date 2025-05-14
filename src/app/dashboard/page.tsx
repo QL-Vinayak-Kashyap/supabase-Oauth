@@ -137,7 +137,7 @@ export default function Dashboard() {
 
         const { data, error } = await supabase
           .from("users")
-          .update({ limitLeft: limitLeftState - 1 })
+          .update({ daily_limit: limitLeftState - 1 })
           .eq("uuid", userState.id)
           .select();
 
@@ -202,11 +202,11 @@ export default function Dashboard() {
   const checkLimit = async () => {
     const { data: limit, error } = await supabase
       .from("users")
-      .select("limitLeft")
+      .select("daily_limit")
       .eq("uuid", userState.id);
 
-    setLimitLeftState(limit[0]?.limitLeft);
-    dispatch(setUserLimit({ limitLeft: limit[0]?.limitLeft }));
+    setLimitLeftState(limit[0]?.daily_limit);
+    dispatch(setUserLimit({ limitLeft: limit[0]?.daily_limit }));
   };
 
   useEffect(() => {

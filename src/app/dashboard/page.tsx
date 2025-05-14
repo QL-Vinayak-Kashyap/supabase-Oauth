@@ -205,8 +205,6 @@ export default function Dashboard() {
       .select("daily_limit")
       .eq("uuid", userState.id);
 
-      console.log("limits", limit);
-
     setLimitLeftState(limit[0]?.daily_limit);
     dispatch(setUserLimit({ limitLeft: limit[0]?.daily_limit }));
   };

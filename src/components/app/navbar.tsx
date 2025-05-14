@@ -66,7 +66,7 @@ const Navbar = () => {
             <img 
               src="/writeeasy.png" 
               alt="WriteEasy Logo" 
-              className="h-8 w-8 mr-2"
+              className="h-8 w-8 mr-2"  
             />
             <h1 className="text-2xl font-bold tracking-tighter">
               Write<span className="font-extrabold">Easy</span>

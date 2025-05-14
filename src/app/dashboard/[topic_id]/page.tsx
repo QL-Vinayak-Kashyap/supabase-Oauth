@@ -108,12 +108,12 @@ const page = () => {
       );
       const { data: limit, error } = await supabase
         .from("users")
-        .update({ limitLeft: userState.limitLeft - 1 })
+        .update({ daily_limit: userState.limitLeft - 1 })
         .eq("uuid", userState.id)
         .select();
 
       if (!error) {
-        dispatch(setUserLimit({ limitLeft: limit[0]?.limitLeft }));
+        dispatch(setUserLimit({ limitLeft: limit[0]?.daily_limit }));
       }
 
       if (!blogData || !isSuccess) throw new Error("Blog generation failed");

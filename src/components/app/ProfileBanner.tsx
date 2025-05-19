@@ -55,11 +55,11 @@ export default function ProfileBanner() {
       <PopoverTrigger asChild>
         <Button
           variant="ghost"
-          className="flex items-center justify-center p-1 rounded-full bg-gradient-to-r from-purple-500 to-purple-700 hover:from-purple-600 hover:to-purple-800 transition-all duration-300 hover:shadow-md"
+          className="flex items-center justify-center p-1 rounded-full bg-gradient-to-r from-grey-500 to-grey-700 hover:from-grey-600 hover:to-grey-800 transition-all duration-300 hover:shadow-md"
         >
-          <Avatar className="h-8 w-8 border-2 border-purple-100 hover:border-purple-200 transition-colors">
+          <Avatar className="h-8 w-8 border-2 border-grey-100 hover:border-grey-200 transition-colors">
             <AvatarImage src="/avatar.png" alt="User Avatar" />
-            <AvatarFallback className="bg-purple-100 text-purple-700 font-medium">
+            <AvatarFallback className="bg-grey-100 text-grey-700 font-medium">
               {userData?.identities[0]?.identity_data?.full_name?.charAt(0) ??
                 "A"}
             </AvatarFallback>
@@ -81,12 +81,12 @@ export default function ProfileBanner() {
           <p className="text-sm text-gray-500">
             {userData?.identities[0]?.identity_data?.email}
           </p>
-          <div className="flex items-center gap-3 px-4 py-2 bg-purple-50 rounded-full">
-            <Timer className="h-4 w-4 text-purple-600" />
+          <div className="flex items-center gap-3 px-4 py-2 bg-grey-50 rounded-full">
+            <Timer className="h-4 w-4 text-grey-600" />
             <div className="flex flex-col">
               <div className="flex items-center gap-1">
-                <span className="text-xs text-purple-600">Daily Credits</span>
-                <span className="text-sm font-medium text-purple-700">
+                <span className="text-xs text-grey-600">Daily Credits</span>
+                <span className="text-sm font-medium text-grey-700">
                   {dailyLimit.used}/{dailyLimit.total}
                 </span>
               </div>

@@ -30,7 +30,7 @@ const Hero = () => {
     //   <div className="container">
     //     <div className="mx-auto max-w-4xl text-center">
     //       <div className="inline-flex items-center rounded-full bg-secondary px-3 py-1 text-sm font-medium text-secondary-foreground mb-8 stagger-animate-1">
-    //         <span className="flex h-2 w-2 rounded-full bg-purple-500 mr-2"></span>
+    //         <span className="flex h-2 w-2 rounded-full bg-grey-500 mr-2"></span>
     //         Introducing WriteEasy SEO Tools
     //       </div>
     //       <h1 className="heading-xl mb-6 text-balance stagger-animate-2">
@@ -59,7 +59,7 @@ const Hero = () => {
     //       style={{ animationDelay: "0.5s" }}
     //     >
     //       <div className="glass-card rounded-2xl overflow-hidden shadow-xl">
-    //         <div className="purple-gradient h-1.5 w-full"></div>
+    //         <div className="grey-gradient h-1.5 w-full"></div>
     //         <div className="p-2 bg-white/90">
     //           <div className="rounded-lg overflow-hidden border border-slate-200/70">
     //             <div className="aspect-[16/9] w-full bg-slate-50 rounded-t-lg"></div>

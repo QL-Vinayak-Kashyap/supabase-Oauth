@@ -34,12 +34,12 @@ export function VersionSwitcher({
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <div className="flex aspect-square size-8 items-center justify-center rounded-lg  text-purple-800">
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg  text-grey-800">
                 <GalleryVerticalEnd className="size-4" />
               </div>
               <Link href="/">
                 <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-semibold text-purple-800">
+                  <span className="font-semibold text-grey-800">
                     WriteEasy
                   </span>
                   <span className="">v{selectedVersion}</span>

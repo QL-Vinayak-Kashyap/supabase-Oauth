@@ -26,11 +26,11 @@ const StickySupportButton = ({
                 <Button
                   variant="outline"
                   size="icon"
-                  className="h-14 w-14 rounded-full shadow-lg border-2 border-purple-300 bg-gradient-to-r from-purple-50 to-purple-100 hover:from-purple-100 hover:to-purple-200 hover:text-purple-800 transition-all duration-300 animate-fade-in"
+                  className="h-14 w-14 rounded-full shadow-lg border-2 border-grey-300 bg-gradient-to-r from-grey-50 to-grey-100 hover:from-grey-100 hover:to-grey-200 hover:text-grey-800 transition-all duration-300 animate-fade-in"
                   aria-label="View topic information"
                 >
-                  <div className="absolute inset-0 rounded-full bg-purple-500 opacity-10 animate-pulse"></div>
-                  <FileText className="h-6 w-6 text-purple-700" />
+                  <div className="absolute inset-0 rounded-full bg-grey-500 opacity-10 animate-pulse"></div>
+                  <FileText className="h-6 w-6 text-grey-700" />
                 </Button>
               </DialogTrigger>
               <TopicDescriptionDialog 
@@ -40,7 +40,7 @@ const StickySupportButton = ({
               />
             </Dialog>
           </TooltipTrigger>
-          <TooltipContent side="left" className="bg-purple-800 text-white border-purple-900">
+          <TooltipContent side="left" className="bg-grey-800 text-white border-grey-900">
             <p>Topic descriptions</p>
           </TooltipContent>
         </Tooltip>

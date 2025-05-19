@@ -6,51 +6,61 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --background: #fbf9fd;
+    /* hsl(270, 50%, 99%) */
+    --foreground: #1c1a1d;
+    /* hsl(270, 10%, 10%) */
+    --card: #ffffff;
+    /* hsl(0, 0%, 100%) */
+    --card-foreground: #1c1a1d;
+    /* hsl(270, 10%, 10%) */
+    --popover: #ffffff;
+    /* hsl(0, 0%, 100%) */
+    --popover-foreground: #1c1a1d;
+    /* hsl(270, 10%, 10%) */
+    --primary: #000000;
+    /* hsl(270, 70%, 60%) */
+    --primary-foreground: #ffffff;
+    /* hsl(0, 0%, 100%) */
+    --secondary: #eeeaf7;
+    /* hsl(270, 30%, 95%) */
+    --secondary-foreground: #444444;
+    /* hsl(270, 70%, 40%) */
+    --muted: #f0edf7;
+    /* hsl(270, 20%, 95%) */
+    --muted-foreground: #675973;
+    /* hsl(270, 10%, 40%) */
+    --accent: #303030;
+    /* hsl(270, 80%, 60%) */
+    --accent-foreground: #ffffff;
+    /* hsl(0, 0%, 100%) */
+    --destructive: #e5484d;
+    /* hsl(0, 84.2%, 60.2%) */
+    --destructive-foreground: #fafafa;
+    /* hsl(0, 0%, 98%) */
+    --border: #e6e1ee;
+    /* hsl(270, 20%, 90%) */
+    --input: #e6e1ee;
+    /* hsl(270, 20%, 90%) */
+    --ring: #414141;
+    /* hsl(270, 70%, 60%) */
+    --sidebar-background: #f9f9f9;
+    /* hsl(0, 0%, 98%) */
+    --sidebar-foreground: #434343;
+    /* hsl(240, 5.3%, 26.1%) */
+    --sidebar-primary: #1a1a1a;
+    /* hsl(240, 5.9%, 10%) */
+    --sidebar-primary-foreground: #fafafa;
+    /* hsl(0, 0%, 98%) */
+    --sidebar-accent: #f4f4f4;
+    /* hsl(240, 4.8%, 95.9%) */
+    --sidebar-accent-foreground: #1a1a1a;
+    /* hsl(240, 5.9%, 10%) */
+    --sidebar-border: #e3e6f0;
+    /* hsl(220, 13%, 91%) */
+    --sidebar-ring: #333333;
+    /* hsl(217.2, 91.2%, 59.8%) */
+    --radius: 1rem;
   }
 
   .dark {
@@ -151,3 +161,17 @@
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
+.container {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  width: 80%;
+  margin: 0 auto;
+
+  * {
+    font-family: inherit !important;
+  }
+}
+
+.md-editor .md-editor-toolbar .md-editor-toolbar-left .md-editor-toolbar-item svg {
+  width: 40px;
+  height: 40px;
+}

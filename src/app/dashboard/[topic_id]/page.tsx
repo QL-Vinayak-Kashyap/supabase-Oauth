@@ -201,7 +201,7 @@ const page = () => {
                             type="number"
                             placeholder="Enter desired word count"
                             {...field}
-                            className="w-full rounded-md border border-border px-4 py-3 bg-white/70 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            className="w-full rounded-md border border-border px-4 py-3 bg-white/70 focus:outline-none focus:ring-2 focus:ring-grey-500"
                           />
                         </FormControl>
                         <FormMessage />
@@ -213,7 +213,7 @@ const page = () => {
                   <Button
                     disabled={loadingFirstBlog}
                     type="submit"
-                    className="w-full bg-purple-600 text-white rounded-md py-3 px-4 font-medium hover:bg-purple-700 transition-colors flex items-center justify-center"
+                    className="w-full bg-grey-600 text-white rounded-md py-3 px-4 font-medium hover:bg-grey-700 transition-colors flex items-center justify-center"
                   >
                     <Zap className="h-4 w-4 mr-2" />
                     {loadingFirstBlog && (

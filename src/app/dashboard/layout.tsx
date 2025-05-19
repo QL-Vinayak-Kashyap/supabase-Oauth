@@ -70,13 +70,13 @@ export default function DashboardLayout({
             <div className="flex flex-row items-center gap-2">
               {/* <Button
                 onClick={handleNewTopicGnerator}
-                className="w- bg-purple-600 text-white rounded-md py-3 px-4 font-medium hover:bg-purple-700 transition-colors"
+                className="w- bg-grey-600 text-white rounded-md py-3 px-4 font-medium hover:bg-grey-700 transition-colors"
               >
                 New Topic
               </Button>
               <Button
                 onClick={() => setOpenHistoryOverlay(true)}
-                className="w- bg-purple-600 text-white rounded-md py-3 px-4 font-medium hover:bg-purple-700 transition-colors"
+                className="w- bg-grey-600 text-white rounded-md py-3 px-4 font-medium hover:bg-grey-700 transition-colors"
               >
                 History
               </Button> */}

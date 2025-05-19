@@ -148,15 +148,19 @@ export default function LoginPage() {
   }, [router, isLoading, cookies]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-indigo-50">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="w-full max-w-md">
         <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
           {/* Logo and Header */}
           <div className="text-center mb-8">
-            <div className="mx-auto w-16 h-16 mb-4 rounded-full bg-gradient-to-r from-purple-500 to-purple-700 flex items-center justify-center">
-              <span className="text-white text-2xl font-bold">B</span>
+            <div className="mx-auto w-16 h-16 mb-4 rounded-ful">
+            <img 
+              src="/writeeasy.png" 
+              alt="WriteEasy Logo" 
+              className=""  
+            />
             </div>
-            <h1 className="text-3xl font-bold text-purple-800 mb-1">
+            <h1 className="text-3xl font-bold text-grey-700 mb-1">
               Welcome Back
             </h1>
             <p className="text-gray-500">Log in to your WriteEasy account</p>
@@ -181,10 +185,10 @@ export default function LoginPage() {
                   placeholder="you@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 border-gray-300 focus:ring-purple-500 focus:border-purple-500"
+                  className="pl-10 border-gray-300"
                   required
                 />
-              </div>
+              </div>  
             </div>
 
             <div className="space-y-2">
@@ -206,7 +210,7 @@ export default function LoginPage() {
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 pr-10 border-gray-300 focus:ring-purple-500 focus:border-purple-500"
+                  className="pl-10 pr-10 border-gray-300"
                   required
                 />
                 <div
@@ -226,14 +230,15 @@ export default function LoginPage() {
                 sitekey={RECAPTCHA_SITE_KEY}
                 onChange={handleRecaptchaOnChange}
                 theme="light"
-                className="transform scale-[0.95] -ml-3"
+                className="w-full"
               />
             </div>
             <div className="pt-2">
-              <Button
+              <Button 
+              variant="default"
                 disabled={isLoading || recaptchaError}
                 type="submit"
-                className="w-full py-6 bg-purple-500 hover:bg-purple-600 text-white font-medium rounded-lg transition-colors"
+                className="w-full py-6 font-medium rounded-lg transition-colors"
               >
                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 {isLoading ? "Checking..." : "Submit"}
@@ -292,7 +297,7 @@ export default function LoginPage() {
               Don't have an account?{" "}
               <Link
                 href={AppRoutes.SIGNUP}
-                className="font-medium text-purple-600 hover:text-purple-800"
+                className="font-medium text-grey-600 hover:text-rey-800"
               >
                 Sign up
               </Link>

@@ -80,7 +80,7 @@ export default function AuthCallback() {
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="flex flex-col items-center gap-4 bg-white p-8 rounded-2xl shadow-lg">
         <svg
-          className="animate-spin h-8 w-8 text-purple-600"
+          className="animate-spin h-8 w-8 text-grey-600"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"

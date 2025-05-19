@@ -24,12 +24,12 @@ const TopicDescriptionDialog = ({
         <DialogTitle className="text-xl font-bold text-gray-800">{name}</DialogTitle>
       </DialogHeader>
       <div className="space-y-6 py-6">
-        <div className="bg-purple-50 p-4 rounded-md border border-purple-100">
-          <h3 className="text-sm font-medium text-purple-700 mb-2">Banner Description</h3>
+        <div className="bg-grey-50 p-4 rounded-md border border-grey-100">
+          <h3 className="text-sm font-medium text-grey-700 mb-2">Banner Description</h3>
           <p className="text-gray-700 leading-relaxed">{bannerDescription ?? "Not Available"}</p>
         </div>
-        <div className="bg-purple-50 p-4 rounded-md border border-purple-100">
-          <h3 className="text-sm font-medium text-purple-700 mb-2">Meta Description</h3>
+        <div className="bg-grey-50 p-4 rounded-md border border-grey-100">
+          <h3 className="text-sm font-medium text-grey-700 mb-2">Meta Description</h3>
           <p className="text-gray-700 leading-relaxed">{metaDescription  ?? "Not Available"}</p>
         </div>
       </div>  

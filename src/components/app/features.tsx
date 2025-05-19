@@ -76,11 +76,11 @@ const Features = () => {
   return (
     // <section id="features" className="py-20 md:py-32 relative overflow-hidden">
     //   {/* Background Elements */}
-    //   <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-[600px] h-[600px] rounded-full bg-purple-100/50 blur-3xl -z-10"></div>
+    //   <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-[600px] h-[600px] rounded-full bg-grey-100/50 blur-3xl -z-10"></div>
 
     //   <div className="container">
     //     <div className="text-center max-w-2xl mx-auto mb-16">
-    //       <div className="inline-block rounded-full bg-purple-100 px-3 py-1 text-sm font-medium text-purple-700 mb-4 animate-fade-in">
+    //       <div className="inline-block rounded-full bg-grey-100 px-3 py-1 text-sm font-medium text-grey-700 mb-4 animate-fade-in">
     //         Advanced Tools
     //       </div>
     //       <h2
@@ -88,7 +88,7 @@ const Features = () => {
     //         style={{ animationDelay: "0.1s" }}
     //       >
     //         Top Reasons{" "}
-    //         <span className="text-purple-600">for best Content Creator</span>
+    //         <span className="text-grey-600">for best Content Creator</span>
     //       </h2>
     //       <p
     //         className="text-lg text-muted-foreground animate-fade-in"

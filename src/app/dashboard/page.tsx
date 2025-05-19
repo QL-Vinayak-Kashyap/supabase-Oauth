@@ -256,7 +256,7 @@ export default function Dashboard() {
                           <Input
                             placeholder="Enter your topic"
                             {...field}
-                            className="w-full rounded-md border border-border px-4 py-3 bg-white/70 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            className="w-full rounded-md border border-border px-4 py-3 bg-white/70 focus:outline-none focus:ring-2 focus:ring-grey-500"
                           />
                         </FormControl>
                         <FormMessage />
@@ -276,7 +276,7 @@ export default function Dashboard() {
                           defaultValue={field.value}
                         >
                           <FormControl>
-                            <SelectTrigger className="w-full rounded-md border border-border px-4 py-3 bg-white/70 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                            <SelectTrigger className="w-full rounded-md border border-border px-4 py-3 bg-white/70 focus:outline-none focus:ring-2 focus:ring-grey-500">
                               <SelectValue placeholder="Select a tone" />
                             </SelectTrigger>
                           </FormControl>
@@ -308,7 +308,7 @@ export default function Dashboard() {
                           <Input
                             placeholder="Enter Main Keyword"
                             {...field}
-                            className="w-full rounded-md border border-border px-4 py-3 bg-white/70 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            className="w-full rounded-md border border-border px-4 py-3 bg-white/70 focus:outline-none focus:ring-2 focus:ring-grey-500"
                           />
                         </FormControl>
                         <FormMessage />
@@ -325,7 +325,7 @@ export default function Dashboard() {
                         onChange={(e) => setCurrentKeyword(e.target.value)}
                         onKeyDown={handleKeyDown}
                         placeholder="Add keywords and press Enter"
-                        className="flex-1 rounded-md border border-border px-4 py-3 bg-white/70 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        className="flex-1 rounded-md border border-border px-4 py-3 bg-white/70 focus:outline-none focus:ring-2 focus:ring-grey-500"
                       />
                       <Button
                         type="button"
@@ -345,13 +345,13 @@ export default function Dashboard() {
                             .secondary_keywords.map((keyword, index) => (
                               <div
                                 key={index}
-                                className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full flex items-center text-sm"
+                                className="bg-grey-100 text-grey-800 px-3 py-1 rounded-full flex items-center text-sm"
                               >
                                 {keyword}
                                 <button
                                   type="button"
                                   onClick={() => removeKeyword(index)}
-                                  className="ml-2 text-purple-600 hover:text-purple-800 focus:outline-none"
+                                  className="ml-2 text-grey-600 hover:text-grey-800 focus:outline-none"
                                 >
                                   <X className="h-3 w-3" />
                                 </button>
@@ -377,8 +377,9 @@ export default function Dashboard() {
                         limitLeftState === 0 ||
                         loadingFirstOutline
                       }
+                      variant="default"
                       type="submit"
-                      className="w-full bg-purple-600 text-white rounded-md py-3 px-4 font-medium hover:bg-purple-700 transition-colors flex items-center justify-center"
+                      className="w-full py-3 px-4 font-medium hover:bg-grey-700 transition-colors flex items-center justify-center"
                     >
                       <Zap className="h-4 w-4 mr-2" />
                       {loadingFirstOutline && (

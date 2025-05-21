@@ -169,8 +169,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     className={cn(
                       "group flex w-full items-center rounded-lg px-2 py-1 text-sm transition-colors",
                       isActive
-                        ? "bg-grey-100 text-grey-700"
-                        : "hover:bg-grey-50 text-gray-700"
+                        ? "bg-hover text-hover-foreground"
+                        : "hover:bg-hover text-hover-foreground"
                     )}
                     // className="flex items-center w-full hover:bg-grey-50 p-1 px-2 rounded-lg"
                   >

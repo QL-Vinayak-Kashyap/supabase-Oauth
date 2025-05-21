@@ -41,17 +41,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* <div className="min-h-screen flex flex-col">
-      <Header />
-      <Hero />
-      <HowItWorks />
-      <Features />
-      <FAQ />
-      <Testimonials />
-      <CallToAction />
-      <Footer />
-    </div> */}
-
       <Navbar />
       <main className="flex-grow">
         <Hero />

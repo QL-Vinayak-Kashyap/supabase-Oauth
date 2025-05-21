@@ -223,8 +223,8 @@ export default function Dashboard() {
 
   return (
     <div className="flex flex-1 flex-col gap-4 p-4">
-      <div className="container mx-auto py-10">
-        <div className="mx-auto max-w-5xl space-y-8">
+      <div className="container mx-auto">
+        <div className="mx-auto w-full space-y-8">
           <div className="space-y-2 text-center">
             <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl shimmer">
               Content Creator
@@ -379,7 +379,7 @@ export default function Dashboard() {
                       }
                       variant="default"
                       type="submit"
-                      className="w-full py-3 px-4 font-medium hover:bg-grey-700 transition-colors flex items-center justify-center"
+                      className="glossy-button w-full py-3 px-4 font-medium hover:bg-grey-700 transition-colors flex items-center justify-center"
                     >
                       <Zap className="h-4 w-4 mr-2" />
                       {loadingFirstOutline && (

@@ -6,7 +6,7 @@
 
 @layer base {
   :root {
-    --background: #fbf9fd;
+    --background: #ffffff;
     /* hsl(270, 50%, 99%) */
     --foreground: #1c1a1d;
     /* hsl(270, 10%, 10%) */
@@ -16,7 +16,7 @@
     /* hsl(270, 10%, 10%) */
     --popover: #ffffff;
     /* hsl(0, 0%, 100%) */
-    --popover-foreground: #1c1a1d;
+    --popover-foreground: #c2c2c2;
     /* hsl(270, 10%, 10%) */
     --primary: #000000;
     /* hsl(270, 70%, 60%) */
@@ -26,9 +26,9 @@
     /* hsl(270, 30%, 95%) */
     --secondary-foreground: #444444;
     /* hsl(270, 70%, 40%) */
-    --muted: #f0edf7;
+    --muted: #e7e7e7;
     /* hsl(270, 20%, 95%) */
-    --muted-foreground: #675973;
+    --muted-foreground: #858585;
     /* hsl(270, 10%, 40%) */
     --accent: #303030;
     /* hsl(270, 80%, 60%) */
@@ -61,6 +61,8 @@
     --sidebar-ring: #333333;
     /* hsl(217.2, 91.2%, 59.8%) */
     --radius: 1rem;
+    --appsidebar-hover-bg: #CACACA;
+    --appsidebar-hover-text: #343434;
   }
 
   .dark {
@@ -163,9 +165,7 @@
 
 .container {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
-  width: 80%;
   margin: 0 auto;
-
   * {
     font-family: inherit !important;
   }

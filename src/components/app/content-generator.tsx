@@ -17,12 +17,18 @@ import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { TablesName } from "@/lib/utils";
 import { toast } from "sonner";
 import { setUserLimit } from "@/redux/slices/currentUserSlice";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 interface GeneratedContent {
   content: string;
   markdown: string;
   wordCount: number;
 }
+
+const schema = z.object({
+  feedback: z.string().min(2),
+});
 
 export function ContentGenerator({
   topicId,
@@ -38,6 +44,7 @@ export function ContentGenerator({
   const dispatch = useAppDispatch();
 
   const feedbackForm = useForm({
+    resolver: zodResolver(schema),
     defaultValues: { feedback: "" },
   });
 
@@ -90,6 +97,19 @@ export function ContentGenerator({
       content: data.content.blog,
       feedback: data.content.feedback,
     };
+    const { error: descriptionInsertError, data: updatedTopicData } = await supabase
+        .from(TablesName.TOPICS)
+        .update([
+          {
+            // topic_id: topic_id,
+            // content: blogData?.data?.blog,
+            // feedback: blogData?.data?.feedback ?? "",
+            banner_description: data?.content?.bannerDescription,
+            meta_description: data?.content?.metaDescription
+          },
+        ])
+        .eq('id', topicId)
+        .select()
     const { data: insertedBlog } = await supabase
       .from(TablesName.BLOGS)
       .insert([dataToBeSent])
@@ -108,6 +128,8 @@ export function ContentGenerator({
         content: {
           blog: feedbackData.data.revised_blog,
           feedback: feedbackRequestData.feedback,
+          metaDescription:feedbackData.data.meta_description,
+          bannerDescription: feedbackData.data.banner_description
         },
       };
       insertDataInSupabase(dispatchData);
@@ -143,13 +165,11 @@ export function ContentGenerator({
     }
   }, [feedbackData, blogInserted, blogGeneratedState]);
 
-  console.log("blogs", blogs);
-
   return (
     <div className="space-y-8">
       {blogs.length !== 0 && (
         <div>
-          {blogs.map((item: any, index: number) => {
+          {blogs.sort((a,b)=> a.id - b.id).map((item: any, index: number) => {
             let diffContent = item.content;
             if (index !== 0) {
               diffContent = highlightDifferencesMarkdown(

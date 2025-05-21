@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import { DEFAULT_CIPHERS } from "tls";
 
 export default {
 	darkMode: ["class"],
@@ -64,6 +65,10 @@ export default {
 					'accent-foreground': 'var(--sidebar-accent-foreground)',
 					border: 'var(--sidebar-border)',
 					ring: 'var(--sidebar-ring)'
+				},
+				hover:{
+					DEFAULT: 'var(--appsidebar-hover-bg)',
+					foreground:'var(--appsidebar-hover-text)'
 				}
 			},
 			borderRadius: {

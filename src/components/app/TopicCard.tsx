@@ -14,7 +14,7 @@ export default function TopicCard({
   return (
     <div className="flex justify-between bg-muted mx-auto p-4 rounded-b-lg sticky top-16 border-b-[8px] border-white z-10">
       <div className="mb-4">
-        {isLoading ? (    
+        {isLoading ? (
           <>
             <Skeleton className="h-6 w-3/4 mb-2" />
             <Skeleton className="h-4 w-1/3" />

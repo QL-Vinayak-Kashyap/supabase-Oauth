@@ -44,34 +44,6 @@ const features = [
   }
 ];
 
-const FeatureCard = ({
-  feature,
-  index,
-}: {
-  feature: (typeof features)[0];
-  index: number;
-}) => {
-  return (
-    <div
-      className="glass-card rounded-xl p-6 opacity-0"
-      style={{
-        animation: `fade-in-up 0.5s ease-out ${0.1 + index * 0.1}s forwards`,
-      }}
-    >
-      <div
-        className={cn(
-          "rounded-full w-12 h-12 flex items-center justify-center mb-4",
-          feature.color
-        )}
-      >
-        <feature.icon className="h-6 w-6" />
-      </div>
-      <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-      <p className="text-muted-foreground">{feature.description}</p>
-    </div>
-  );
-};
-
 const Features = () => {
   return (
     // <section id="features" className="py-20 md:py-32 relative overflow-hidden">

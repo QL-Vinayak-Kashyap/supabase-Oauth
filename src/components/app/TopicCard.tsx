@@ -19,7 +19,7 @@ export default function TopicCard({
             <Skeleton className="h-4 w-1/3" />
           </>
         ) : (
-          <div className="flex items-center">
+          <div className="items-center">
             <h2 className="text-2xl font-semibold">{topicData?.topic_name}</h2>
             <p className="text-sm text-gray-500">
               {topicData?.tone?.toUpperCase()}

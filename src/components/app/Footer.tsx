@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import useCurrentYear from "@/utils/customHooks/useCurrentYear";
 

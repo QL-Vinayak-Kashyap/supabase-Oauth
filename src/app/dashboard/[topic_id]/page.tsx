@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -26,7 +25,7 @@ import { supabase } from "@/lib/supabaseClient";
 import { TablesName } from "@/lib/utils";
 import { useLazyGenerateBlogQuery } from "@/redux/api/api";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Info, Loader2, Zap } from "lucide-react";
+import { Loader2, Zap } from "lucide-react";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -35,9 +34,6 @@ import { z } from "zod";
 import { MdEditor } from "md-editor-rt";
 import "md-editor-rt/lib/style.css";
 import { setUserLimit } from "@/redux/slices/currentUserSlice";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import TopicDescriptionDialog from "@/components/app/TopicDescriptionDialog";
-import StickySupportButton from "@/components/app/StickySUpportButton";
 
 const blogFormSchema = z.object({
   word_count: z.coerce
@@ -130,8 +126,6 @@ const page = () => {
             topic_id: topic_id,
             content: blogData?.data?.blog,
             feedback: blogData?.data?.feedback ?? "",
-            // banner_description: blogData?.data?.banner_description,
-            // meta_description: blogData?.data?.meta_description
           },
         ])
         .select();
@@ -140,9 +134,6 @@ const page = () => {
         .from(TablesName.TOPICS)
         .update([
           {
-            // topic_id: topic_id,
-            // content: blogData?.data?.blog,
-            // feedback: blogData?.data?.feedback ?? "",
             banner_description: blogData?.data?.banner_description,
             meta_description: blogData?.data?.meta_description
           },
@@ -154,7 +145,9 @@ const page = () => {
         setBlogGeneratedState(true);  
         toast("Blog Generated");
       }
-    } catch (error) { }
+    } catch (error) { 
+      toast(error);
+    }
   }
 
   const handleOpenUpdateOutlineDailog = () => {

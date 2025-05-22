@@ -7,6 +7,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/
 import { supabase } from "@/lib/supabaseClient";
 import { TablesName } from "@/lib/utils";
 import { useParams } from "next/navigation";
+import { toast } from "sonner";
 
 interface StickySupportButtonProps {
   id: string;
@@ -37,6 +38,7 @@ const StickySupportButton = ({
       })
 
     } catch (error) {
+      toast(error);
       
     }finally{
       setLoading(false);

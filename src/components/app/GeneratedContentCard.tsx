@@ -12,7 +12,7 @@ import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Copy, FileEdit, FileIcon, Loader2 } from "lucide-react";
 import { MarkdownRenderer } from "./markdown-renderer";
 import { exportToWord } from "@/lib/export-to-word";
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { toast } from "sonner";
 import { handleExportPDF } from "@/lib/exportToPDF";
 
@@ -45,6 +45,7 @@ export default function GeneratedContentCard({
     try {
       await exportToWord(forWord, topicName ?? "");
     } catch (error) {
+      toast(error);
     } finally {
       setIsExporting(false);
     }

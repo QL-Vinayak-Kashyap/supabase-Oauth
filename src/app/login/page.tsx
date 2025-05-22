@@ -3,7 +3,7 @@
 import type React from "react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { AlertTriangle, Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
+import { Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/lib/supabaseClient";
@@ -14,14 +14,6 @@ import { setUser } from "@/redux/slices/currentUserSlice";
 import { useRouter } from "next/navigation";
 import { AppRoutes } from "@/lib/utils";
 import ReCAPTCHA from "react-google-recaptcha";
-// import bcrypt from "bcryptjs";
-
-// const comparePassword = async (
-//   password: string,
-//   hashedPassword: string
-// ): Promise<boolean> => {
-//   return await bcrypt.compare(password, hashedPassword);
-// };
 
 const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
@@ -274,20 +266,6 @@ export default function LoginPage() {
                   Continue with Google
                 </span>
               </Button>
-              {/* <Button
-                disabled
-                type="button"
-                variant="outline"
-                className="py-5 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50"
-              >
-                <svg
-                  className="h-5 w-5 text-[#1877F2]"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M9.677 20.895v-7.745H7.687V10.2h1.99V7.86c0-1.97 1.204-3.045 2.965-3.045.84 0 1.562.062 1.77.09v2.054h-1.215c-.95 0-1.135.45-1.135 1.11v2.13h2.273l-.296 2.95h-1.977v7.745" />
-                </svg>
-              </Button> */}
             </div>
           </div>
 

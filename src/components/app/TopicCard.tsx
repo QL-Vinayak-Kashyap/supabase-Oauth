@@ -10,7 +10,6 @@ export default function TopicCard({
   isLoading: boolean;
   feedbackUpdated: Number
 }>) {
-  // console.log("topicData",topicData);
   return (
     <div className="flex justify-between bg-muted mx-auto p-4 rounded-b-lg sticky top-16 border-b-[8px] border-white z-10">
       <div className="mb-4">

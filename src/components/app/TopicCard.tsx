@@ -1,14 +1,17 @@
 import { Skeleton } from "@/components/ui/skeleton";
+import StickySupportButton from "./StickySUpportButton";
 
 export default function TopicCard({
   topicData,
   isLoading,
+  feedbackUpdated
 }: Readonly<{
   topicData: any;
   isLoading: boolean;
+  feedbackUpdated: Number
 }>) {
   return (
-    <div className="bg-[#fcfbfe] mx-auto p-4 rounded-lg ">
+    <div className="flex justify-between bg-muted mx-auto p-4 rounded-b-lg sticky top-16 border-b-[8px] border-white z-10">
       <div className="mb-4">
         {isLoading ? (
           <>
@@ -16,30 +19,15 @@ export default function TopicCard({
             <Skeleton className="h-4 w-1/3" />
           </>
         ) : (
-          <>
+          <div className="flex items-center">
             <h2 className="text-2xl font-semibold">{topicData?.topic_name}</h2>
             <p className="text-sm text-gray-500">
               {topicData?.tone?.toUpperCase()}
             </p>
-          </>
+          </div>
         )}
       </div>
-      {/* <div className="mb-4">
-        {isLoading ? (
-          <Skeleton className="h-4 w-1/2" />
-        ) : (
-          <p className="text-base font-medium">{topicData?.main_keyword}</p>
-        )}
-      </div>
-      <div>
-        {isLoading ? (
-          <Skeleton className="h-4 w-2/3" />
-        ) : (
-          <p className="text-sm text-muted-foreground">
-            {topicData?.secondary_keywords}
-          </p>
-        )}
-      </div> */}
+      <StickySupportButton  id={topicData?.id} feedbackUpdated={feedbackUpdated}/>
     </div>
   );
 }

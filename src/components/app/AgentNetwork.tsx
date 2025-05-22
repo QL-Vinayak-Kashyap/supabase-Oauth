@@ -69,7 +69,7 @@ const AgentNetwork = () => {
             style={{ animationDelay: "0.1s" }}
           >
             Specialized{" "}
-            <span className="text-purple-600">Intelligence Grid</span>{" "}
+            <span className="text-grey-600">Intelligence Grid</span>{" "}
           </h2>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
             Each piece of content is crafted by a team of specialized AI agents,
@@ -83,8 +83,8 @@ const AgentNetwork = () => {
               key={agent.title}
               className="bg-white rounded-lg p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
             >
-              <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mb-4">
-                <agent.icon className="h-6 w-6 text-purple-700" />
+              <div className="w-12 h-12 rounded-full bg-grey-100 flex items-center justify-center mb-4">
+                <agent.icon className="h-6 w-6 text-grey-700" />
               </div>
               <h3 className="text-lg font-semibold mb-2">{agent.title}</h3>
               <p className="text-gray-600 text-sm">{agent.description}</p>

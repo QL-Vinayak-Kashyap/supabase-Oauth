@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -40,10 +39,10 @@ const blogFormSchema = z.object({
   word_count: z.coerce
     .number()
     .min(100, { message: "Minimum 100 words required" })
-    .max(10000, { message: "Maximum 10000 words allowed" }),
+    .max(1200, { message: "Maximum 1200 words allowed" }),
 });
 
-type BlogFormValues = z.infer<typeof blogFormSchema>;
+type BlogFormValues = z.infer<typeof blogFormSchema>; 
 
 const page = () => {
   const { topic_id } = useParams();
@@ -73,14 +72,16 @@ const page = () => {
   const fetchTopicData = async () => {
     try {
       setIsTopicDataLoading(true);
-      const { data: Topics, error } = await supabase
+      const { data: Topics, error, status } = await supabase
         .from(TablesName.TOPICS)
         .select("*")
         .eq("id", topic_id);
       if (error) throw new Error("Error in fetching the Topic Data.");
 
-      setTopicData(Topics[0]);
-      setOutlineMarkdown(Topics[0]?.outline);
+      if(status === 200){
+        setTopicData(Topics[0]);
+        setOutlineMarkdown(Topics[0]?.outline);
+      }
     } catch (error) {
     } finally {
       setIsTopicDataLoading(false);
@@ -128,11 +129,25 @@ const page = () => {
           },
         ])
         .select();
+
+      const { error: descriptionInsertError, data: updatedTopicData } = await supabase
+        .from(TablesName.TOPICS)
+        .update([
+          {
+            banner_description: blogData?.data?.banner_description,
+            meta_description: blogData?.data?.meta_description
+          },
+        ])
+        .eq('id', topic_id)
+        .select()
+        setTopicData(updatedTopicData[0]);
       if (blogData) {
-        setBlogGeneratedState(true);
+        setBlogGeneratedState(true);  
         toast("Blog Generated");
       }
-    } catch (error) {}
+    } catch (error) { 
+      toast(error);
+    }
   }
 
   const handleOpenUpdateOutlineDailog = () => {
@@ -145,8 +160,9 @@ const page = () => {
 
   return (
     <div className="container mx-auto">
-      <div className="mx-auto space-y-8">
-        <TopicCard topicData={topicData} isLoading={isTopicDataLoading} />
+      <div className="mx-auto space-y-8 relative">
+        {/* data for the topic */}
+        <TopicCard topicData={topicData} isLoading={isTopicDataLoading} feedbackUpdated={blogCount} />
         <GeneratedContentCard
           generatedContent={topicData?.outline}
           isEditOutline={!blogCount}
@@ -176,7 +192,7 @@ const page = () => {
                             type="number"
                             placeholder="Enter desired word count"
                             {...field}
-                            className="w-full rounded-md border border-border px-4 py-3 bg-white/70 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            className="w-full rounded-md border border-border px-4 py-3 bg-white/70 focus:outline-none focus:ring-2 focus:ring-grey-500"
                           />
                         </FormControl>
                         <FormMessage />
@@ -187,11 +203,12 @@ const page = () => {
                 <CardFooter>
                   <Button
                     disabled={loadingFirstBlog}
+                    variant="default"
                     type="submit"
-                    className="w-full bg-purple-600 text-white rounded-md py-3 px-4 font-medium hover:bg-purple-700 transition-colors flex items-center justify-center"
+                    className="glossy-button w-full rounded-lg py-3 px-4 font-medium hover:bg-grey-700 transition-colors flex items-center justify-center"
                   >
                     <Zap className="h-4 w-4 mr-2" />
-                    {loadingFirstBlog && (
+                    {loadingFirstBlog && (  
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     )}
                     {loadingFirstBlog ? "Generating..." : "Generate Content"}

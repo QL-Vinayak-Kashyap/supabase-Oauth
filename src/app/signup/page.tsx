@@ -4,7 +4,6 @@ import type React from "react";
 import { useState } from "react";
 import Link from "next/link";
 import {
-  AlertTriangle,
   Eye,
   EyeOff,
   Loader2,
@@ -18,13 +17,6 @@ import { supabase } from "@/lib/supabaseClient";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import ReCAPTCHA from "react-google-recaptcha";
-// import bcrypt from "bcryptjs";
-
-// export const hashPassword = async (password: string): Promise<string> => {
-//   const saltRounds = 10; // Recommended salt rounds
-//   const hashedPassword = await bcrypt.hash(password, saltRounds);
-//   return hashedPassword;
-// };
 
 const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
@@ -98,7 +90,6 @@ export default function SignUpPage() {
       });
     } catch (error) {
       toast("Please check you creds...");
-      console.log(error);
     }
   };
 
@@ -108,11 +99,18 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-indigo-50">
+    <div className="min-h-screen flex items-center justify-center bg-grey-50">
       <div className="w-full max-w-md px-6">
         <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-purple-800 mb-1">
+          <div className="mx-auto w-16 h-16 mb-4 rounded-ful">
+            <img 
+              src="/writeeasy.png" 
+              alt="WriteEasy Logo" 
+              className=""  
+            />
+            </div>
+            <h1 className="text-3xl font-bold text-grey-800 mb-1">
               Create Account
             </h1>
           </div>
@@ -134,7 +132,7 @@ export default function SignUpPage() {
                   placeholder="Enter your full name"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className="pl-10 border-gray-300 focus:ring-purple-500 focus:border-purple-500 bg-blue-50/50 border-0 rounded-lg"
+                  className="pl-10 border-gray-300 focus:ring-grey-500 focus:border-grey-500 bg-grey-50/50 border-0 rounded-lg"
                   required
                 />
               </div>
@@ -157,7 +155,7 @@ export default function SignUpPage() {
                   placeholder="you@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 border-gray-300 focus:ring-purple-500 focus:border-purple-500 bg-blue-50/50 border-0 rounded-lg"
+                  className="pl-10 border-gray-300 focus:ring-grey-500 focus:border-grey-500 bg-grey-50/50 border-0 rounded-lg"
                   required
                 />
               </div>
@@ -180,7 +178,7 @@ export default function SignUpPage() {
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 pr-10 border-gray-300 focus:ring-purple-500 focus:border-purple-500 bg-blue-50/50 border-0 rounded-lg"
+                  className="pl-10 pr-10 border-gray-300 focus:ring-grey-500 focus:border-grey-500 bg-grey-50/50 border-0 rounded-lg"
                   required
                 />
                 <div
@@ -200,14 +198,15 @@ export default function SignUpPage() {
                 sitekey={RECAPTCHA_SITE_KEY}
                 onChange={handleRecaptchaOnChange}
                 theme="light"
-                className="transform scale-[0.95] -ml-3"
+                className="w-full transform scale-[0.95] ml-3"
               />
             </div>
             <div className="pt-4">
               <Button
-                disabled={isLoading || recaptchaError}
+              variant="default"
+                disabled={isLoading || recaptchaError} 
                 type="submit"
-                className="w-full py-6 bg-purple-500 hover:bg-purple-600 text-white font-medium rounded-lg transition-colors"
+                className="w-full py-6 font-medium rounded-lg transition-colors"
               >
                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 {isLoading ? "Checking..." : "Submit"}
@@ -242,20 +241,6 @@ export default function SignUpPage() {
                   Continue with Google
                 </span>
               </Button>
-              {/* <Button
-                disabled
-                type="button"
-                variant="outline"
-                className="py-5 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50"
-              >
-                <svg
-                  className="h-5 w-5 text-[#1877F2]"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M9.677 20.895v-7.745H7.687V10.2h1.99V7.86c0-1.97 1.204-3.045 2.965-3.045.84 0 1.562.062 1.77.09v2.054h-1.215c-.95 0-1.135.45-1.135 1.11v2.13h2.273l-.296 2.95h-1.977v7.745" />
-                </svg>
-              </Button> */}
             </div>
           </div>
 
@@ -264,7 +249,7 @@ export default function SignUpPage() {
               Already have an account?{" "}
               <Link
                 href="/login"
-                className="font-medium text-purple-600 hover:text-purple-800"
+                className="font-medium text-grey-600 hover:text-grey-800"
               >
                 Log in
               </Link>

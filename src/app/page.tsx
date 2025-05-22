@@ -6,9 +6,7 @@ import Hero from "@/components/app/hero";
 import Features from "@/components/app/features";
 import CallToAction from "@/components/app/CallToAction";
 import Footer from "@/components/app/Footer";
-import ParticlesBackground from "@/components/app/ParticlesBackground";
 import Process from "@/components/app/Process";
-import AgentNetwork from "@/components/app/AgentNetwork";
 import Testimonials from "@/components/app/Testimonials";
 import Faq from "@/components/app/FAQ";
 
@@ -42,17 +40,16 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      {/* <ParticlesBackground /> */}
       <main className="flex-grow">
         <Hero />
-        <Features />
         <Process />
-        <AgentNetwork />
-        <Testimonials />
+        <Features />
+        {/* <AgentNetwork /> */}
         <Faq />
+        <Testimonials />
         <CallToAction />
       </main>
-      <Footer />
+      <Footer /> 
     </div>
   );
 }

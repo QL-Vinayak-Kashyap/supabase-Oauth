@@ -12,10 +12,8 @@ import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Copy, FileEdit, FileIcon, Loader2 } from "lucide-react";
 import { MarkdownRenderer } from "./markdown-renderer";
 import { exportToWord } from "@/lib/export-to-word";
-import React, { useRef } from "react";
+import React from "react";
 import { toast } from "sonner";
-import html2pdf from "html2pdf.js";
-import { marked } from "marked";
 import { handleExportPDF } from "@/lib/exportToPDF";
 
 type FeedbackTypes = {
@@ -47,6 +45,7 @@ export default function GeneratedContentCard({
     try {
       await exportToWord(forWord, topicName ?? "");
     } catch (error) {
+      toast(error);
     } finally {
       setIsExporting(false);
     }
@@ -60,7 +59,7 @@ export default function GeneratedContentCard({
   }
 
   return (
-    <Card>
+    <Card className="relative">
       <CardHeader>
         <CardTitle>
           {Number.isNaN(index) ? "Outline" : `${index + 1}.  Content`}
@@ -68,14 +67,14 @@ export default function GeneratedContentCard({
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="preview" className="w-full">
-          <TabsList className="mb-4 w-full justify-start">
-            <TabsTrigger value="preview">Preview</TabsTrigger>
-            <TabsTrigger value="markdown">Markdown</TabsTrigger>
+          <TabsList className="mb-4 w-full rounded-[12px] justify-start">
+            <TabsTrigger value="preview" className="rounded-[12px]">Preview</TabsTrigger>
+            <TabsTrigger value="markdown" className="rounded-[12px]">Markdown</TabsTrigger>
           </TabsList>
-          <TabsContent value="preview" className="rounded-md bg-muted p-4">
+          <TabsContent value="preview" className="rounded-[12px] bg-muted p-4 h-[80vh] overflow-scroll">
             <MarkdownRenderer content={generatedContent} />
           </TabsContent>
-          <TabsContent value="markdown" className="rounded-md bg-muted p-4">
+          <TabsContent value="markdown" className="rounded-[12px] bg-muted p-4">
             <pre className="overflow-x-auto whitespace-pre-wrap break-words font-mono text-sm">
               {generatedContent}
             </pre>
@@ -85,7 +84,7 @@ export default function GeneratedContentCard({
       <CardFooter className="flex flex-col gap-2">
         <div className=" flex flex-row w-[100%] gap-2">
           <Button
-            variant="secondary"
+            variant="outline"
             onClick={() => {
               navigator.clipboard.writeText(forWord);
               toast("Copied!!!");
@@ -142,7 +141,7 @@ export default function GeneratedContentCard({
                       <FormControl>
                         <Textarea
                           className="w-full p-2 border rounded-lg"
-                          placeholder="Enter your feedback..."
+                          placeholder="Type here..."
                           {...field}
                         />
                       </FormControl>
@@ -150,7 +149,7 @@ export default function GeneratedContentCard({
                   )}
                 />
                 <Button
-                  className="mt-4 w-full"
+                  className="glossy-button mt-4 w-full"
                   type="submit"
                   disabled={loadingGeneratingBlogAgain}
                 >
@@ -166,11 +165,6 @@ export default function GeneratedContentCard({
           </div>
         )}
       </CardFooter>
-      {/* <div
-              ref={contentRef}
-              className="prose prose-lg max-w-none mt-4 p-4 bg-white hidden"
-              dangerouslySetInnerHTML={{ __html: marked(forWord ?? "") }}
-            /> */}
     </Card>
   );
 }

@@ -149,7 +149,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarContent className="p-4">
           <Button
             onClick={handleNewTopicGnerator}
-            className="w-full bg-purple-600 text-white rounded-md py-3 px-4 font-medium hover:bg-purple-700 transition-colors"
+            className="w-full py-3 px-4 font-medium hover:bg-grey-700 transition-colors"
           >
             New Topic
           </Button>
@@ -169,10 +169,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     className={cn(
                       "group flex w-full items-center rounded-lg px-2 py-1 text-sm transition-colors",
                       isActive
-                        ? "bg-purple-100 text-purple-700"
-                        : "hover:bg-purple-50 text-gray-700"
+                        ? "bg-hover text-hover-foreground"
+                        : "hover:bg-hover text-hover-foreground"
                     )}
-                    // className="flex items-center w-full hover:bg-purple-50 p-1 px-2 rounded-lg"
+                    // className="flex items-center w-full hover:bg-grey-50 p-1 px-2 rounded-lg"
                   >
                     <Link
                       href={`${AppRoutes.DASHBOARD}/${item.id}`}
@@ -185,10 +185,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                               key={item.id}
                               className={`group flex w-full items-center rounded-lg text-sm font-medium transition-colors ${
                                 isActive
-                                  ? "bg-purple-100 text-purple-700"
-                                  : "hover:bg-purple-50 text-gray-700"
+                                  ? "bg-grey-100 text-grey-700"
+                                  : "hover:bg-grey-50 text-gray-700"
                               } max-w-[150px] overflow-hidden whitespace-nowrap text-ellipsis`}
-                              // className="group flex w-full items-center rounded-lg py-2 hover:bg-purple-50 text-sm text-gray-700 font-medium transition-colors"
+                              // className="group flex w-full items-center rounded-lg py-2 hover:bg-grey-50 text-sm text-gray-700 font-medium transition-colors"
                             >
                               {item.topic_name}
                             </SidebarGroupContent>
@@ -204,7 +204,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-8 w-8 text-gray-500 hover:text-purple-900 hover:bg-purple-50"
+                          className="h-8 w-8 text-gray-500 hover:text-grey-900 hover:bg-grey-50"
                         >
                           <MoreVertical className="h-4 w-4" />
                         </Button>
@@ -243,7 +243,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </DialogHeader>
           <div className="py-4">
             <input
-              className="w-full rounded-md border border-border px-4 py-3 bg-white/70 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full rounded-md border border-border px-4 py-3 bg-white/70 focus:outline-none focus:ring-2 focus:ring-grey-500"
               value={editingTopic}
               onChange={(e) => setEditingTopic(e.target.value)}
               placeholder="Topic name"

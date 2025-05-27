@@ -66,9 +66,10 @@ export default function AuthCallback() {
           }, 1000);
           toast("Login Successfully!");
         } else {
+          toast("Login Failed!");
           router.push("/login");
         }
-      } catch (error) {
+      } catch (error) { 
         toast(error?.message);
       }
     };
@@ -76,7 +77,7 @@ export default function AuthCallback() {
     getUser();
   }, [router]);
 
-  return (
+  return (  
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="flex flex-col items-center gap-4 bg-white p-8 rounded-2xl shadow-lg">
         <svg

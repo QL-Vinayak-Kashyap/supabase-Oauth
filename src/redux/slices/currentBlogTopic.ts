@@ -1,43 +1,66 @@
+import { BlogData, BlogWizardStep } from "@/components/app/BlogWizardSidebar";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-interface Content {
-  blog: string;
-  feedback: string;
-}
-interface CurrentBlog {
-  blogToken: string;
-  topic: string;
-  topic_id: string;
-  wordsNumber: string;
-  content: Content[] | Content;
-}
+// interface Content {
+//   blog: string;
+//   feedback: string;
+// }
 
-const initialState: CurrentBlog = {
+
+interface BlogState {
+  currentStep: BlogWizardStep;
+  blogData: BlogData;
+  blogToken: string;
+  topic_id: string;
+}
+// export interface CurrentBlog {
+//   blogToken: string;
+//   topic: string;
+//   topic_id: string;
+//   wordsNumber: string;
+//   outline:string;
+//   currentStep: string;
+//   main_keyword: string;
+//   secondary_keywords: string[];
+//   tone:string;
+// }
+
+const initialState: BlogState = {
+  currentStep: 'topic',
+  blogData: {
+    topic: '',
+    primaryKeywords: "",
+    secondaryKeywords: [],
+    tone: '',
+    outline: "",
+    generatedBlog: ''
+  },
   blogToken: "",
-  topic: "",
   topic_id: "",
-  wordsNumber: "",
-  content: [],
 };
 
 const currentBlogSlice = createSlice({
   name: "currentBlogTopic",
   initialState,
   reducers: {
+    setCurrentStep: (state, action: PayloadAction<BlogWizardStep>) => {
+      state.currentStep = action.payload;
+    },
+    updateBlogData: (state, action: PayloadAction<Partial<BlogData>>) => {
+      state.blogData = { ...state.blogData, ...action.payload };
+    },
+    setBlogData: (state, action: PayloadAction<BlogData>) => {
+      state.blogData = action.payload;
+    },
+    resetBlogState: (state) => {
+      state.currentStep = 'topic';
+      state.blogData = initialState.blogData;
+    },
     setCurrentBlog: (
-      state: CurrentBlog,
-      action: PayloadAction<CurrentBlog>
+      state: BlogState,
+      action: PayloadAction<BlogState>
     ) => {
       state.blogToken = action.payload.blogToken;
-      state.topic = action.payload.topic;
-      state.wordsNumber = action.payload.wordsNumber;
-      const existingContent = Array.isArray(state.content)
-        ? state.content
-        : [state.content];
-      const newContent = Array.isArray(action.payload.content)
-        ? action.payload.content
-        : [action.payload.content];
-
-      state.content = [...existingContent, ...newContent];
+      // state.blogData.topic = action.payload.blogData.topic;
     },
     setBlogToken: (state, action: PayloadAction<{ blogToken: string }>) => {
       state.blogToken = action.payload.blogToken;

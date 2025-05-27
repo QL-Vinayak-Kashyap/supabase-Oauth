@@ -97,7 +97,8 @@ export function ContentGenerator({
       content: data.content.blog,
       feedback: data.content.feedback,
     };
-    const { error: descriptionInsertError, data: updatedTopicData } = await supabase
+    const { error: descriptionInsertError, data: updatedTopicData } =
+      await supabase
         .from(TablesName.TOPICS)
         .update([
           {
@@ -105,11 +106,11 @@ export function ContentGenerator({
             // content: blogData?.data?.blog,
             // feedback: blogData?.data?.feedback ?? "",
             banner_description: data?.content?.bannerDescription,
-            meta_description: data?.content?.metaDescription
+            meta_description: data?.content?.metaDescription,
           },
         ])
-        .eq('id', topicId)
-        .select()
+        .eq("id", topicId)
+        .select();
     const { data: insertedBlog } = await supabase
       .from(TablesName.BLOGS)
       .insert([dataToBeSent])
@@ -128,8 +129,8 @@ export function ContentGenerator({
         content: {
           blog: feedbackData.data.revised_blog,
           feedback: feedbackRequestData.feedback,
-          metaDescription:feedbackData.data.meta_description,
-          bannerDescription: feedbackData.data.banner_description
+          metaDescription: feedbackData.data.meta_description,
+          bannerDescription: feedbackData.data.banner_description,
         },
       };
       insertDataInSupabase(dispatchData);
@@ -169,39 +170,41 @@ export function ContentGenerator({
     <div className="space-y-8">
       {blogs.length !== 0 && (
         <div>
-          {blogs.sort((a,b)=> a.id - b.id).map((item: any, index: number) => {
-            let diffContent = item.content;
-            if (index !== 0) {
-              diffContent = highlightDifferencesMarkdown(
-                blogs[index - 1].content,
-                item.content
+          {blogs
+            .sort((a, b) => a.id - b.id)
+            .map((item: any, index: number) => {
+              let diffContent = item.content;
+              if (index !== 0) {
+                diffContent = highlightDifferencesMarkdown(
+                  blogs[index - 1].content,
+                  item.content
+                );
+              }
+              return (
+                <div key={item.id} className="mb-4">
+                  {item.feedback !== "" ? (
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Earlier Recommendation:</CardTitle>
+                        <CardDescription>"{item.feedback}"</CardDescription>
+                      </CardHeader>
+                    </Card>
+                  ) : null}
+                  <GeneratedContentCard
+                    key={item.id}
+                    index={index}
+                    totalItems={blogs.length}
+                    generatedContent={diffContent}
+                    forWord={item.content}
+                    // setGeneratedContent={setGeneratedContent}
+                    feedbackForm={feedbackForm}
+                    handleGenerateAgain={handleGenerateAgain}
+                    loadingGeneratingBlogAgain={loadingGeneratingBlogAgain}
+                    topicName={topic[0]?.topic_name}
+                  />
+                </div>
               );
-            }
-            return (
-              <div key={item.id} className="mb-4">
-                {item.feedback !== "" ? (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Earlier Recommendation:</CardTitle>
-                      <CardDescription>"{item.feedback}"</CardDescription>
-                    </CardHeader>
-                  </Card>
-                ) : null}
-                <GeneratedContentCard
-                  key={item.id}
-                  index={index}
-                  totalItems={blogs.length}
-                  generatedContent={diffContent}
-                  forWord={item.content}
-                  // setGeneratedContent={setGeneratedContent}
-                  feedbackForm={feedbackForm}
-                  handleGenerateAgain={handleGenerateAgain}
-                  loadingGeneratingBlogAgain={loadingGeneratingBlogAgain}
-                  topicName={topic[0]?.topic_name}
-                />
-              </div>
-            );
-          })}
+            })}
         </div>
       )}
     </div>

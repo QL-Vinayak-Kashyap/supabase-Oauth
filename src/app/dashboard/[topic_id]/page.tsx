@@ -155,7 +155,7 @@ const page = () => {
   };
 
   useEffect(() => {
-    fetchTopicData();
+    fetchTopicData();  
   }, []);
 
   return (

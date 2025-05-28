@@ -34,9 +34,9 @@ export default function GeneratedContentCard({
 }: any) {
   const [isExporting, setIsExporting] = React.useState(false);
 
-  const helperHandleGenerateAgain = async (value: FeedbackTypes) => {
-    handleGenerateAgain(value, forWord);
-  };
+  // const helperHandleGenerateAgain = async (value: FeedbackTypes) => {
+  //   handleGenerateAgain(value, forWord);
+  // };
 
   const handleExportToWord = async () => {
     if (!generatedContent) return;
@@ -124,7 +124,7 @@ export default function GeneratedContentCard({
             </Button>
           )}
         </div>
-        {index === totalItems - 1 && (
+        {/* {index === totalItems - 1 && (
           <div className="w-full mx-auto p-4 border rounded-lg shadow-md">
             <h2 className="text-xl font-semibold mb-2">
               Provide Ideas for Regeneration
@@ -163,7 +163,7 @@ export default function GeneratedContentCard({
               </form>
             </Form>
           </div>
-        )}
+        )} */}
       </CardFooter>
     </Card>
   );

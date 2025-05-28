@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Volume2, ArrowLeft } from "lucide-react";
+import { Volume2, ArrowLeft, PenSquare } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -7,8 +7,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
 
 interface StepToneProps {
+  topic:string;
+  primaryKeywords:string;
+  secondaryKeywords:string[];
   tone: string;
   onToneChange: (tone: string) => void;
   onNext: () => void;
@@ -28,9 +32,31 @@ const toneOptions = [
   { value: "persuasive", label: "Persuasive" }
 ];
 
-const StepTone = ({ tone, onToneChange, onNext, onBack }: StepToneProps) => {
+const StepTone = ({ topic, primaryKeywords, secondaryKeywords,tone, onToneChange, onNext, onBack }: StepToneProps) => {
   return (
     <div className="space-y-6">
+      <div className="rounded-md bg-gray-50 p-3 space-y-2">
+        <p className="text-sm font-medium">Topic: <span className="text-primary">{topic}</span></p>
+        <div>
+          <p className="text-sm font-medium">Primary Keyword:</p>
+          <div className="flex flex-wrap gap-1 mt-1">
+              <Badge variant="default" className="text-xs">{primaryKeywords}
+              </Badge>
+          </div>
+        </div>
+        <div>
+          <p className="text-sm font-medium">Secondary Keywords:</p>
+          <div className="flex flex-wrap gap-1 mt-1">
+            {secondaryKeywords.map((item)=>
+                <Badge variant="default" className="text-xs">{item}
+              </Badge>
+              )
+            }
+          </div>
+        </div>
+      </div>
+
+
       <div className="space-y-2">
         <div className="flex items-center space-x-2">
           <Volume2 className="w-5 h-5 text-primary" />

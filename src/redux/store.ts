@@ -8,6 +8,7 @@ import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 import { ThunkMiddleware } from "redux-thunk";
 import { Middleware } from "@reduxjs/toolkit";
+import currentBlogReducer from "./slices/currentBlogs";
 
 const persistConfig = {
   key: "root",
@@ -17,8 +18,9 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   counter: counterReducer,
-  currentUser: currentUserReducer,
+  currentUser: currentUserReducer,  
   currentBlogTopic: currentBlogTopic,
+  currentBlog : currentBlogReducer,
   [userApi.reducerPath]: userApi.reducer,
 });
 

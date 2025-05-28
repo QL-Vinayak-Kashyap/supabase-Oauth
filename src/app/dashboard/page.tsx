@@ -28,7 +28,7 @@ import {
   useLazyGenerateOutlineQuery,
 } from "@/redux/api/api";
 import { AlertTriangle, Loader2, PlusCircle, X, Zap } from "lucide-react";
-import { CurrentBlog, setCurrentBlog } from "@/redux/slices/currentBlogTopic";
+import { setCurrentBlog, setCurrentStep, updateBlogData } from "@/redux/slices/currentBlogTopic";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import {
@@ -103,7 +103,7 @@ export default function Dashboard() {
   //   { value: "objective", label: "objective" },
   // ];
 
-  const [currentStep, setCurrentStep] = useState<BlogWizardStep>("topic");
+  // const [currentStep, setCurrentStep] = useState<BlogWizardStep>("topic");
   const [blogData, setBlogData] = useState<BlogData>({
     topic: "",
     primaryKeywords: "",
@@ -120,7 +120,7 @@ export default function Dashboard() {
 
   const handleSubmit = () => {
 
-    setCurrentStep("outline");
+    dispatch(setCurrentStep("outline"));
 
     // if (!recaptchaValue) {
     //   setRecaptchaError(true);
@@ -248,20 +248,20 @@ export default function Dashboard() {
     }
   }, [reqOutlineData]);
 
-  useEffect(()=>{
-    const dispatchData: CurrentBlog = {
-      blogToken: "",
-      topic: "",
-      topic_id: "",
-      wordsNumber: "",
-      outline: "",  
-      currentStep:'topic',
-      main_keyword:"",
-      secondary_keywords:[],
-      tone: "",
-    };
-    dispatch(setCurrentBlog(dispatchData));
-  },[currentStep])
+  // useEffect(()=>{
+  //   const dispatchData: CurrentBlog = {
+  //     blogToken: "",
+  //     topic: "",
+  //     topic_id: "",
+  //     wordsNumber: "",
+  //     outline: "",  
+  //     currentStep:'topic',
+  //     main_keyword:"",
+  //     secondary_keywords:[],
+  //     tone: "",
+  //   };
+  //   dispatch(setCurrentBlog(dispatchData));
+  // },[state.currentStep])
 
   // return (
   //   <div className="flex flex-1 flex-col gap-4 p-4">
@@ -453,61 +453,65 @@ export default function Dashboard() {
   };
 
   const renderStepContent = () => {
-    switch (currentStep) {
+    switch (state.currentStep) {
       case 'topic':
         return (
           <StepTopicInput 
-            topic={blogData.topic} 
-            onTopicChange={(topic) => setBlogData({ ...blogData, topic })}
-            onNext={() => setCurrentStep('primary')}
+            topic={state.blogData.topic} 
+            onTopicChange={(topic) => dispatch(updateBlogData({ topic }))}
+            onNext={() => dispatch(setCurrentStep('primary'))}
           />
         );
       case 'primary':
         return (
           <StepPrimaryKeywords 
-            topic={blogData.topic}
+            topic={state.blogData.topic}
             primaryKeywords={blogData.primaryKeywords}
-            onKeywordsChange={(keywords) => setBlogData({ ...blogData, primaryKeywords: keywords })}
-            onNext={() => setCurrentStep('secondary')}
-            onBack={() => setCurrentStep('topic')}
+            onKeywordsChange={(keywords) => dispatch(updateBlogData({ primaryKeywords: keywords }))}
+            onNext={() => dispatch(setCurrentStep('secondary'))}
+            onBack={() => dispatch(setCurrentStep('topic'))}
           />
         );
       case 'secondary':
         return (
           <StepSecondaryKeywords 
-            topic={blogData.topic}
-            primaryKeywords={blogData.primaryKeywords}
-            secondaryKeywords={blogData.secondaryKeywords}
-            onKeywordsChange={(keywords) => setBlogData({ ...blogData, secondaryKeywords: keywords })}
-            // onNext={() => setCurrentStep('outline')}
-            onNext={()=> setCurrentStep('tone')}
-            onBack={() => setCurrentStep('primary')}
-          />
+          // blogData={state.blogData}
+            topic={state.blogData.topic}
+            primaryKeywords={state.blogData.primaryKeywords}
+            secondaryKeywords={state.blogData.secondaryKeywords}
+            onKeywordsChange={(keywords) => dispatch(updateBlogData({ secondaryKeywords: keywords }))}
+            // onNext={() => dispatch(setCurrentStep('outline')}
+            onNext={()=> dispatch(setCurrentStep('tone'))}
+            onBack={() => dispatch(setCurrentStep('primary'))}
+          />  
         );
         case 'tone':
         return (
           <StepTone
-            tone={blogData.tone}
-            onToneChange={(tone) => setBlogData({ ...blogData, tone })}
+            topic={state.blogData.topic}
+            primaryKeywords={state.blogData.primaryKeywords}
+            secondaryKeywords={state.blogData.secondaryKeywords}
+            tone={state.blogData.tone}
+            onToneChange={(tone) => dispatch(updateBlogData({ tone }))}
             onNext={() => handleSubmit()}
-            onBack={() => setCurrentStep('secondary')}
+            onBack={() => dispatch(setCurrentStep('secondary'))}
             />);
       case 'outline':
         return (
           <StepOutline 
-            blogData ={blogData}
-            outline={blogData.outline}
-            onOutlineChange={(outline) => setBlogData({ ...blogData, outline })}
-            onNext={() => setCurrentStep('generate')}
-            onBack={() => setCurrentStep('tone')}
+            blogData ={state.blogData}
+            outline={state.blogData.outline}
+            onOutlineChange={(outline) => dispatch(updateBlogData({ outline }))}
+            onNext={() => dispatch(setCurrentStep('generate'))}
+            onBack={() => dispatch(setCurrentStep('tone'))}
           />
         );
       case 'generate':
         return (
           <StepGenerate 
-            blogData={blogData}
+            blogData={state.blogData}
             onGenerateBlog={handleGenerateBlog}
-            onBack={() => setCurrentStep('outline')}
+            onBack={() => dispatch(setCurrentStep('outline'))}
           />
         );
       default:
@@ -539,8 +543,8 @@ export default function Dashboard() {
                 <div className="mb-8">
                   <div className="flex justify-between">
                     {['topic', 'primary', 'secondary', 'tone', 'outline', 'generate'].map((step, index) => {
-                      const isActive = currentStep === step;
-                      const isCompleted = ['topic', 'primary', 'secondary', 'tone','outline', 'generate'].indexOf(currentStep) >= index;
+                      const isActive = state.currentStep === step;
+                      const isCompleted = ['topic', 'primary', 'secondary', 'tone','outline', 'generate'].indexOf(state.currentStep) >= index;
                       
                       return (
                         <div key={step} className="flex flex-col items-center">
@@ -567,11 +571,11 @@ export default function Dashboard() {
                       className="absolute top-0 h-1 bg-primary transition-all" 
                       style={{ 
                         width: `${
-                          currentStep === 'topic' ? '0%' : 
-                          currentStep === 'primary' ? '20%' : 
-                          currentStep === 'secondary' ? '40%' : 
-                          currentStep === 'tone' ? '60%' :
-                          currentStep === 'outline' ? '80%' : '100%'
+                          state.currentStep === 'topic' ? '0%' : 
+                          state.currentStep === 'primary' ? '20%' : 
+                          state.currentStep === 'secondary' ? '40%' : 
+                          state.currentStep === 'tone' ? '60%' :
+                          state.currentStep === 'outline' ? '80%' : '100%'
                         }` 
                       }} 
                     ></div>

@@ -1,10 +1,18 @@
-import { BlogData, BlogWizardStep } from "@/components/app/BlogWizardSidebar";
+import { BlogWizardStep } from "@/components/app/BlogWizardSidebar";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 // interface Content {
 //   blog: string;
 //   feedback: string;
 // }
 
+export interface BlogData {
+  topic: string;
+  primaryKeywords: string;
+  secondaryKeywords: string[];
+  tone: string;
+  outline: string;
+  generatedBlog: [];
+}
 
 interface BlogState {
   currentStep: BlogWizardStep;
@@ -32,7 +40,7 @@ const initialState: BlogState = {
     secondaryKeywords: [],
     tone: '',
     outline: "",
-    generatedBlog: ''
+    generatedBlog: []
   },
   blogToken: "",
   topic_id: "",
@@ -60,15 +68,23 @@ const currentBlogSlice = createSlice({
       action: PayloadAction<BlogState>
     ) => {
       state.blogToken = action.payload.blogToken;
-      // state.blogData.topic = action.payload.blogData.topic;
+      state.blogData = {...state.blogData};
+      state.currentStep = 'topic';
+      state.topic_id 
     },
     setBlogToken: (state, action: PayloadAction<{ blogToken: string }>) => {
       state.blogToken = action.payload.blogToken;
+      state.blogData = {...state.blogData};
+      state.currentStep = 'topic';
+      state.topic_id
     },
+    // setBlogGeneratedContent:(state)=>{
+
+    // },
     resetCurrentBlogTopic: () => initialState,
   },
 });
 
-export const { setCurrentBlog, setBlogToken, resetCurrentBlogTopic } =
+export const { setCurrentBlog, setBlogToken, resetCurrentBlogTopic ,setCurrentStep,updateBlogData,setBlogData, resetBlogState} =
   currentBlogSlice.actions;
 export default currentBlogSlice.reducer;

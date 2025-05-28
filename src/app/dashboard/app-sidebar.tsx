@@ -16,10 +16,14 @@ import { AppRoutes } from "@/lib/utils";
 import { Home, Settings, MessageSquare } from "lucide-react";
 import { TablesName } from "@/lib/utils";
 import { supabase } from "@/lib/supabaseClient";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { setCurrentSelectedId, setCurrentTopicBlogs } from "@/redux/slices/currentBlogs";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const dispatch =useAppDispatch();
   const pathname = usePathname();
   const { topic_id } = useParams();
+  const {generatedBlog} =useAppSelector((state: any)=>state.currentBlog)
 
   const [blogs, setBlogs] = React.useState([]);
 
@@ -28,22 +32,24 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   blogs.forEach((blog, index) => {
     menuItems.push({
       name: `Content ${index + 1}`,
-      // href: `${AppRoutes.DASHBOARD}/${topicId}/content/${blog.id}`,
     });
   });
 
-  const getContentFromSupabase = async () => {
-    const { data: blogs } = await supabase
-      .from(TablesName.BLOGS)
-      .select("*")
-      .eq("topic_id", topic_id);
-    if (blogs) {
-      setBlogs(blogs);
-    }
-  };
-  React.useEffect(() => {
-    getContentFromSupabase();
-  }, [topic_id]);
+  // const getContentFromSupabase = async () => {
+  //   const { data: blogs } = await supabase
+  //     .from(TablesName.BLOGS)
+  //     .select("*")
+  //     .eq("topic_id", topic_id);
+  //   if (blogs) {
+  //     setBlogs(blogs);
+  //     dispatch(setCurrentTopicBlogs(blogs))
+  //   }
+  // };
+  // console.log("blogs", blogs);
+  // React.useEffect(() => {
+  //   getContentFromSupabase();
+  // }, [topic_id]);
+  console.log("currentBlog.generatedBlog",generatedBlog);
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -52,13 +58,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent className="p-4">
         <SidebarGroup>
           <SidebarGroupContent className="space-y-2">
-            {menuItems?.map((item, index) => {
-              return (
-                <Link href="" key={index}>
-                  <Button variant="ghost" className="w-full">
-                    {item.name}
-                  </Button>
-                </Link>
+            {generatedBlog?.map((item, index) => {
+              return (<div key={index}>
+                  <Button onClick={()=> dispatch(setCurrentSelectedId({currentSelectedId: item.id}))} variant="ghost" className="w-full">
+                    {item.id}
+                  </Button> 
+              </div>
               );
             })}
           </SidebarGroupContent>

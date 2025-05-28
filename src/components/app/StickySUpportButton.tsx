@@ -46,7 +46,6 @@ const StickySupportButton = ({
   }
 
   useEffect(() => { 
-    console.log("feedbackUpdated",feedbackUpdated);
     if(topic_id){
       getUpdatedTopicData()
     }

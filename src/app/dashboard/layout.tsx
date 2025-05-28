@@ -27,7 +27,7 @@ import moment from "moment";
 import { AppRoutes } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { AppSidebar } from "./app-sidebar";
-interface Topics {
+export interface Topics {
   id: string;
   topic_name: string;
   created_at: Date;
@@ -50,7 +50,6 @@ export default function DashboardLayout({
     isError,
   } = useGetTokenQuery({ uuid: userState?.id }, { skip: !userState?.id });
   const [dialogOpen,setDialogOpen]=useState<boolean>(false);
-  const state = useAppSelector((state) => state.currentUser);
   const router = useRouter();
   useEffect(() => {
     if (isError) return;
@@ -65,7 +64,7 @@ export default function DashboardLayout({
       const { data: topics } = await supabase
         .from("Topics")
         .select("*")
-        .eq("user_id", state.id);
+        .eq("user_id", userState.id);
       setTopics(topics);
     } catch (error) {
       console.log("error", error);
@@ -110,11 +109,6 @@ export default function DashboardLayout({
                       <Lock className="mr-2 h-4 w-4" />
                       Create New Private Chat
                     </Button>
-                    {/* <div className="mt-2 text-right">
-                      <Button variant="link" className="text-xs text-primary">
-                        SHOW ALL
-                      </Button>
-                    </div> */}
                   </div>
 
                   <Separator className="my-2" />
@@ -123,7 +117,6 @@ export default function DashboardLayout({
                     <h3 className="text-xs font-semibold text-muted-foreground mb-2">
                       History
                     </h3>
-                    {/* <ScrollArea className="w-full rounded-md border"> */}
                     <div className="space-y-2 overflow-scroll  h-[300px]">
                       {topics.map(({ topic_name, created_at, id }) => (
                         <Button

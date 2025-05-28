@@ -15,7 +15,7 @@ const StepTopicInput = ({ topic, onTopicChange, onNext }: StepTopicInputProps) =
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (localTopic.trim()) {
+    if (localTopic?.trim()) {
       onTopicChange(localTopic.trim());
       onNext();
     }
@@ -45,7 +45,7 @@ const StepTopicInput = ({ topic, onTopicChange, onNext }: StepTopicInputProps) =
           <Button 
             type="submit" 
             size="lg"
-            disabled={!localTopic.trim()}
+            disabled={!localTopic?.trim()}
           >
             Next
           </Button>

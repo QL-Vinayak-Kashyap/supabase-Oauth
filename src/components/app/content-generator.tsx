@@ -41,6 +41,7 @@ export function ContentGenerator({
   const [blogInserted, setBlogInserted] = React.useState(false);
   const state = useAppSelector((state: any) => state.currentBlogTopic);
   const userState = useAppSelector((state: any) => state.currentUser);
+  const {generatedBlog,currentSelectedId} =useAppSelector((state: any)=>state.currentBlog )
   const dispatch = useAppDispatch();
 
   const feedbackForm = useForm({
@@ -148,30 +149,29 @@ export function ContentGenerator({
     }
   };
 
-  const getContentFromSupabase = async () => {
-    const { data: blogs } = await supabase
-      .from(TablesName.BLOGS)
-      .select("*")
-      .eq("topic_id", topicId);
-    if (blogs) {
-      setBlogCount(blogs.length);
-      setBlogs(blogs);
-    }
-  };
+  // const getContentFromSupabase = async () => {
+  //   const { data: blogs } = await supabase
+  //     .from(TablesName.BLOGS)
+  //     .select("*")
+  //     .eq("topic_id", topicId);
+  //   if (blogs) {
+  //     setBlogCount(blogs.length);
+  //     setBlogs(blogs);
+  //   }
+  // };
 
   React.useEffect(() => {
     if (topicId) {
       getTopicName();
-      getContentFromSupabase();
+      // getContentFromSupabase();
     }
   }, [feedbackData, blogInserted, blogGeneratedState]);
 
   return (
     <div className="space-y-8">
-      {blogs.length !== 0 && (
+      {generatedBlog?.length !== 0 && (
         <div>
-          {blogs
-            .sort((a, b) => a.id - b.id)
+          {generatedBlog?.filter((item)=> item.id === currentSelectedId)
             .map((item: any, index: number) => {
               let diffContent = item.content;
               if (index !== 0) {

@@ -13,7 +13,7 @@ import currentBlogReducer from "./slices/currentBlogs";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["currentUser", "currentBlogTopic"], // Persist these slices
+  whitelist: ["currentUser", "currentBlogTopic","currentBlogReducer"], // Persist these slices
 };
 
 const rootReducer = combineReducers({

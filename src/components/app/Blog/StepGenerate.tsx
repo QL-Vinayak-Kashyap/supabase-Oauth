@@ -2,14 +2,13 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { BookCheck, ArrowLeft, RefreshCw, FileText, Zap, Loader2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { BlogData } from "@/components/app/BlogWizardSidebar";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabaseClient";
 import { useLazyGenerateBlogQuery } from "@/redux/api/api";
-import { AppRoutes, TablesName } from "@/lib/utils";
+import { AppRoutes, BlogData, TablesName } from "@/lib/utils";
 import { setUserLimit } from "@/redux/slices/currentUserSlice";
 import { Input } from "@/components/ui/input";
 import { z } from "zod";
@@ -19,7 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 
 interface StepGenerateProps {
-  blogData: BlogData;
+  blogData?: BlogData;
   onGenerateBlog: () => void;
   onBack: () => void;
 }
@@ -38,7 +37,7 @@ const StepGenerate = ({
   onGenerateBlog,
   onBack
 }: StepGenerateProps) => {
-  const [] = useState("")
+  // const [] = useState("")
   const userState = useAppSelector((state) => state.currentUser);
   const state = useAppSelector((state) => state.currentBlogTopic);
   const [isGenerating, setIsGenerating] = useState(false);

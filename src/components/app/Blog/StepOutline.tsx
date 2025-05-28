@@ -6,11 +6,11 @@ import { MdEditor } from "md-editor-rt";
 import { useAppSelector } from "@/hooks/hooks";
 import { toast } from "sonner";
 import { GenerateOutlineRequest, useLazyGenerateOutlineQuery } from "@/redux/api/api";
-import { BlogData } from "../BlogWizardSidebar";
 import Loading from "../Loading";
+import { BlogData } from "@/lib/utils";
 
 interface StepOutlineProps {
-  blogData: BlogData;
+  blogData?: BlogData;
   outline: string;
   onOutlineChange: (outline: string) => void;
   onNext: () => void;

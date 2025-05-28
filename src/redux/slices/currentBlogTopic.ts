@@ -1,4 +1,4 @@
-import { BlogWizardStep } from "@/components/app/BlogWizardSidebar";
+import { BlogWizardStep } from "@/lib/utils";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 // interface Content {
 //   blog: string;

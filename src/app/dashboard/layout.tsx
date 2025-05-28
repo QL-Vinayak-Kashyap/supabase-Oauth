@@ -26,7 +26,7 @@ import { Button } from "@/components/ui/button";
 import moment from "moment";
 import { AppRoutes } from "@/lib/utils";
 import { useRouter } from "next/navigation";
-import { AppSidebar } from "./app-sidebar";
+import { AppSidebar } from "../../components/app/Blog/AppSidebar";
 export interface Topics {
   id: string;
   topic_name: string;

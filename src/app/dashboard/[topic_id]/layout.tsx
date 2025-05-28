@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode, useEffect, useState } from "react";
-import { AppSidebar } from "../app-sidebar";
+import { AppSidebar } from "../../../components/app/Blog/AppSidebar";
 import { useLazyGenerateBlogQuery, useLazyGenerateBlogWithFeedbackQuery } from "@/redux/api/api";
 import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";

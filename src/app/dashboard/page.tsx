@@ -1,5 +1,4 @@
 "use client";
-
 import {
   Form,
   FormControl,
@@ -38,11 +37,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { AppRoutes, TablesName } from "@/lib/utils";
+import { AppRoutes, BlogData, TablesName } from "@/lib/utils";
 import { toast } from "sonner";
 import { setUserLimit } from "@/redux/slices/currentUserSlice";
 import ReCAPTCHA from "react-google-recaptcha";
-import { BlogData } from "@/components/app/BlogWizardSidebar";
 import StepOutline from "@/components/app/Blog/StepOutline";
 import StepTopicInput from "@/components/app/Blog/StepTopicInput";
 import StepPrimaryKeywords from "@/components/app/Blog/StepPrimaryKeyword";
@@ -65,7 +63,6 @@ type OutLineFormValues = z.infer<typeof outLinrFormSchema>;
 
 const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
-export type BlogWizardStep = 'topic' | 'primary' | 'secondary' | 'tone' | 'outline' | 'generate';
 
 export default function Dashboard() {
   const router = useRouter();
@@ -236,7 +233,7 @@ export default function Dashboard() {
     dispatch(setUserLimit({ limitLeft: limit[0]?.daily_limit }));
   };
 
-  useEffect(() => {
+  useEffect(() => { 
     checkLimit();
     if (reqOutlineData) {
       const dispatchData: any = {
@@ -499,7 +496,7 @@ export default function Dashboard() {
       case 'outline':
         return (
           <StepOutline 
-            blogData ={state.blogData}
+            // blogData ={state.blogData}
             outline={state.blogData.outline}
             onOutlineChange={(outline) => dispatch(updateBlogData({ outline }))}
             onNext={() => dispatch(setCurrentStep('generate'))}
@@ -509,7 +506,7 @@ export default function Dashboard() {
       case 'generate':
         return (
           <StepGenerate 
-            blogData={state.blogData}
+            // blogData={state.blogData}
             onGenerateBlog={handleGenerateBlog}
             onBack={() => dispatch(setCurrentStep('outline'))}
           />

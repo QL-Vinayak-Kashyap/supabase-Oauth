@@ -14,7 +14,7 @@ import { MarkdownRenderer } from "./markdown-renderer";
 import { exportToWord } from "@/lib/export-to-word";
 import React from "react";
 import { toast } from "sonner";
-import { handleExportPDF } from "@/lib/exportToPDF";
+// import { handleExportPDF } from "@/lib/exportToPDF";
 
 type FeedbackTypes = {
   feedback: string;
@@ -51,12 +51,12 @@ export default function GeneratedContentCard({
     }
   };
 
-  const handleExportToPdf = async () => {
-    if (!forWord) throw new Error("Missing required parameter: forWord");
-    try {
-      await handleExportPDF(forWord, topicName ?? "");
-    } catch (err) { toast("Error in exporting in PDF.") }
-  }
+  // const handleExportToPdf = async () => {
+  //   if (!forWord) throw new Error("Missing required parameter: forWord");
+  //   try {
+  //     await handleExportPDF(forWord, topicName ?? "");
+  //   } catch (err) { toast("Error in exporting in PDF.") }
+  // }
 
   return (
     <Card className="relative">
@@ -105,14 +105,14 @@ export default function GeneratedContentCard({
             )}
             {isExporting ? "Exporting..." : "Export to Word"}
           </Button>
-          {!Number.isNaN(index) && <Button
+          {/* {!Number.isNaN(index) && <Button
             variant="outline"
             className="text-sm"
             onClick={handleExportToPdf}
           >
             <FileIcon className="mr-2 h-4 w-4" />
             Export as PDF
-          </Button>}
+          </Button>} */}
           {isEditOutline && (
             <Button
               variant="outline"

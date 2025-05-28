@@ -1,24 +1,5 @@
 "use client";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+
 import * as z from "zod";
 import { supabase } from "@/lib/supabaseClient";
 import { useState, useEffect } from "react";
@@ -26,17 +7,10 @@ import {
   GenerateOutlineRequest,
   useLazyGenerateOutlineQuery,
 } from "@/redux/api/api";
-import { AlertTriangle, Loader2, PlusCircle, X, Zap } from "lucide-react";
 import { setCurrentBlog, setCurrentStep, updateBlogData } from "@/redux/slices/currentBlogTopic";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { AppRoutes, BlogData, TablesName } from "@/lib/utils";
 import { toast } from "sonner";
 import { setUserLimit } from "@/redux/slices/currentUserSlice";
@@ -48,27 +22,13 @@ import StepSecondaryKeywords from "@/components/app/Blog/StepSecondaryKeyword";
 import StepGenerate from "@/components/app/Blog/StepGenerate";
 import StepTone from "@/components/app/Blog/StepTone";
 
-const outLinrFormSchema = z.object({
-  topic: z.string().min(3, { message: "Topic must be at least 3 characters" }),
-  main_keyword: z
-    .string()
-    .min(2, { message: "Main Keyword must be at least 2 characters" })
-    .max(30, { message: "Main Keyword must not greater than 30 characters" })
-    .optional(),
-  secondary_keywords: z.array(z.string()).optional(),
-  tone: z.string().min(1, { message: "Please select a tone" }),
-});
 
-type OutLineFormValues = z.infer<typeof outLinrFormSchema>;
-
-const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+// const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
 
 export default function Dashboard() {
-  const router = useRouter();
   const dispatch = useAppDispatch();
-  const [reqOutlineData, setReqOutlineData] =
-    useState<GenerateOutlineRequest>();
+  const [reqOutlineData, setReqOutlineData] = useState<GenerateOutlineRequest>();
   const userState = useAppSelector((state) => state.currentUser);
   const state = useAppSelector((state) => state.currentBlogTopic);
   // const { currentStep, blogData, showBlog } = useAppSelector((state) => state.blog);
@@ -115,9 +75,9 @@ export default function Dashboard() {
     { data: generatedOutline, isLoading: loadingFirstOutline },
   ] = useLazyGenerateOutlineQuery();
 
-  const handleSubmit = () => {
+  // const handleSubmit = () => {
 
-    dispatch(setCurrentStep("outline"));
+  //   dispatch(setCurrentStep("outline"));
 
     // if (!recaptchaValue) {
     //   setRecaptchaError(true);
@@ -125,7 +85,7 @@ export default function Dashboard() {
     // }
     // setRecaptchaError(false);
     // handleGenerateOutline();
-  };
+  // };
 
   // async function handleGenerateOutline() {
   //   if (!limitLeftState) {
@@ -490,7 +450,7 @@ export default function Dashboard() {
             secondaryKeywords={state.blogData.secondaryKeywords}
             tone={state.blogData.tone}
             onToneChange={(tone) => dispatch(updateBlogData({ tone }))}
-            onNext={() => handleSubmit()}
+            onNext={() => dispatch(setCurrentStep("outline"))}
             onBack={() => dispatch(setCurrentStep('secondary'))}
             />);
       case 'outline':
@@ -519,15 +479,7 @@ export default function Dashboard() {
   return (
       <div className="min-h-screen flex w-full">
         <main className="flex-1 bg-gray-50">
-          {/* <div className="p-4 border-b flex items-center">
-            <SidebarTrigger className="mr-4" />
-            <h1 className="text-xl font-semibold">Blog Wizard AI</h1>
-          </div> */}
-          
           <div className="p-6">
-            {/* {showBlog ? (
-              <BlogDisplay blogData={blogData} />
-            ) : ( */}
               <div className="max-w-4xl mx-auto">
                 <div className="mb-8">
                   <h2 className="text-2xl font-bold mb-2">AI-Powered Blog Creator</h2>
@@ -584,7 +536,6 @@ export default function Dashboard() {
                   {renderStepContent()}
                 </div>
               </div>
-            {/* )} */}
           </div>
         </main>
       </div>

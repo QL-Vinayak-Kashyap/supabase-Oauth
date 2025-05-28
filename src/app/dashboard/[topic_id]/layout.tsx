@@ -45,8 +45,8 @@ export default function TopicLayout({
   const state = useAppSelector((state) => state.currentBlogTopic);
   const { generatedBlog, currentSelectedId } = useAppSelector((state: any) => state.currentBlog)
   const dispatch = useAppDispatch();
-  const [blogInserted, setBlogInserted] =useState<boolean>(false);
-  const [feedbackRequestData,setFeedbackRequestData] =useState<FeedbackTypes>();
+  const [blogInserted, setBlogInserted] = useState<boolean>(false);
+  const [feedbackRequestData, setFeedbackRequestData] = useState<FeedbackTypes>();
 
   const feedbackForm = useForm({
     resolver: zodResolver(schema),
@@ -192,41 +192,41 @@ export default function TopicLayout({
       .eq("topic_id", topic_id);
     if (blogs) {
       dispatch(setCurrentTopicBlogs({ generatedBlog: blogs }))
-      dispatch((setCurrentSelectedId({ currentSelectedId: blogs[blogs.length-1]?.id })))
+      dispatch((setCurrentSelectedId({ currentSelectedId: blogs[blogs.length - 1]?.id })))
     }
   };
 
-   const insertDataInSupabase = async (data: any) => {
-      const dataToBeSent = {
-        topic_id: topic_id,
-        content: data.content.blog,
-        feedback: data.content.feedback,
-      };
-      const { error: descriptionInsertError, data: updatedTopicData } =
-        await supabase
-          .from(TablesName.TOPICS)
-          .update([
-            {
-              // topic_id: topic_id,
-              // content: blogData?.data?.blog,
-              // feedback: blogData?.data?.feedback ?? "",
-              banner_description: data?.content?.bannerDescription,
-              meta_description: data?.content?.metaDescription,
-            },
-          ])
-          .eq("id", topic_id)
-          .select();
-      const { data: insertedBlog } = await supabase
-        .from(TablesName.BLOGS)
-        .insert([dataToBeSent])
-        .select();
-      if (insertedBlog) {
-        setBlogInserted((state)=> !state);
-      }
+  const insertDataInSupabase = async (data: any) => {
+    const dataToBeSent = {
+      topic_id: topic_id,
+      content: data.content.blog,
+      feedback: data.content.feedback,
     };
-    useEffect(()=>{
-      getContentFromSupabase();
-    },[blogInserted])
+    const { error: descriptionInsertError, data: updatedTopicData } =
+      await supabase
+        .from(TablesName.TOPICS)
+        .update([
+          {
+            // topic_id: topic_id,
+            // content: blogData?.data?.blog,
+            // feedback: blogData?.data?.feedback ?? "",
+            banner_description: data?.content?.bannerDescription,
+            meta_description: data?.content?.metaDescription,
+          },
+        ])
+        .eq("id", topic_id)
+        .select();
+    const { data: insertedBlog } = await supabase
+      .from(TablesName.BLOGS)
+      .insert([dataToBeSent])
+      .select();
+    if (insertedBlog) {
+      setBlogInserted((state) => !state);
+    }
+  };
+  useEffect(() => {
+    getContentFromSupabase();
+  }, [blogInserted])
 
 
   useEffect(() => {
@@ -235,22 +235,22 @@ export default function TopicLayout({
       handleGenerateBlog();
     }
   }, []);
-   useEffect(() => {
-      if (feedbackData) {
-        const dispatchData: any = {
-          blogToken: state?.blogToken || "",
-          topic: state.blogData.topic,
-          wordsNumber: 1000,
-          content: {
-            blog: feedbackData.data.revised_blog,
-            feedback: feedbackRequestData.feedback,
-            metaDescription: feedbackData.data.meta_description,
-            bannerDescription: feedbackData.data.banner_description,
-          },
-        };
-        insertDataInSupabase(dispatchData);
-      }
-    }, [feedbackData]);
+  useEffect(() => {
+    if (feedbackData) {
+      const dispatchData: any = {
+        blogToken: state?.blogToken || "",
+        topic: state.blogData.topic,
+        wordsNumber: 1000,
+        content: {
+          blog: feedbackData.data.revised_blog,
+          feedback: feedbackRequestData.feedback,
+          metaDescription: feedbackData.data.meta_description,
+          bannerDescription: feedbackData.data.banner_description,
+        },
+      };
+      insertDataInSupabase(dispatchData);
+    }
+  }, [feedbackData]);
   return (
     <div className="flex min-h-screen">
       <AppSidebar />
@@ -259,45 +259,45 @@ export default function TopicLayout({
           <TopicCard topicData={topicData} isLoading={isTopicDataLoading} feedbackUpdated={blogCount} />
           {children}
           <div className="sticky bottom-0 w-full mx-auto p-4 border rounded-lg shadow-md bg-white">
-        <h2 className="text-xl font-semibold mb-2">
-          Provide Ideas for Regeneration
-        </h2>
-        <Form {...feedbackForm}>
-          <form
-            onSubmit={feedbackForm.handleSubmit(handleGenerateAgain)}
-          >
-            <FormField
-              control={feedbackForm.control}
-              name="feedback"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Textarea
-                      className="w-full p-2 border rounded-lg"
-                      placeholder="Type here..."
-                      {...field}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <Button
-              className="glossy-button mt-4 w-full"
-              type="submit"
-              disabled={loadingGeneratingBlogAgain}
-            >
-              {loadingGeneratingBlogAgain && (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              {loadingGeneratingBlogAgain
-                ? "Regenerating..."
-                : "Regenerate Content"}
-            </Button>
-          </form>
-        </Form>
-      </div>
+            <h2 className="text-xl font-semibold mb-2">
+              Provide Ideas for Regeneration
+            </h2>
+            <Form {...feedbackForm}>
+              <form
+                onSubmit={feedbackForm.handleSubmit(handleGenerateAgain)}
+              >
+                <FormField
+                  control={feedbackForm.control}
+                  name="feedback"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Textarea
+                          className="w-full p-2 border rounded-lg"
+                          placeholder="Type here..."
+                          {...field}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  className="glossy-button mt-4 w-full"
+                  type="submit"
+                  disabled={loadingGeneratingBlogAgain}
+                >
+                  {loadingGeneratingBlogAgain && (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                  {loadingGeneratingBlogAgain
+                    ? "Regenerating..."
+                    : "Regenerate Content"}
+                </Button>
+              </form>
+            </Form>
+          </div>
         </div>}</main>
-      
+
     </div>
   );
 }

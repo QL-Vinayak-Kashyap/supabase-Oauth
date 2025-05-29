@@ -1,14 +1,10 @@
+'use client'
+
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FileText} from "lucide-react";
-
-interface StepTopicInputProps {
-  topic: string;
-  onTopicChange: (topic: string) => void;
-  onNext: () => void;
-}
-
+import { StepTopicInputProps } from "@/types";
 
 const StepTopicInput = ({ topic, onTopicChange, onNext }: StepTopicInputProps) => {
   const [localTopic, setLocalTopic] = useState(topic);
@@ -20,6 +16,8 @@ const StepTopicInput = ({ topic, onTopicChange, onNext }: StepTopicInputProps) =
       onNext();
     }
   };
+
+  console.log("!localTopic?.trim()",!localTopic?.trim());
 
   return (
     <div className="space-y-6">
@@ -45,9 +43,9 @@ const StepTopicInput = ({ topic, onTopicChange, onNext }: StepTopicInputProps) =
           <Button 
             type="submit" 
             size="lg"
-            disabled={!localTopic?.trim()}
+            disabled={!localTopic.trim()}
           >
-            Next
+            Next  
           </Button>
         </div>
       </form>

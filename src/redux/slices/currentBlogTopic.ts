@@ -1,21 +1,10 @@
-import { BlogWizardStep } from "@/lib/utils";
+// import  {BlogWizardStep}  from "@/lib/utils";
+import { BlogData } from "@/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-// interface Content {
-//   blog: string;
-//   feedback: string;
-// }
 
-export interface BlogData {
-  topic: string;
-  primaryKeywords: string;
-  secondaryKeywords: string[];
-  tone: string;
-  outline: string;
-  generatedBlog: [];
-}
 
 interface BlogState {
-  currentStep: BlogWizardStep;
+  currentStep: string;
   blogData: BlogData;
   blogToken: string;
   topic_id: string;
@@ -38,9 +27,9 @@ const initialState: BlogState = {
     topic: '',
     primaryKeywords: "",
     secondaryKeywords: [],
-    tone: '',
+    tone: "",
     outline: "",
-    generatedBlog: []
+    generatedBlog: ""
   },
   blogToken: "",
   topic_id: "",
@@ -50,7 +39,7 @@ const currentBlogSlice = createSlice({
   name: "currentBlogTopic",
   initialState,
   reducers: {
-    setCurrentStep: (state, action: PayloadAction<BlogWizardStep>) => {
+    setCurrentStep: (state, action: PayloadAction<string>) => {
       state.currentStep = action.payload;
     },
     updateBlogData: (state, action: PayloadAction<Partial<BlogData>>) => {

@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { FilePen, ArrowLeft} from "lucide-react";
@@ -7,15 +9,9 @@ import { useAppSelector } from "@/hooks/hooks";
 import { toast } from "sonner";
 import { GenerateOutlineRequest, useLazyGenerateOutlineQuery } from "@/redux/api/api";
 import Loading from "../Loading";
-import { BlogData } from "@/lib/utils";
+import { StepOutlineProps } from "@/types";
 
-interface StepOutlineProps {
-  blogData?: BlogData;
-  outline: string;
-  onOutlineChange: (outline: string) => void;
-  onNext: () => void;
-  onBack: () => void;
-}
+
 
 const StepOutline = ({
   blogData,
@@ -92,7 +88,6 @@ const StepOutline = ({
       }
     },[])
 
-    console.log("loadingFirstOutline",loadingFirstOutline);
 
   return (
     <div className="space-y-4 relative">

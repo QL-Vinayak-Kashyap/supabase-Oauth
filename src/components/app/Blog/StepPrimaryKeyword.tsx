@@ -4,14 +4,9 @@ import { Search, ArrowLeft, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { StepPrimaryKeywordsProps } from "@/types";
 
-interface StepPrimaryKeywordsProps {
-  topic: string;
-  primaryKeywords: string;
-  onKeywordsChange: (keywords: string) => void;
-  onNext: () => void;
-  onBack: () => void;
-}
+
 
 const StepPrimaryKeywords = ({ 
   topic, 
@@ -77,10 +72,15 @@ const StepPrimaryKeywords = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (newKeyword.trim()) {
+      console.log("primary", newKeyword);
       onKeywordsChange(newKeyword.trim());
       onNext();
     }
   };
+
+  useEffect(()=>{
+    setNewKeyword(primaryKeywords);
+  },[])
 
   return (
     <div className="space-y-4">
@@ -108,17 +108,18 @@ const StepPrimaryKeywords = ({
         {/* <Button type="submit" variant="outline" size="sm" disabled={!newKeyword.trim()}>
           Add
         </Button> */}
-      </form>
+      
 
       <div className="flex justify-between">
         <Button variant="ghost" onClick={onBack} className="flex items-center gap-1">
           <ArrowLeft className="h-4 w-4" />
           Back
         </Button>
-        <Button onClick={onNext} disabled={newKeyword.length === 0}>
+        <Button type="submit" disabled={newKeyword.length === 0}>
           Next
         </Button>
       </div>
+      </form>
     </div>
   );
 };

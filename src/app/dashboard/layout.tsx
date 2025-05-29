@@ -24,8 +24,8 @@ import {
 import { Search, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import moment from "moment";
-import { AppRoutes } from "@/lib/utils";
-import { useRouter } from "next/navigation";
+import { AppRoutes, cn } from "@/lib/utils";
+import { usePathname, useRouter } from "next/navigation";
 import { AppSidebar } from "../../components/app/Blog/AppSidebar";
 export interface Topics {
   id: string;
@@ -38,6 +38,7 @@ export default function DashboardLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+    const pathName = usePathname();
   const [topicLoading, setTopicLoading] = React.useState<boolean>(false);
   const [topics, setTopics] = React.useState<Topics[]>([]);
   const dispatch = useAppDispatch();
@@ -101,6 +102,10 @@ export default function DashboardLayout({
                     Actions
                   </h3>
                   <Button
+                    onClick={() => {
+                      setDialogOpen(false);
+                      router.push(`${AppRoutes.DASHBOARD}`);
+                    }}
                     variant="ghost"
                     className="w-full justify-start text-sm hover:bg-muted"
                   >
@@ -116,26 +121,35 @@ export default function DashboardLayout({
                     History
                   </h3>
                   <div className="space-y-2 overflow-scroll  h-[300px]">
-                    {topics.map(({ topic_name, created_at, id }) => (
-                      <Button
-                        key={id}
-                        variant="ghost"
-                        className="w-full justify-between text-sm hover:bg-muted py-2 px-3 rounded-md"
-                        onClick={() => {
-                          setDialogOpen(false);
-                          router.push(
-                            `${AppRoutes.DASHBOARD}/${id}?content=""`
-                          );
-                        }}
-                      >
-                        <span className="truncate">
-                          {topic_name ? topic_name : "Not Available"}
-                        </span>
-                        <span className="text-xs text-muted-foreground flex-shrink-0">
-                          {moment(created_at).fromNow()}
-                        </span>
-                      </Button>
-                    ))}
+                    {topics.map(({ topic_name, created_at, id }) => {
+                      const isActive = pathName === `${AppRoutes.DASHBOARD}/${id}`;
+                      return (
+                        <Button
+                          key={id}
+                          variant="ghost"
+                          className={cn(
+                            "group flex w-full items-center justify-between rounded-lg px-2 py-1 text-sm transition-colors",
+                            isActive
+                              ? "bg-hover text-hover-foreground"
+                              : "hover:bg-hover text-hover-foreground"
+                          )}
+                          onClick={() => {
+                            setDialogOpen(false);
+                            router.push(
+                              `${AppRoutes.DASHBOARD}/${id}?content=""`
+                            );
+                          }}
+                        >
+                          <span className="truncate">
+                            {topic_name ? topic_name : "Not Available"}
+                          </span>
+                          <span className="text-xs text-muted-foreground flex-shrink-0">
+                            {moment(created_at).fromNow()}
+                          </span>
+                        </Button>
+                      )
+                    }
+                    )}
                   </div>
                 </div>
               </div>

@@ -1,3 +1,5 @@
+"use client"
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { BookCheck, ArrowLeft, RefreshCw, FileText, Zap, Loader2 } from "lucide-react";
@@ -8,7 +10,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabaseClient";
 import { useLazyGenerateBlogQuery } from "@/redux/api/api";
-import { AppRoutes, BlogData, TablesName } from "@/lib/utils";
+import { AppRoutes, TablesName } from "@/lib/utils";
 import { setUserLimit } from "@/redux/slices/currentUserSlice";
 import { Input } from "@/components/ui/input";
 import { z } from "zod";
@@ -16,12 +18,8 @@ import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { StepGenerateProps } from "@/types";
 
-interface StepGenerateProps {
-  blogData?: BlogData;
-  onGenerateBlog: () => void;
-  onBack: () => void;
-}
 
 const blogFormSchema = z.object({
   word_count: z.coerce
@@ -34,10 +32,8 @@ type BlogFormValues = z.infer<typeof blogFormSchema>;
 
 const StepGenerate = ({
   blogData,
-  onGenerateBlog,
   onBack
 }: StepGenerateProps) => {
-  // const [] = useState("")
   const userState = useAppSelector((state) => state.currentUser);
   const state = useAppSelector((state) => state.currentBlogTopic);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -51,12 +47,8 @@ const StepGenerate = ({
     },
   });
 
-  const [
-    triggerGenerateBlog,
-    { data: generatedBlog, isLoading: loadingFirstBlog },
-  ] = useLazyGenerateBlogQuery();
 
-  const handleGenerate = async () => {
+  const handleGenerateTopic = async () => {
     try {
       const datatoInsert = {
         user_id: userState?.id,
@@ -72,7 +64,6 @@ const StepGenerate = ({
         await supabase.from("Topics").insert([datatoInsert]).select();
 
         if (topicDataInserted) {
-        // setReqOutlineData(value);
         router.push(`${AppRoutes.DASHBOARD}/${topicDataInserted[0]?.id}?content=new`);
       }
 
@@ -83,73 +74,6 @@ const StepGenerate = ({
     } catch (error) {
       toast(error);
     }
-
-    // if (userState.limitLeft === 0) {
-    //   toast("Limit reached!!!");
-    //   return;
-    // }
-    // try {
-
-    //   const requestData: any = {
-    //     topic: blogData.topic,
-    //     tone: blogData.tone,
-    //     outline: blogData.outline,
-    //     main_keyword: blogData.primaryKeywords,
-    //     secondary_keywords: blogData.secondaryKeywords,
-    //     token: state?.blogToken
-    //   };
-
-    //   const { data: generatedBlogData, isSuccess } = await triggerGenerateBlog(
-    //     requestData
-    //   );
-    //   const { data: limit, error } = await supabase
-    //     .from("users")
-    //     .update({ daily_limit: userState.limitLeft - 1 })
-    //     .eq("uuid", userState.id)
-    //     .select();
-
-    //   if (!error) {
-    //     dispatch(setUserLimit({ limitLeft: limit[0]?.daily_limit }));
-    //   }
-
-    //   if (!generatedBlogData || !isSuccess) throw new Error("Blog generation failed");
-
-    //   const { error: blogInsertError } = await supabase
-    //     .from(TablesName.BLOGS)
-    //     .insert([
-    //       {
-    //         topic_id: "",
-    //         content: generatedBlogData?.data?.blog,
-    //         feedback: generatedBlogData?.data?.feedback ?? "",
-    //       },
-    //     ])
-    //     .select();
-
-    //   const { error: descriptionInsertError, data: updatedTopicData } = await supabase
-    //     .from(TablesName.TOPICS)
-    //     .update([
-    //       {
-    //         banner_description: generatedBlogData?.data?.banner_description,
-    //         meta_description: generatedBlogData?.data?.meta_description
-    //       },
-    //     ])
-    //     .eq('id', "")
-    //     .select()
-    //   // setTopicData(updatedTopicData[0]);
-    //   if (generatedBlogData) {
-    //     // setBlogGeneratedState(true);  
-    //     toast("Blog Generated");
-    //   }
-    // } catch (error) {
-    //   toast(error);
-    // }
-
-    // setIsGenerating(true);
-    // In a real app, you would call an API to generate the blog
-    // setTimeout(() => {
-    //   onGenerateBlog();
-    //   setIsGenerating(false);
-    // }, 2000);
   };
 
   return (
@@ -226,7 +150,7 @@ const StepGenerate = ({
 
       <Form {...blogForm}>
         <form
-          onSubmit={blogForm.handleSubmit(handleGenerate)}
+          onSubmit={blogForm.handleSubmit(handleGenerateTopic)}
           className="space-y-6"
         >
           <FormField
@@ -256,7 +180,7 @@ const StepGenerate = ({
               Back
             </Button>
             <Button
-              onClick={handleGenerate}
+              type="submit"
               disabled={isGenerating}
               className="flex items-center gap-1"
             >
@@ -273,20 +197,6 @@ const StepGenerate = ({
               )}
             </Button>
           </div>
-
-          {/* <Button
-            disabled={loadingFirstBlog}
-            variant="default"
-            type="submit"
-            className="glossy-button w-full rounded-lg py-3 px-4 font-medium hover:bg-grey-700 transition-colors flex items-center justify-center"
-          >
-            <Zap className="h-4 w-4 mr-2" />
-            {loadingFirstBlog && (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            {loadingFirstBlog ? "Generating..." : "Generate Content"}
-          </Button> */}
-
         </form>
       </Form>
     </div>

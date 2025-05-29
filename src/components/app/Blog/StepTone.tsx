@@ -1,3 +1,5 @@
+'use client'
+
 import { Button } from "@/components/ui/button";
 import { Volume2, ArrowLeft, PenSquare } from "lucide-react";
 import {
@@ -8,31 +10,37 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { StepToneProps } from "@/types";
+import { toneOptions } from "@/lib/utils";
+import { useState } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
+import { useAppDispatch } from "@/hooks/hooks";
+import { setCurrentStep } from "@/redux/slices/currentBlogTopic";
 
-interface StepToneProps {
-  topic:string;
-  primaryKeywords:string;
-  secondaryKeywords:string[];
-  tone: string;
-  onToneChange: (tone: string) => void;
-  onNext: () => void;
-  onBack: () => void;
-}
 
-const toneOptions = [
-  { value: "professional", label: "Professional" },
-  { value: "casual", label: "Casual" },
-  { value: "friendly", label: "Friendly" },
-  { value: "formal", label: "Formal" },
-  { value: "conversational", label: "Conversational" },
-  { value: "authoritative", label: "Authoritative" },
-  { value: "humorous", label: "Humorous" },
-  { value: "inspirational", label: "Inspirational" },
-  { value: "educational", label: "Educational" },
-  { value: "persuasive", label: "Persuasive" }
-];
+const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
-const StepTone = ({ topic, primaryKeywords, secondaryKeywords,tone, onToneChange, onNext, onBack }: StepToneProps) => {
+const StepTone = ({ topic, primaryKeywords, secondaryKeywords, tone, onToneChange, onNext, onBack }: StepToneProps) => {
+
+  const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null);
+  const [recaptchaError, setRecaptchaError] = useState(true);
+  const dispatch = useAppDispatch()
+
+  const handleRecaptchaOnChange = (value) => {
+    setRecaptchaValue(value);
+    setRecaptchaError(false);
+  };
+
+  const handleSubmit = () => {
+
+    if (!recaptchaValue) {
+      setRecaptchaError(true);
+      return;
+    }
+    setRecaptchaError(false);
+    dispatch(setCurrentStep("outline"));
+    onNext()
+  };
   return (
     <div className="space-y-6">
       <div className="rounded-md bg-gray-50 p-3 space-y-2">
@@ -40,17 +48,17 @@ const StepTone = ({ topic, primaryKeywords, secondaryKeywords,tone, onToneChange
         <div>
           <p className="text-sm font-medium">Primary Keyword:</p>
           <div className="flex flex-wrap gap-1 mt-1">
-              <Badge variant="default" className="text-xs">{primaryKeywords}
-              </Badge>
+            <Badge variant="default" className="text-xs">{primaryKeywords}
+            </Badge>
           </div>
         </div>
         <div>
           <p className="text-sm font-medium">Secondary Keywords:</p>
           <div className="flex flex-wrap gap-1 mt-1">
-            {secondaryKeywords.map((item)=>
-                <Badge variant="default" className="text-xs">{item}
+            {secondaryKeywords.map((item) =>
+              <Badge variant="default" className="text-xs">{item}
               </Badge>
-              )
+            )
             }
           </div>
         </div>
@@ -93,12 +101,21 @@ const StepTone = ({ topic, primaryKeywords, secondaryKeywords,tone, onToneChange
         )}
       </div>
 
+      <div className="flex flex-col gap-4">
+        <ReCAPTCHA
+          sitekey={RECAPTCHA_SITE_KEY}
+          onChange={handleRecaptchaOnChange}
+          theme="light"
+          className="transform scale-[0.95] -ml-3"
+        />
+      </div>
+
       <div className="flex justify-between">
         <Button variant="ghost" onClick={onBack} className="flex items-center gap-1">
           <ArrowLeft className="h-4 w-4" />
           Back
         </Button>
-        <Button onClick={onNext} disabled={!tone}>
+        <Button onClick={handleSubmit} disabled={recaptchaError || !tone }>
           Next
         </Button>
       </div>

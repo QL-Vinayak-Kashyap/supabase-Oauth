@@ -1,31 +1,25 @@
+"use client"
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { PenSquare, ArrowLeft, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-
-interface StepSecondaryKeywordsProps {
-  topic: string;
-  primaryKeywords: string;
-  secondaryKeywords: string[];
-  onKeywordsChange: (keywords: string[]) => void;
-  onNext: () => void;
-  onBack: () => void;
-}
+import { StepSecondaryKeywordsProps } from "@/types";
 
 const StepSecondaryKeywords = ({
   topic, 
   primaryKeywords,
-  secondaryKeywords, 
+  secondaryKeywords,
   onKeywordsChange, 
   onNext, 
-  onBack 
+  onBack
 }: StepSecondaryKeywordsProps) => {
   const [newKeyword, setNewKeyword] = useState("");
 
   const addKeyword = (keyword: string) => {
     keyword = keyword.trim();
-    if (keyword && !secondaryKeywords.includes(keyword) && !primaryKeywords.includes(keyword)) {
+    if (keyword && !secondaryKeywords?.includes(keyword) && !primaryKeywords.includes(keyword)) {
       onKeywordsChange([...secondaryKeywords, keyword]);
       setNewKeyword("");
     }
@@ -79,7 +73,7 @@ const StepSecondaryKeywords = ({
 
       <div>
         <p className="text-sm font-medium mb-2">Your secondary keywords:</p>
-        {secondaryKeywords.length > 0 ? (
+        {secondaryKeywords?.length > 0 ? (
           <div className="flex flex-wrap gap-2">
             {secondaryKeywords.map((keyword, index) => (
               <Badge key={index} variant="secondary" className="flex items-center gap-1 pl-3">
@@ -103,11 +97,11 @@ const StepSecondaryKeywords = ({
           <ArrowLeft className="h-4 w-4" />
           Back
         </Button>
-        <Button onClick={onNext} disabled={secondaryKeywords.length === 0}>
+        <Button onClick={onNext} disabled={secondaryKeywords?.length === 0}>
           Next
         </Button>
       </div>
-    </div>
+    </div>  
   );
 };
 

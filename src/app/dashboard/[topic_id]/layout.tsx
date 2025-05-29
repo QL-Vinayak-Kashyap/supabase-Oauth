@@ -18,6 +18,7 @@ import { Loader2 } from "lucide-react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Loading from "@/components/app/Loading";
 
 type FeedbackTypes = {
   feedback: string;
@@ -87,7 +88,6 @@ export default function TopicLayout({
       return;
     }
     try {
-
       const requestData: any = {
         topic: state.blogData.topic,
         tone: state.blogData.tone,
@@ -138,11 +138,11 @@ export default function TopicLayout({
         // setBlogGeneratedState(true);  
         toast("Blog Generated");
       }
-      if (searchParams.get("content") === 'new') {
-        const params = new URLSearchParams(searchParams);
-        params.set('content', '');
-        router.push(`${pathname}?${params.toString()}`);
-      }
+      // if (searchParams.get("content") === 'new') {
+      //   const params = new URLSearchParams(searchParams);
+      //   params.set('content', '');
+      //   router.push(`${pathname}?${params.toString()}`);
+      // }
     } catch (error) {
       toast(error);
     }
@@ -197,6 +197,7 @@ export default function TopicLayout({
   };
 
   const insertDataInSupabase = async (data: any) => {
+    console.log("insertDataInSupabase called");
     const dataToBeSent = {
       topic_id: topic_id,
       content: data.content.blog,
@@ -207,9 +208,6 @@ export default function TopicLayout({
         .from(TablesName.TOPICS)
         .update([
           {
-            // topic_id: topic_id,
-            // content: blogData?.data?.blog,
-            // feedback: blogData?.data?.feedback ?? "",
             banner_description: data?.content?.bannerDescription,
             meta_description: data?.content?.metaDescription,
           },
@@ -257,7 +255,7 @@ export default function TopicLayout({
       <main className="flex-1 relative">{
         <div>
           <TopicCard topicData={topicData} isLoading={isTopicDataLoading} feedbackUpdated={blogCount} />
-          {children}
+          {loadingFirstBlog? <Loading/> :children}
           <div className="sticky bottom-0 w-full mx-auto p-4 border rounded-lg shadow-md bg-white">
             <h2 className="text-xl font-semibold mb-2">
               Provide Ideas for Regeneration

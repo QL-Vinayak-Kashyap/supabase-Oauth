@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
-import { AppRoutes } from "@/lib/utils";
+import { AppRoutes, cn } from "@/lib/utils";
 import { Home, Settings, MessageSquare } from "lucide-react";
 import { TablesName } from "@/lib/utils";
 import { supabase } from "@/lib/supabaseClient";
@@ -20,10 +20,11 @@ import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { setCurrentSelectedId, setCurrentTopicBlogs } from "@/redux/slices/currentBlogs";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const dispatch =useAppDispatch();
+  const pathName = usePathname();
+  const dispatch = useAppDispatch();
   const pathname = usePathname();
   const { topic_id } = useParams();
-  const {generatedBlog} =useAppSelector((state: any)=>state.currentBlog)
+  const { generatedBlog, currentSelectedId } = useAppSelector((state: any) => state.currentBlog)
 
   const [blogs, setBlogs] = React.useState([]);
 
@@ -35,21 +36,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     });
   });
 
-  // const getContentFromSupabase = async () => {
-  //   const { data: blogs } = await supabase
-  //     .from(TablesName.BLOGS)
-  //     .select("*")
-  //     .eq("topic_id", topic_id);
-  //   if (blogs) {
-  //     setBlogs(blogs);
-  //     dispatch(setCurrentTopicBlogs(blogs))
-  //   }
-  // };
-  // console.log("blogs", blogs);
-  // React.useEffect(() => {
-  //   getContentFromSupabase();
-  // }, [topic_id]);
-  console.log("currentBlog.generatedBlog",generatedBlog);
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -59,10 +45,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarGroup>
           <SidebarGroupContent className="space-y-2">
             {generatedBlog?.map((item, index) => {
+              const isActive = item.id === currentSelectedId;
               return (<div key={index}>
-                  <Button onClick={()=> dispatch(setCurrentSelectedId({currentSelectedId: item.id}))} variant="ghost" className="w-full">
-                    {item.id}
-                  </Button> 
+                <Button onClick={() => dispatch(setCurrentSelectedId({ currentSelectedId: item.id }))} variant="ghost" className={cn(
+                  "group flex w-full items-center justify-between rounded-lg px-2 py-1 text-sm transition-colors",
+                  isActive
+                    ? "bg-hover text-hover-foreground"
+                    : "hover:bg-hover text-hover-foreground"
+                )}>
+                  {item.id}
+                </Button>
               </div>
               );
             })}

@@ -92,14 +92,14 @@ const StepGenerate = ({
         <CardContent className="p-4 space-y-3">
           <div>
             <p className="text-sm font-medium">Topic:</p>
-            <p className="text-sm">{blogData.topic}</p>
+            <p className="text-sm">{blogData?.topic}</p>
           </div>
 
           <Separator />
 
           <div>
             <p className="text-sm font-medium">Primary Keyword:</p>
-            <p className="text-sm">{blogData.primaryKeywords}</p>
+            <p className="text-sm">{blogData?.primaryKeywords}</p>
           </div>
 
 
@@ -108,7 +108,7 @@ const StepGenerate = ({
           <div>
             <p className="text-sm font-medium">Secondary Keywords:</p>
             <div className="flex flex-wrap gap-1 mt-1">
-              {blogData.secondaryKeywords.map((keyword, index) => (
+              {blogData?.secondaryKeywords.map((keyword, index) => (
                 <Badge key={index} variant="secondary" className="text-xs">
                   {keyword}
                 </Badge>
@@ -120,7 +120,7 @@ const StepGenerate = ({
 
           <div>
             <p className="text-sm font-medium">Tone:</p>
-            <p className="text-sm">{blogData.tone}</p>
+            <p className="text-sm">{blogData?.tone}</p>
           </div>
 
           <Separator />

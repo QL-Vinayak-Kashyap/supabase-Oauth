@@ -90,7 +90,7 @@ const StepOutline = ({
 
 
   return (
-    <div className="space-y-4 relative">
+    <div className=" relative">
       <div className="space-y-2">
         <div className="flex items-center space-x-2">
           <FilePen className="w-5 h-5 text-primary" />

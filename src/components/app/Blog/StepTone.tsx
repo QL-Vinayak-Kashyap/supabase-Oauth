@@ -46,7 +46,7 @@ const StepTone = ({ topic, primaryKeywords, secondaryKeywords, tone, onToneChang
       <div className="rounded-md bg-gray-50 p-3 space-y-2">
         <p className="text-sm font-medium">Topic: <span className="text-primary">{topic}</span></p>
         <div>
-          <p className="text-sm font-medium">Primary Keyword:</p>
+          <p className="text-sm font-medium">Primary Keywords:</p>
           <div className="flex flex-wrap gap-1 mt-1">
             <Badge variant="default" className="text-xs">{primaryKeywords}
             </Badge>
@@ -55,8 +55,8 @@ const StepTone = ({ topic, primaryKeywords, secondaryKeywords, tone, onToneChang
         <div>
           <p className="text-sm font-medium">Secondary Keywords:</p>
           <div className="flex flex-wrap gap-1 mt-1">
-            {secondaryKeywords.map((item) =>
-              <Badge variant="default" className="text-xs">{item}
+            {secondaryKeywords?.map((item)=>
+                <Badge variant="secondary" className="text-xs">{item}
               </Badge>
             )
             }

@@ -63,7 +63,7 @@ const StepGenerate = ({
       const { data: topicDataInserted, error: topicInsertError } =
         await supabase.from("Topics").insert([datatoInsert]).select();
 
-        if (topicDataInserted) {
+      if (topicDataInserted) {
         router.push(`${AppRoutes.DASHBOARD}/${topicDataInserted[0]?.id}?content=new`);
       }
 

@@ -58,18 +58,15 @@ const currentBlogSlice = createSlice({
     ) => {
       state.blogToken = action.payload.blogToken;
       state.blogData = {...state.blogData};
-      state.currentStep = 'topic';
-      state.topic_id 
+      state.currentStep;
+      state.topic_id; 
     },
     setBlogToken: (state, action: PayloadAction<{ blogToken: string }>) => {
       state.blogToken = action.payload.blogToken;
       state.blogData = {...state.blogData};
-      state.currentStep = 'topic';
-      state.topic_id
+      state.currentStep;
+      state.topic_id;
     },
-    // setBlogGeneratedContent:(state)=>{
-
-    // },
     resetCurrentBlogTopic: () => initialState,
   },
 });

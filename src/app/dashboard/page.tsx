@@ -33,9 +33,10 @@ export default function Dashboard() {
       .from("users")
       .select("daily_limit")
       .eq("uuid", userState.id);
-
-    setLimitLeftState(limit[0]?.daily_limit);
-    dispatch(setUserLimit({ limitLeft: limit[0]?.daily_limit }));
+      if(limit){
+        setLimitLeftState(limit[0]?.daily_limit);
+        dispatch(setUserLimit({ limitLeft: limit[0]?.daily_limit }));
+      }
   };
 
   useEffect(() => {

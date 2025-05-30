@@ -19,6 +19,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Loading from "@/components/app/Loading";
+import { resetBlogState } from "@/redux/slices/currentBlogTopic";
 
 type FeedbackTypes = {
   feedback: string;
@@ -123,6 +124,10 @@ export default function TopicLayout({
         ])
         .select();
 
+        if(!blogInsertError){
+          setBlogInserted((state) => !state);
+        }
+
       const { error: descriptionInsertError, data: updatedTopicData } = await supabase
         .from(TablesName.TOPICS)
         .update([
@@ -133,16 +138,10 @@ export default function TopicLayout({
         ])
         .eq('id', topic_id)
         .select()
-      // setTopicData(updatedTopicData[0]);
-      if (generatedBlogData) {
-        // setBlogGeneratedState(true);  
+      if (generatedBlogData) { 
+        dispatch(resetBlogState())
         toast("Blog Generated");
       }
-      // if (searchParams.get("content") === 'new') {
-      //   const params = new URLSearchParams(searchParams);
-      //   params.set('content', '');
-      //   router.push(`${pathname}?${params.toString()}`);
-      // }
     } catch (error) {
       toast(error);
     }
@@ -197,7 +196,7 @@ export default function TopicLayout({
   };
 
   const insertDataInSupabase = async (data: any) => {
-    console.log("insertDataInSupabase called");
+    
     const dataToBeSent = {
       topic_id: topic_id,
       content: data.content.blog,
@@ -229,11 +228,12 @@ export default function TopicLayout({
 
   useEffect(() => {
     fetchTopicData();
-    if (searchParams.get("content") === 'new') {
+    if (searchParams.get("content") === 'new' && generatedBlog.length === 0) {
       handleGenerateBlog();
     }
   }, []);
   useEffect(() => {
+    console.log("feedback",feedbackData );
     if (feedbackData) {
       const dispatchData: any = {
         blogToken: state?.blogToken || "",
@@ -295,7 +295,6 @@ export default function TopicLayout({
             </Form>
           </div>
         </div>}</main>
-
     </div>
   );
 }

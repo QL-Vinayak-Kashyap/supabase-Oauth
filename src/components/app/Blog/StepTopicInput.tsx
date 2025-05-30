@@ -17,8 +17,6 @@ const StepTopicInput = ({ topic, onTopicChange, onNext }: StepTopicInputProps) =
     }
   };
 
-  console.log("!localTopic?.trim()",!localTopic?.trim());
-
   return (
     <div className="space-y-6">
       <div className="space-y-2">

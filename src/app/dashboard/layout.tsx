@@ -27,6 +27,7 @@ import moment from "moment";
 import { AppRoutes, cn } from "@/lib/utils";
 import { usePathname, useRouter } from "next/navigation";
 import { AppSidebar } from "../../components/app/Blog/AppSidebar";
+import { toast } from "sonner";
 export interface Topics {
   id: string;
   topic_name: string;
@@ -66,9 +67,11 @@ export default function DashboardLayout({
         .from("Topics")
         .select("*")
         .eq("user_id", userState.id);
-      setTopics(topics);
+        if(topics){
+          setTopics(topics);
+        }
     } catch (error) {
-      console.log("error", error);
+      toast(error)
     } finally {
       setTopicLoading(false);
     }
@@ -121,7 +124,7 @@ export default function DashboardLayout({
                     History
                   </h3>
                   <div className="space-y-2 overflow-scroll  h-[300px]">
-                    {topics.map(({ topic_name, created_at, id }) => {
+                    {topics && topics.map(({ topic_name, created_at, id }) => {
                       const isActive = pathName === `${AppRoutes.DASHBOARD}/${id}`;
                       return (
                         <Button

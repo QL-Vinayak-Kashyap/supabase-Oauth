@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from "@/components/ui/button";
-import { Volume2, ArrowLeft, PenSquare } from "lucide-react";
+import { Volume2, ArrowLeft } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -55,15 +55,14 @@ const StepTone = ({ topic, primaryKeywords, secondaryKeywords, tone, onToneChang
         <div>
           <p className="text-sm font-medium">Secondary Keywords:</p>
           <div className="flex flex-wrap gap-1 mt-1">
-            {secondaryKeywords?.map((item)=>
-                <Badge variant="secondary" className="text-xs">{item}
+            {secondaryKeywords?.map((item,index)=>
+                <Badge key={index} variant="secondary" className="text-xs">{item}
               </Badge>
             )
             }
           </div>
         </div>
       </div>
-
 
       <div className="space-y-2">
         <div className="flex items-center space-x-2">

@@ -68,10 +68,17 @@ export default function GeneratedContentCard({
       <CardContent>
         <Tabs defaultValue="preview" className="w-full">
           <TabsList className="mb-4 w-full rounded-[12px] justify-start">
-            <TabsTrigger value="preview" className="rounded-[12px]">Preview</TabsTrigger>
-            <TabsTrigger value="markdown" className="rounded-[12px]">Markdown</TabsTrigger>
+            <TabsTrigger value="preview" className="rounded-[12px]">
+              Preview
+            </TabsTrigger>
+            <TabsTrigger value="markdown" className="rounded-[12px]">
+              Markdown
+            </TabsTrigger>
           </TabsList>
-          <TabsContent value="preview" className="rounded-[12px] bg-muted p-4 h-[80vh] overflow-scroll">
+          <TabsContent
+            value="preview"
+            className="rounded-[12px] bg-muted p-4 h-[80vh] overflow-scroll"
+          >
             <MarkdownRenderer content={generatedContent} />
           </TabsContent>
           <TabsContent value="markdown" className="rounded-[12px] bg-muted p-4">

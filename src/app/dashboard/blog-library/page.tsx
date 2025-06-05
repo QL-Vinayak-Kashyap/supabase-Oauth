@@ -83,7 +83,6 @@ const page = () => {
         {/* Header */}
         <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <h1 className="text-2xl md:text-3xl font-bold">History</h1>
-
           <div className="flex items-center gap-3">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -95,7 +94,7 @@ const page = () => {
                 className="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64"
               />
             </div>
-            <Button className="glossy-button bg-grey-500 hover:bg-grey-700 text-black" onClick={() => handleCreateNewTopic()}>
+            <Button className="bg-grey-00 hover:bg-grey-700 text-black" onClick={() => handleCreateNewTopic()}>
               <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>

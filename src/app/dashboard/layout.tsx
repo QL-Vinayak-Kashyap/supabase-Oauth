@@ -10,7 +10,7 @@ import { setBlogToken } from "@/redux/slices/currentBlogTopic";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 
 import { AppSidebar } from "../../components/app/Blog/AppSidebar";
-import Navbar from "@/components/app/Navbar";
+import Navbar from "@/components/app/DashboardNavbar";
 
 export default function DashboardLayout({
   children,

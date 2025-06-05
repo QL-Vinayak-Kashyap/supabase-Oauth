@@ -22,7 +22,7 @@ const StepOutline = ({
 }: StepOutlineProps) => {
   const userState = useAppSelector((state) => state.currentUser);
   const state = useAppSelector((state) => state.currentBlogTopic);
-  const [dialogOpen, setDialogOpen] = useState<boolean>();
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [outLineGenerated, setOutLineGenerated] = useState<string>("");
   const [outlineMarkdown, setOutlineMarkdown] = useState<string>("");
 

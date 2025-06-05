@@ -3,7 +3,7 @@
 import TopicCard from "@/components/app/TopicCard";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { supabase } from "@/lib/supabaseClient";
-import { TablesName } from "@/lib/utils";
+import { AppRoutes, TablesName } from "@/lib/utils";
 import { useLazyGenerateBlogWithFeedbackQuery } from "@/redux/api/api";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -31,10 +31,10 @@ const schema = z.object({
   feedback: z.string().min(2),
 });
 
-const page = () => {
+const BlogTopic = () => {
   const { topic_id } = useParams();
   const [topicData, setTopicData] = useState<any>();
-  const [isTopicDataLoading, setIsTopicDataLoading] = useState<boolean>();
+  const [isTopicDataLoading, setIsTopicDataLoading] = useState<boolean>(false);
   const userState = useAppSelector((state) => state.currentUser);
   const state = useAppSelector((state) => state.currentBlogTopic);
   const { generatedBlog } = useAppSelector((state) => state.currentBlog);
@@ -145,10 +145,6 @@ const page = () => {
     }
   };
 
-  // useEffect(() => {
-  //   getContentFromSupabase();
-  // }, [blogInserted])
-
   useEffect(() => {
     fetchTopicData();
   }, []);
@@ -172,29 +168,31 @@ const page = () => {
   }, [feedbackData])
   return (
     <>
-      <header className="container flex justify-between h-16 shrink-0 items-center gap-2 border-b px-4 sticky top-[0px] bg-white z-50">
+      <header className="flex justify-between h-16 shrink-0 items-center gap-2 border-b px-4 sticky top-[0px] bg-white z-50">
         <Link href="/">
-        <div className="flex items-center">
-          <img
-            src="/writeeasy.png"
-            alt="WriteEasy Logo"
-            className="h-8 w-8 mr-2"
+          <div className="flex items-center">
+            <img
+              src="/writeeasy.png"
+              alt="WriteEasy Logo"
+              className="h-10 w-10 mr-2"
             />
-          <h1 className="text-2xl font-bold tracking-tighter">
-            Write<span className="font-extrabold">Easy</span>
-          </h1>
-        </div>
-            </Link>
+            <h1 className="text-2xl font-normal tracking-tighter">
+              Write<span className="font-bold">Easy</span>
+            </h1>
+          </div>
+        </Link>
         <div className="flex flex-row items-center gap-2">
         </div>
         <div className="flex flex-row items-center gap-2">
           <ProfileBanner />
         </div>
-      </header>     
+      </header>
       <div className="container mx-auto relative">
+        <Link href={`${AppRoutes.DASHBOARD}/blog-writer`}>GO To Dashboard</Link>
         <div className="mx-auto relative">
           {/* data for the topic */}
           <TopicCard topicData={topicData} generatedBlogData={generatedBlog} isLoading={isTopicDataLoading} feedbackUpdated={1} />
+          <div className="min-h-[60vh]">
           {isTopicDataLoading || loadingGeneratingBlogAgain ?
             <Loading /> :
             <GeneratedContentCard
@@ -203,6 +201,7 @@ const page = () => {
               topicName={topicData?.topic_name}
             />
           }
+          </div>
           <div className="sticky bottom-0 w-full mx-auto p-4 border rounded-lg shadow-md bg-white">
             <h2 className="text-xl font-semibold mb-2">
               Provide Ideas for Regeneration
@@ -241,10 +240,10 @@ const page = () => {
               </form>
             </Form>
           </div>
-        </div>
+        </div>  
       </div>
     </>
   );
 };
 
-export default page;
+export default BlogTopic;

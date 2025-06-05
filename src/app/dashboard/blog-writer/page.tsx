@@ -28,7 +28,7 @@ import { setGenerationType } from "@/redux/slices/currentBlogTopic";
 
 
 
-const page = () => {
+const BlogWriter = () => {
     const dispatch = useAppDispatch();
     const [reqOutlineData, setReqOutlineData] = useState<GenerateOutlineRequest>();
     const userState = useAppSelector((state) => state.currentUser);
@@ -336,4 +336,4 @@ const page = () => {
     );
 };
 
-export default page;
+export default BlogWriter;

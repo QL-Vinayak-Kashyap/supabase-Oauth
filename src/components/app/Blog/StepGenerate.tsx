@@ -45,7 +45,7 @@ const StepGenerate = ({
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [showGeneratedContent, setShowGeneratedContent] = useState<boolean>(!state.blogData?.generatedBlog);
-   const [saveConfirmOpen, setSaveConfirmOpen] = useState(false);
+  const [saveConfirmOpen, setSaveConfirmOpen] = useState(false);
 
   const blogForm = useForm<BlogFormValues>({
     resolver: zodResolver(blogFormSchema),
@@ -89,38 +89,12 @@ const StepGenerate = ({
 
       if (!generatedBlogData || !isSuccess) throw new Error("Blog generation failed");
 
-      // const { error: blogInsertError } = await supabase
-      //   .from(TablesName.TOPICS)
-      //   .insert([
-      //     {
-      //       topic_id: topic_id,
-      //       content: generatedBlogData?.data?.blog,
-      //       feedback: generatedBlogData?.data?.feedback ?? "",
-      //       banner_description: generatedBlogData?.data?.banner_description,
-      //       meta_description: generatedBlogData?.data?.meta_description
-      //     },
-      //   ])
-      //   .select();
-
-      // if (!blogInsertError) {
-      //   setBlogInserted((state) => !state);
-      // }
       if (isSuccess) {
         setBlogGenerated(generatedBlogData?.data?.blog);
         dispatch(updateBlogData({ generatedBlog: generatedBlogData }))
         setShowGeneratedContent(true);
       }
 
-      // const { error: descriptionInsertError, data: updatedTopicData } = await supabase
-      //   .from(TablesName.TOPICS)
-      //   .update([
-      //     {
-      //       banner_description: generatedBlogData?.data?.banner_description,
-      //       meta_description: generatedBlogData?.data?.meta_description
-      //     },
-      //   ])
-      //   .eq('id', topic_id)
-      //   .select()
       if (isSuccess) {
         // dispatch(resetBlogState())
         toast("Blog Generated");
@@ -163,37 +137,38 @@ const StepGenerate = ({
     }
   };
 
-  const handleSaveBlog = async ()=>{
+  const handleSaveBlog = async () => {
     try {
       const { error: blogInsertError } = await supabase
-      .from(TablesName.BLOGS)
-      .upsert([
-        {
-          topic_id: state.topic_id,
-          content: generatedBlogData?.data?.blog,
-          feedback: generatedBlogData?.data?.feedback ?? "",
-          banner_description: generatedBlogData?.data?.banner_description,
-          meta_description: generatedBlogData?.data?.meta_description
-        },
-      ])
-      .select();
+        .from(TablesName.BLOGS)
+        .upsert([
+          {
+            topic_id: state.topic_id,
+            content: generatedBlogData?.data?.blog,
+            feedback: generatedBlogData?.data?.feedback ?? "",
+            banner_description: generatedBlogData?.data?.banner_description,
+            meta_description: generatedBlogData?.data?.meta_description
+          },
+        ])
+        .select();
 
-      if(blogInsertError){
+      if (blogInsertError) {
         throw new Error("Error in saving blog, Please created again!")
       }
-      
+
     } catch (error) {
       toast(error);
     }
-    
+
 
   }
 
-  const handleEditBlogCreated =()=>{
+  const handleEditBlogCreated = () => {
+    dispatch(resetCurrentBlogTopic());
     router.push(`${AppRoutes.BLOG}/${state.topic_id}`);
   }
 
-  const handleCreateNewBlog =()=>{
+  const handleCreateNewBlog = () => {
     dispatch(resetCurrentBlogTopic());
     router.push(`${AppRoutes.DASHBOARD}/blog-writer`);
   }
@@ -312,41 +287,45 @@ const StepGenerate = ({
             </>
           }</>
       }
-      <Button variant="ghost" onClick={onBack} className="flex items-center gap-1">
-        <ArrowLeft className="h-4 w-4" />
-        Back
-      </Button>
-      {/* <Button variant="ghost" onClick={handleSaveBlog} className="flex items-center gap-1">
+      <div className="flex ">
+        <Button variant="ghost" onClick={onBack} className="flex items-center gap-1" disabled={loadingFirstBlog}>
+          <ArrowLeft className="h-4 w-4" />
+          Back
+        </Button>
+        {/* <Button variant="ghost" onClick={handleSaveBlog} className="flex items-center gap-1">
         <ArrowLeft className="h-4 w-4" />
         Save & Continue
       </Button> */}
-      <AlertDialog open={saveConfirmOpen} onOpenChange={setSaveConfirmOpen}>
-        <AlertDialogTrigger onClick={()=> handleSaveBlog()}>Save & Continue</AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Do you want to edit it or create a new Blog?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This will permanently delete this topic. This action cannot be
-                    undone.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={handleEditBlogCreated}
-                    className="bg-red-600 hover:bg-red-700"
-                  >
-                    Edit
-                  </AlertDialogAction>
-                  <AlertDialogAction
-                    onClick={handleCreateNewBlog}
-                    className="bg-red-600 hover:bg-red-700"
-                  >
-                    Create New
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+        {
+          showGeneratedContent ? <AlertDialog open={saveConfirmOpen} onOpenChange={setSaveConfirmOpen}>
+            <AlertDialogTrigger onClick={() => handleSaveBlog()}>Save & Continue</AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader> 
+                <AlertDialogTitle>Do you want to edit it or create a new Blog?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This will permanently delete this topic. This action cannot be
+                  undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={handleEditBlogCreated}
+                  className="bg-red-600 hover:bg-red-700"
+                >
+                  Edit
+                </AlertDialogAction>
+                <AlertDialogAction
+                  onClick={handleCreateNewBlog}
+                  className="bg-red-600 hover:bg-red-700"
+                >
+                  Create New
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog> : <></>
+        }
+      </div>
     </div>
   );
 };

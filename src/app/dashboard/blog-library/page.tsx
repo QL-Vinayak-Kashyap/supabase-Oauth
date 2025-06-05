@@ -14,6 +14,7 @@ import moment from "moment";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { resetCurrentBlogTopic } from "@/redux/slices/currentBlogTopic";
 
 export interface Topics {
   id: string;
@@ -22,7 +23,7 @@ export interface Topics {
   created_at: Date;
 }
 
-const page = () => {
+const BlogLibrary = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const dispatch = useAppDispatch();
   const userState = useAppSelector((state) => state.currentUser);
@@ -37,10 +38,13 @@ const page = () => {
   const getTopics = async () => {
     try {
       setTopicLoading(true);
-      const { data: topics } = await supabase
+      const { data: topics, error } = await supabase
         .from("Topics")
         .select("*")
         .eq("user_id", userState.id);
+        if(error){
+          throw new Error("Error in getting topics.")
+        }
       if (topics) {
         setTopics(topics);
       }
@@ -69,7 +73,7 @@ const page = () => {
   }
 
   const handleCreateNewTopic = () => {
-    // dispatch
+    dispatch(resetCurrentBlogTopic())
     router.push('/dashboard/blog-writer');
   }
 
@@ -165,4 +169,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default BlogLibrary;

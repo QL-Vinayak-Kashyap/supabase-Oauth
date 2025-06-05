@@ -26,13 +26,13 @@ const Navbar = () => {
       <div className="container mx-auto">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
-            <img
+          <img
               src="/writeeasy.png"
               alt="WriteEasy Logo"
-              className="h-8 w-8 mr-2"
+              className="h-10 w-10 mr-2"
             />
-            <h1 className="text-2xl font-bold tracking-tighter">
-              Write<span className="font-extrabold">Easy</span>
+            <h1 className="text-2xl font-normal tracking-tighter">
+              Write<span className="font-bold">Easy</span>
             </h1>
           </div>
           <nav className="hidden md:flex space-x-8 items-center">

@@ -18,59 +18,6 @@ const StepPrimaryKeywords = ({
   onBack 
 }: StepPrimaryKeywordsProps) => {
   const [newKeyword, setNewKeyword] = useState("");
-  
-  // In a real application, you would fetch suggested keywords from an API
-  // This is a mock implementation
-  // useEffect(() => {
-  //   if (topic) {
-  //     // Mock function to generate keywords based on topic
-  //     const generateSuggestedKeywords = (topic: string): string[] => {
-  //       const topicWords = topic.toLowerCase().split(/\s+/);
-        
-  //       const mockKeywordSets: Record<string, string[]> = {
-  //         meditation: ["mindfulness", "relaxation", "stress relief", "mental clarity", "focus"],
-  //         health: ["wellness", "nutrition", "exercise", "fitness", "self-care"],
-  //         technology: ["innovation", "digital", "software", "gadgets", "AI"],
-  //         business: ["entrepreneurship", "marketing", "strategy", "leadership", "startups"],
-  //         travel: ["adventure", "destinations", "culture", "tourism", "exploration"]
-  //       };
-        
-  //       let suggested: string[] = [];
-        
-  //       // Check if any topic word matches our mock data
-  //       topicWords.forEach(word => {
-  //         Object.keys(mockKeywordSets).forEach(key => {
-  //           if (word.includes(key) || key.includes(word)) {
-  //             suggested = [...suggested, ...mockKeywordSets[key]];
-  //           }
-  //         });
-  //       });
-        
-  //       // If no specific matches, return general keywords
-  //       if (suggested.length === 0) {
-  //         suggested = ["essential", "important", "top", "key", "fundamental", "best practices"];
-  //       }
-        
-  //       // Remove duplicates and return
-  //       return Array.from(new Set(suggested));
-  //     };
-      
-  //     setSuggestedKeywords(generateSuggestedKeywords(topic));
-  //   }
-  // }, [topic]);
-
-  // const addKeyword = (keyword: string) => {
-  //   keyword = keyword.trim();
-  //   if (keyword && !primaryKeywords.includes(keyword)) {
-  //     onKeywordsChange([...primaryKeywords, keyword]);
-  //     setNewKeyword("");
-  //   }
-  // };
-
-  // const removeKeyword = (keyword: string) => {
-  //   onKeywordsChange(primaryKeywords.filter(k => k !== keyword));
-  // };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (newKeyword.trim()) {

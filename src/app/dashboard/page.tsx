@@ -1,14 +1,10 @@
 "use client";
 
-import * as z from "zod";
 import { supabase } from "@/lib/supabaseClient";
 import { useState, useEffect } from "react";
 import { setCurrentBlog, setCurrentStep, updateBlogData } from "@/redux/slices/currentBlogTopic";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
-
-import { AppRoutes, TablesName } from "@/lib/utils";
-import { toast } from "sonner";
 import { setUserLimit } from "@/redux/slices/currentUserSlice";
 import ReCAPTCHA from "react-google-recaptcha";
 import StepOutline from "@/components/app/Blog/StepOutline";
@@ -17,9 +13,6 @@ import StepPrimaryKeywords from "@/components/app/Blog/StepPrimaryKeyword";
 import StepSecondaryKeywords from "@/components/app/Blog/StepSecondaryKeyword";
 import StepGenerate from "@/components/app/Blog/StepGenerate";
 import StepTone from "@/components/app/Blog/StepTone";
-import { BlogData } from "@/types";
-
-
 
 export default function Dashboard() {
   const dispatch = useAppDispatch();
@@ -112,10 +105,10 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen flex w-full">
-      <main className="flex-1 bg-gray-50">
+       <main className="flex-1 bg-gray-50">
         <div className="p-6">
           <div className="max-w-4xl mx-auto">
-            <div className="mb-8">
+            {/* <div className="mb-8">
               <h2 className="text-2xl font-bold mb-2">
                 AI-Powered Blog Creator
               </h2>
@@ -123,10 +116,8 @@ export default function Dashboard() {
                 Complete the steps below to generate high-quality blog content
                 using artificial intelligence.
               </p>
-            </div>
-
-            {/* Steps Indicator */}
-            <div className="mb-8">
+            </div> */}
+            {/* <div className="mb-8">
               <div className="flex justify-between">
                 {[
                   "topic",
@@ -204,12 +195,11 @@ export default function Dashboard() {
                   }}
                 ></div>
               </div>
-            </div>
-
+            </div> */}
             {/* Current Step Form */}
-            <div className="bg-white p-6 rounded-lg border shadow-sm">
+            {/* <div className="bg-white p-6 rounded-lg border shadow-sm">
               {renderStepContent()}
-            </div>
+            </div> */}
           </div>
         </div>
       </main>

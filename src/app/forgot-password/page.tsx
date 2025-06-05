@@ -19,6 +19,7 @@ import {
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   email: z.string().min(2).max(50),
@@ -42,7 +43,7 @@ export default function ForgotPasswordPage() {
       // Replace this with your actual password reset logic
       await new Promise((resolve) => setTimeout(resolve, 1000));
     } catch (error) {
-      console.log(error);
+      toast(error)
     } finally {
       setIsLoading(false);
     }

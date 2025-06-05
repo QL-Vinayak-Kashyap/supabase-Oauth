@@ -2,8 +2,9 @@
 import { BlogData } from "@/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-
 interface BlogState {
+  generationTypeComp: boolean;
+  generationTypeValue: string;
   currentStep: string;
   blogData: BlogData;
   blogToken: string;
@@ -22,6 +23,8 @@ interface BlogState {
 // }
 
 const initialState: BlogState = {
+  generationTypeComp: true,
+  generationTypeValue:'full',
   currentStep: 'topic',
   blogData: {
     topic: '',
@@ -29,7 +32,7 @@ const initialState: BlogState = {
     secondaryKeywords: [],
     tone: "",
     outline: "",
-    generatedBlog: ""
+    generatedBlog: {}
   },
   blogToken: "",
   topic_id: "",
@@ -39,6 +42,12 @@ const currentBlogSlice = createSlice({
   name: "currentBlogTopic",
   initialState,
   reducers: {
+    updateGenerationTypeState : (state, action:PayloadAction<boolean>)=>{
+      state.generationTypeComp = action.payload;
+     },
+    setGenerationType: (state, action:PayloadAction<string>) =>{
+      state.generationTypeValue = action.payload;
+    },
     setCurrentStep: (state, action: PayloadAction<string>) => {
       state.currentStep = action.payload;
     },
@@ -51,6 +60,9 @@ const currentBlogSlice = createSlice({
     resetBlogState: (state) => {
       state.currentStep = 'topic';
       state.blogData = initialState.blogData;
+    },
+    setTopicId:(state,action: PayloadAction<string>)=>{
+      state.topic_id = action.payload;
     },
     setCurrentBlog: (
       state: BlogState,
@@ -71,6 +83,6 @@ const currentBlogSlice = createSlice({
   },
 });
 
-export const { setCurrentBlog, setBlogToken, resetCurrentBlogTopic ,setCurrentStep,updateBlogData,setBlogData, resetBlogState} =
+export const {setTopicId,updateGenerationTypeState, setGenerationType, setCurrentBlog, setBlogToken, resetCurrentBlogTopic ,setCurrentStep,updateBlogData,setBlogData, resetBlogState} =
   currentBlogSlice.actions;
 export default currentBlogSlice.reducer;

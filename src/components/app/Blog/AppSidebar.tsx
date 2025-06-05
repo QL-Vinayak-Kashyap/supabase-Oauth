@@ -7,61 +7,75 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarHeader,
-  SidebarRail,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
-import { AppRoutes, cn } from "@/lib/utils";
-import { Home, Settings, MessageSquare } from "lucide-react";
-import { TablesName } from "@/lib/utils";
-import { supabase } from "@/lib/supabaseClient";
-import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
-import { setCurrentSelectedId, setCurrentTopicBlogs } from "@/redux/slices/currentBlogs";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { BookOpen, PlusCircle } from "lucide-react";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathName = usePathname();
-  const dispatch = useAppDispatch();
-  const pathname = usePathname();
-  const { topic_id } = useParams();
-  const { generatedBlog, currentSelectedId } = useAppSelector((state: any) => state.currentBlog)
-
-  const [blogs, setBlogs] = React.useState([]);
-
-  const menuItems = [];
-
-  blogs.forEach((blog, index) => {
-    menuItems.push({
-      name: `Content ${index + 1}`,
-    });
-  });
 
   return (
     <Sidebar {...props}>
-      <SidebarHeader>
-        <h2 className="text-lg font-semibold p-4">Topic Menu</h2>
+      <SidebarHeader className="h-16 border-b-gray-100 border-b-2 justify-center items-start">
+        <Link href="/">
+          <div className="flex items-center">
+            <img
+              src="/writeeasy.png"
+              alt="WriteEasy Logo"
+              className="h-10 w-10 mr-2"
+            />
+            <h1 className="text-2xl font-normal tracking-tighter">
+              Write<span className="font-bold">Easy</span>
+            </h1>
+          </div>
+        </Link>
       </SidebarHeader>
-      <SidebarContent className="p-4">
+      <SidebarContent className="">
         <SidebarGroup>
-          <SidebarGroupContent className="space-y-2">
-            {generatedBlog?.map((item, index) => {
-              const isActive = item.id === currentSelectedId;
-              return (<div key={index}>
-                <Button onClick={() => dispatch(setCurrentSelectedId({ currentSelectedId: item.id }))} variant="ghost" className={cn(
-                  "group flex w-full items-center justify-between rounded-lg px-2 py-1 text-sm transition-colors",
-                  isActive
-                    ? "bg-hover text-hover-foreground"
-                    : "hover:bg-hover text-hover-foreground"
-                )}>
-                  {item.id}
-                </Button>
-              </div>
-              );
-            })}
+          <SidebarGroupContent className="">
+            <SidebarMenu className="space-y-1">
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  className={cn(
+                    "flex items-center gap-2 rounded py-2 text-sm transition-colors",
+                    pathName.includes("blog-writer")
+                      ? "bg-gray-200 font-semibold text-primary"
+                      : "bg-white text-primary hover:bg-gray-100"
+                  )}
+                >
+                  <Link href="/dashboard/blog-writer">
+                    <PlusCircle className="h-4 w-4" />
+                    Add New Article
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>  
+
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  className={cn(
+                    "flex items-center gap-2 rounded py-2 text-sm transition-colors",
+                    pathName.includes("blog-library")
+                      ? "bg-gray-200 font-semibold text-primary"
+                      : "bg-white text-primary hover:bg-gray-100"
+                  )}
+                >
+                  <Link href="/dashboard/blog-library">
+                    <BookOpen className="h-4 w-4" />
+                    Library
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarRail />
     </Sidebar>
   );
-}
+} 

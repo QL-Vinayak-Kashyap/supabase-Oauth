@@ -4,7 +4,7 @@ export interface BlogData {
     secondaryKeywords: string[];
     tone: string;
     outline: string;
-    generatedBlog: string;
+    generatedBlog: {};
   }
   
  export type BlogWizardStep = 'topic' | 'primary' | 'secondary'|'tone'| 'outline' | 'generate';
@@ -55,3 +55,12 @@ export interface BlogData {
     onTopicChange: (topic: string) => void;
     onNext: () => void;
   }
+  export interface generatedBlogTypes {
+    id: Number
+    content: string
+    meta_description:string
+    banner_description:string
+    feedback:string
+    created_at:string
+    topic_id: string
+}

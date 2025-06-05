@@ -8,48 +8,53 @@ import { supabase } from "@/lib/supabaseClient";
 import { TablesName } from "@/lib/utils";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
+import { generatedBlogTypes } from "@/types";
 
 interface StickySupportButtonProps {
+  generatedBlogData: generatedBlogTypes[];
   id: string;
-  feedbackUpdated: Number
+  feedbackUpdated: Number;
+  topicName: string;
 } 
 
 const StickySupportButton = ({
-  id, feedbackUpdated
+  generatedBlogData,
+  id, feedbackUpdated,
+  topicName
 }: StickySupportButtonProps) => {
   const { topic_id } = useParams();
   const [description, setDescription] =useState<any>({})
   const [loading, setLoading] =useState(false);
-  const getUpdatedTopicData = async () => {
-    try {
-      setLoading(true);
-      const { data: Topics, error } = await supabase
-      .from(TablesName.TOPICS)
-      .select('topic_name,banner_description,meta_description').eq("id",topic_id);
+  // const getUpdatedTopicData = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const { data: Topics, error } = await supabase
+  //     .from(TablesName.TOPICS)
+  //     .select('topic_name,banner_description,meta_description').eq("id",topic_id);
 
-      if(error){
-        throw new Error("Error in fetching the updated description", error);
-      }
+  //     if(error){
+  //       throw new Error("Error in fetching the updated description", error);
+  //     }
 
-      setDescription({
-        name: Topics[0].topic_name,
-        bannerDescription: Topics[0].banner_description,
-        metaDescription: Topics[0].meta_description
-      })
+  //     setDescription({
+  //       name: Topics[0].topic_name,
+  //       bannerDescription: Topics[0].banner_description,
+  //       metaDescription: Topics[0].meta_description
+  //     })
 
-    } catch (error) {
-      toast(error);
+  //   } catch (error) {
+  //     toast(error);
       
-    }finally{
-      setLoading(false);
-    }
-  }
+  //   }finally{
+  //     setLoading(false);
+  //   }
+  // }
 
-  useEffect(() => { 
-    if(topic_id){
-      getUpdatedTopicData()
-    }
-  }, [feedbackUpdated])
+  // useEffect(() => { 
+  //   if(topic_id){
+  //     getUpdatedTopicData()
+  //   }
+  // }, [feedbackUpdated])
   return (
     <div className="z-50">
       <TooltipProvider>
@@ -69,9 +74,9 @@ const StickySupportButton = ({
                 </Button>
               </DialogTrigger>
               <TopicDescriptionDialog
-                name={description?.name}
-                bannerDescription={description?.bannerDescription}
-                metaDescription={description?.metaDescription}
+                name={topicName}
+                bannerDescription={generatedBlogData[0]?.banner_description}
+                metaDescription={generatedBlogData[0]?.meta_description}
               />
             </Dialog>
           </TooltipTrigger>

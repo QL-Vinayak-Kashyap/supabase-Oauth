@@ -1,8 +1,9 @@
+import { generatedBlogTypes } from "@/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface CurrentBlogState{
     currentSelectedId:Number 
-    generatedBlog: []
+    generatedBlog: generatedBlogTypes[]
 }
 
 const initialState: CurrentBlogState = {

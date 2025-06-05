@@ -16,34 +16,20 @@ import React from "react";
 import { toast } from "sonner";
 // import { handleExportPDF } from "@/lib/exportToPDF";
 
-type FeedbackTypes = {
-  feedback: string;
-};
-
 export default function GeneratedContentCard({
   generatedContent,
-  feedbackForm,
-  handleGenerateAgain,
-  index = NaN,
-  totalItems,
-  loadingGeneratingBlogAgain,
-  forWord,
   topicName,
   isEditOutline,
   handleOpenUpdateOutlineDailog,
 }: any) {
   const [isExporting, setIsExporting] = React.useState(false);
 
-  // const helperHandleGenerateAgain = async (value: FeedbackTypes) => {
-  //   handleGenerateAgain(value, forWord);
-  // };
-
   const handleExportToWord = async () => {
     if (!generatedContent) return;
     setIsExporting(true);
 
     try {
-      await exportToWord(forWord, topicName ?? "");
+      await exportToWord(generatedContent, topicName ?? "");
     } catch (error) {
       toast(error);
     } finally {
@@ -60,11 +46,11 @@ export default function GeneratedContentCard({
 
   return (
     <Card className="relative">
-      <CardHeader>
+      {/* <CardHeader>
         <CardTitle>
           {Number.isNaN(index) ? "Outline" : `${index + 1}.  Content`}
         </CardTitle>
-      </CardHeader>
+      </CardHeader> */}
       <CardContent>
         <Tabs defaultValue="preview" className="w-full">
           <TabsList className="mb-4 w-full rounded-[12px] justify-start">
@@ -77,7 +63,7 @@ export default function GeneratedContentCard({
           </TabsList>
           <TabsContent
             value="preview"
-            className="rounded-[12px] bg-muted p-4 h-[80vh] overflow-scroll"
+            className="rounded-[12px] bg-muted p-4"
           >
             <MarkdownRenderer content={generatedContent} />
           </TabsContent>
@@ -89,11 +75,11 @@ export default function GeneratedContentCard({
         </Tabs>
       </CardContent>
       <CardFooter className="flex flex-col gap-2">
-        <div className=" flex flex-row w-[100%] gap-2">
+        <div className="flex flex-row w-[100%] gap-2">
           <Button
             variant="outline"
             onClick={() => {
-              navigator.clipboard.writeText(forWord);
+              navigator.clipboard.writeText(generatedContent);
               toast("Copied!!!");
             }}
           >
@@ -130,47 +116,7 @@ export default function GeneratedContentCard({
               Edit
             </Button>
           )}
-        </div>
-        {/* {index === totalItems - 1 && (
-          <div className="w-full mx-auto p-4 border rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold mb-2">
-              Provide Ideas for Regeneration
-            </h2>
-            <Form {...feedbackForm}>
-              <form
-                onSubmit={feedbackForm.handleSubmit(helperHandleGenerateAgain)}
-              >
-                <FormField
-                  control={feedbackForm.control}
-                  name="feedback"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Textarea
-                          className="w-full p-2 border rounded-lg"
-                          placeholder="Type here..."
-                          {...field}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                <Button
-                  className="glossy-button mt-4 w-full"
-                  type="submit"
-                  disabled={loadingGeneratingBlogAgain}
-                >
-                  {loadingGeneratingBlogAgain && (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  )}
-                  {loadingGeneratingBlogAgain
-                    ? "Regenerating..."
-                    : "Regenerate Content"}
-                </Button>
-              </form>
-            </Form>
-          </div>
-        )} */}
+        </div> 
       </CardFooter>
     </Card>
   );

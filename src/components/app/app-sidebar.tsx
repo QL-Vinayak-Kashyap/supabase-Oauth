@@ -135,7 +135,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   React.useEffect(() => {
     getTopics();
-  }, [blogState.topic, dialogOpen, deleteConfirmOpen]);
+  }, [blogState.blogData.topic, dialogOpen, deleteConfirmOpen]);
 
   return (
     <>

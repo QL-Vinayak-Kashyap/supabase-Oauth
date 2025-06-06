@@ -10,7 +10,6 @@ export async function GET(request: Request) {
   // if "next" is in param, use it as the redirect URL
   const next = searchParams.get('next') ?? '/dashboard'
 
-  console.log("next:", next, "code:",code);
 
   if (code) {
     // const supabase = await createServerClient()

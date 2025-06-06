@@ -16,7 +16,7 @@ const Hero = () => {
             not hours. No more writer's block.
           </p>
           <div className="flex justify-center">
-            <Link href="/dashboard" className="glossy-button px-8 py-3 text-lg font-medium rounded-lg">Generate Your First Blog</Link>
+            <Link href="/dashboard/blog-writer" className="glossy-button px-8 py-3 text-lg font-medium rounded-lg">Generate Your First Blog</Link>
           </div>
         </div>
       </div>

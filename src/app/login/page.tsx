@@ -132,7 +132,7 @@ export default function LoginPage() {
       } = await supabase.auth.getSession();
 
       if (session) {
-        router.push(AppRoutes.DASHBOARD); // Redirect if already logged in
+        router.push(`${AppRoutes.DASHBOARD}/blog-writer`); // Redirect if already logged in
       }
     };
 

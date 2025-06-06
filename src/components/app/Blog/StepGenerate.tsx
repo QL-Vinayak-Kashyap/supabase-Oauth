@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { BookCheck, ArrowLeft, RefreshCw, FileText, Zap, Loader2, Save } from "lucide-react";
+import { BookCheck, ArrowLeft, RefreshCw, FileText, Zap, Loader2, Save, PlusCircle, View, ViewIcon } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
@@ -41,13 +41,13 @@ const StepGenerate = ({
   const userState = useAppSelector((state) => state.currentUser);
   const state = useAppSelector((state) => state.currentBlogTopic);
   const [isGeneratingTopic, setIsGeneratingTopic] = useState(false);
-  const [blogGenerated, setBlogGenerated] = useState<string>("");
+  const [blogGenerated, setBlogGenerated] = useState<string>(state.blogData?.generatedBlog?.data?.blog);
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const [showGeneratedContent, setShowGeneratedContent] = useState<boolean>(!state.blogData?.generatedBlog);
+  const [showGeneratedContent, setShowGeneratedContent] = useState<boolean>(false);
   const [saveConfirmOpen, setSaveConfirmOpen] = useState(false);
 
-  const blogForm = useForm<BlogFormValues>({
+  const blogForm = useForm<BlogFormValues>({  
     resolver: zodResolver(blogFormSchema),
     defaultValues: {
       word_count: 1000,
@@ -117,19 +117,15 @@ const StepGenerate = ({
         outline: blogData?.outline,
         tone: blogData?.tone,
       };
-
       const { data: topicDataInserted, error: topicInsertError } =
         await supabase.from("Topics").insert([datatoInsert]).select();
-
       if (topicDataInserted) {
         dispatch(setTopicId(topicDataInserted[0].id))
         handleGenerateBlog(topicDataInserted[0].id);
       }
-
       if (topicInsertError) throw new Error(topicInsertError.message);
       if (!topicDataInserted || topicDataInserted.length === 0)
         throw new Error("Topic insertion failed");
-
     } catch (error) {
       toast(error);
     } finally {
@@ -151,16 +147,13 @@ const StepGenerate = ({
           },
         ])
         .select();
-
       if (blogInsertError) {
         throw new Error("Error in saving blog, Please created again!")
       }
-
+      toast("Blog saved!")
     } catch (error) {
       toast(error);
     }
-
-
   }
 
   const handleEditBlogCreated = () => {
@@ -260,10 +253,10 @@ const StepGenerate = ({
                   />
 
                   <div className="flex justify-between">
-                    {/* <Button variant="ghost" onClick={onBack} className="flex items-center gap-1">
+                    <Button variant="ghost" onClick={onBack} className="flex items-center gap-1">
                       <ArrowLeft className="h-4 w-4" />
                       Back
-                    </Button> */}
+                    </Button>
                     <Button
                       type="submit"
                       disabled={isGeneratingTopic}
@@ -287,40 +280,35 @@ const StepGenerate = ({
             </>
           }</>
       }
-      <div className="flex ">
-        <Button variant="ghost" onClick={onBack} className="flex items-center gap-1" disabled={loadingFirstBlog}>
-          <ArrowLeft className="h-4 w-4" />
-          Back
-        </Button>
-        {/* <Button variant="ghost" onClick={handleSaveBlog} className="flex items-center gap-1">
-        <ArrowLeft className="h-4 w-4" />
-        Save & Continue
-      </Button> */}
+      <div className="flex justify-end">
         {
           showGeneratedContent ? <AlertDialog open={saveConfirmOpen} onOpenChange={setSaveConfirmOpen}>
-            <AlertDialogTrigger onClick={() => handleSaveBlog()}>Save & Continue</AlertDialogTrigger>
+            <AlertDialogTrigger onClick={() => handleSaveBlog()} className="glossy-button px-4 py-2 rounded">Save & Continue</AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader> 
                 <AlertDialogTitle>Do you want to edit it or create a new Blog?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  This will permanently delete this topic. This action cannot be
-                  undone.
+                  This blog has been saved 
                 </AlertDialogDescription>
               </AlertDialogHeader>
-              <AlertDialogFooter>
+              <AlertDialogFooter className="flex justify-between">
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={handleEditBlogCreated}
-                  className="bg-red-600 hover:bg-red-700"
-                >
-                  Edit
-                </AlertDialogAction>
+                <div className="flex gap-4">
                 <AlertDialogAction
                   onClick={handleCreateNewBlog}
-                  className="bg-red-600 hover:bg-red-700"
-                >
+                  className="bg-black hover:bg-gray-700"
+                  >
+                  <PlusCircle className="h-4 w-4" />
                   Create New
                 </AlertDialogAction>
+                <AlertDialogAction
+                  onClick={handleEditBlogCreated}
+                  className="bg-black hover:bg-gray-700"
+                  >
+                  <ViewIcon className="h-4 w-4" />
+                  View
+                </AlertDialogAction>
+                  </div>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog> : <></>

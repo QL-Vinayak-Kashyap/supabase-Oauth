@@ -92,7 +92,7 @@ const StepTone = ({ topic, primaryKeywords, secondaryKeywords, tone, onToneChang
         </div>
 
         {tone && (
-          <div className="p-3 bg-gray-50 rounded-md">
+          <div className="p-3 bg-gray-50 rounded">
             <p className="text-sm">
               <span className="font-medium">Selected tone:</span> {toneOptions.find(t => t.value === tone)?.label}
             </p>

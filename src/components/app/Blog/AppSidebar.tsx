@@ -68,7 +68,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 >
                   <Link href="/dashboard/blog-library">
                     <BookOpen className="h-4 w-4" />
-                    Library
+                    History
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

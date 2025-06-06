@@ -144,7 +144,7 @@ const BlogWriter = () => {
                         <h2 className="text-lg font-semibold mb-4">Choose your writing mode:</h2>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="px-24 grid grid-cols-1 md:grid-cols-2 gap-24">
                         {/* 10-Steps Article */}
                         <Card className="relative overflow-hidden border-2 hover:shadow-lg transition-shadow">
                             <div className="absolute top-4 left-4">
@@ -166,7 +166,7 @@ const BlogWriter = () => {
                                     <h3 className="text-xl font-semibold">10-Steps Article</h3>
                                     <div className="flex items-center gap-1 text-teal-600">
                                         <Clock className="w-4 h-4" />
-                                        <span className="text-sm font-medium">5 mins</span>
+                                        <span className="text-sm font-medium">3 mins</span>
                                     </div>
                                 </div>
 
@@ -176,10 +176,9 @@ const BlogWriter = () => {
                                         <li>• Article Type (Listicles, How-to Guides, news articles, etc.)</li>
                                         <li>• Reference/Competitor Selection</li>
                                         <li>• Keywords</li>
-                                        <li>• Word Length (500-5000 words)</li>
+                                        <li>• Word Length (500-2000 words)</li>
                                         <li>• Outline</li>
                                         <li>• Writing Style, CTA</li>
-                                        <li>• Image, FAQs and other settings</li>
                                     </ul>
                                 </div>
 

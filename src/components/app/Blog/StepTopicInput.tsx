@@ -34,14 +34,15 @@ const StepTopicInput = ({ topic, onTopicChange, onNext }: StepTopicInputProps) =
           placeholder="e.g., 'The Benefits of Meditation for Mental Health'"
           value={localTopic}
           onChange={(e) => setLocalTopic(e.target.value)}
-          className="w-full text-base p-4 h-12"
+          className="w-full bg-gray-200 text-base p-4 h-12"
         />
 
         <div className="flex justify-end">
           <Button 
             type="submit" 
             size="lg"
-            disabled={!localTopic.trim()}
+            disabled={!localTopic?.trim()}
+            className="rounded"
           >
             Next  
           </Button>

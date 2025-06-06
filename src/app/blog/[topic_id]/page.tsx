@@ -40,6 +40,7 @@ const BlogTopic = () => {
   const { generatedBlog } = useAppSelector((state) => state.currentBlog);
   const dispatch = useAppDispatch();
   const [feedbackRequestData, setFeedbackRequestData] = useState<FeedbackTypes>();
+  const [loadingGeneratingBlogAgain, setLoadingGeneratingBlogAgain] =useState<boolean>(false);
 
   const feedbackForm = useForm({
     resolver: zodResolver(schema),
@@ -48,15 +49,17 @@ const BlogTopic = () => {
 
   const [
     triggerGenerateBlogWithFeedback,
-    { data: feedbackData, isLoading: loadingGeneratingBlogAgain },
+    { data: feedbackData },
   ] = useLazyGenerateBlogWithFeedbackQuery();
 
-  async function handleGenerateAgain(value: any) {
+  const handleGenerateAgain = async (value: any) => {
     if (userState.limitLeft === 0) {
       toast("Your Limit reached. Please upgrade or contact org.");
       return;
     }
     try {
+      console.log("handleGenerateAgain");
+      setLoadingGeneratingBlogAgain(true);
       value["token"] = state?.blogToken || "";
       value["blog_content"] = generatedBlog[0]?.content;
       setFeedbackRequestData(value);
@@ -86,6 +89,7 @@ const BlogTopic = () => {
     } catch (error) {
       console.error("Error in Generating Again:", error);
     } finally {
+      setLoadingGeneratingBlogAgain(false);
       feedbackForm.reset();
     }
   }
@@ -149,6 +153,8 @@ const BlogTopic = () => {
     fetchTopicData();
   }, []);
 
+  console.log("loadingGeneratingBlogAgain",loadingGeneratingBlogAgain,generatedBlog);
+
 
   useEffect(() => {
     if (feedbackData) {
@@ -182,13 +188,13 @@ const BlogTopic = () => {
           </div>
         </Link>
         <div className="flex flex-row items-center gap-2">
+        <Link href={`${AppRoutes.DASHBOARD}/blog-writer`}>Dashboard</Link>
         </div>
         <div className="flex flex-row items-center gap-2">
           <ProfileBanner />
         </div>
       </header>
       <div className="container mx-auto relative">
-        <Link href={`${AppRoutes.DASHBOARD}/blog-writer`}>GO To Dashboard</Link>
         <div className="mx-auto relative">
           {/* data for the topic */}
           <TopicCard topicData={topicData} generatedBlogData={generatedBlog} isLoading={isTopicDataLoading} feedbackUpdated={1} />
@@ -197,7 +203,7 @@ const BlogTopic = () => {
             <Loading /> :
             <GeneratedContentCard
               // index={index}
-              generatedContent={generatedBlog[0]?.content ?? ""}
+              generatedContent={generatedBlog[0]?.content}
               topicName={topicData?.topic_name}
             />
           }
@@ -230,12 +236,7 @@ const BlogTopic = () => {
                   type="submit"
                   disabled={loadingGeneratingBlogAgain}
                 >
-                  {loadingGeneratingBlogAgain && (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  )}
-                  {loadingGeneratingBlogAgain
-                    ? "Regenerating..."
-                    : "Regenerate Content"}
+                Regenerate Content
                 </Button>
               </form>
             </Form>

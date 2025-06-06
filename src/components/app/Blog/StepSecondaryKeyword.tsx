@@ -36,6 +36,8 @@ const StepSecondaryKeywords = ({
     }
   };
 
+  console.log("secondaryKeywords?.length",secondaryKeywords?.length);
+
   return (
     <div className="max-w-full mx-auto p-4">
       <div className="flex flex-col space-y-4">
@@ -64,19 +66,17 @@ const StepSecondaryKeywords = ({
         </div>
 
        
-        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+        <form onSubmit={handleSubmit} className="flex flex-row items-center sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
           <Input
             placeholder="Enter a secondary keyword"
             value={newKeyword}
             onChange={(e) => setNewKeyword(e.target.value)}
-            className="flex-1"
+            className="w-full bg-gray-200 text-base p-4 h-12"
           />
-          <Button type="submit" variant="outline" size="sm" disabled={!newKeyword.trim()}>
+          <Button type="submit" variant="secondary" size="sm" disabled={!newKeyword.trim()} className="cursor-pointer text-black border-black border-2 rounded">
             Add
           </Button>
         </form>
-
-        
         <div>
           <p className="text-sm font-medium mb-2">Your secondary keywords:</p>
           {secondaryKeywords?.length > 0 ? (
@@ -94,7 +94,7 @@ const StepSecondaryKeywords = ({
               ))}
             </div>
           ) : (
-            <p className="text-sm text-gray-500 italic">No secondary keywords selected yet</p>
+            <p className="text-sm text-gray-500 italic">No secondary keywords added yet</p>
           )}
         </div>
 
@@ -104,11 +104,11 @@ const StepSecondaryKeywords = ({
             <ArrowLeft className="h-4 w-4" />
             Back
           </Button>
-          <Button onClick={onNext} disabled={secondaryKeywords?.length === 0}>
+          <Button onClick={onNext} disabled={secondaryKeywords?.length == 0} >
             Next
           </Button>
         </div>
-      </div>
+      </div>  
     </div>  
   );
 };

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Search, ArrowLeft, X } from "lucide-react";
+import { Search, ArrowLeft, X, ArrowRightFromLine } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
@@ -47,18 +47,13 @@ const StepPrimaryKeywords = ({
         <p className="text-sm font-medium">Topic: <span className="text-primary">{topic}</span></p>
       </div>
 
-      <form onSubmit={handleSubmit} className="flex space-x-2">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <Input
           placeholder="Enter a keyword"
           value={newKeyword}
           onChange={(e) => setNewKeyword(e.target.value)}
-          className="flex-1"
+          className="w-full bg-gray-200 text-base p-4 h-12"
         />
-        {/* <Button type="submit" variant="outline" size="sm" disabled={!newKeyword.trim()}>
-          Add
-        </Button> */}
-      
-
       <div className="flex justify-between">
         <Button variant="ghost" onClick={onBack} className="flex items-center gap-1">
           <ArrowLeft className="h-4 w-4" />

@@ -1,10 +1,12 @@
+
+
 export interface BlogData {
     topic: string;
     primaryKeywords: string;
     secondaryKeywords: string[];
     tone: string;
     outline: string;
-    generatedBlog: {};
+    generatedBlog: any;
   }
   
  export type BlogWizardStep = 'topic' | 'primary' | 'secondary'|'tone'| 'outline' | 'generate';

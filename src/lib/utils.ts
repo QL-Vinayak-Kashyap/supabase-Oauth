@@ -5,17 +5,23 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export const hasEnvVars =
+  process.env.NEXT_PUBLIC_SUPABASE_URL &&
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
 export enum AppRoutes {
   LANDING = "/",
   DASHBOARD = "/dashboard",
   LOGIN = "/login",
-  SIGNUP = "/signup",
+  SIGNUP = "/sign-up",
   BLOG ="/blog",
 }
 
 export enum TablesName {
+  PROFILE="profiles",
   BLOGS = "Blogs",
   TOPICS = "Topics",
+  ACCOUNTTYPE ="AccountTypes"
 }
 export const toneOptions = [
   { value: "professional", label: "Professional" },

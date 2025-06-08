@@ -5,17 +5,19 @@ import { Button } from "@/components/ui/button";
 import { FilePen, ArrowLeft } from "lucide-react";
 import GeneratedContentCard from "../GeneratedContentCard";
 import { MdEditor } from "md-editor-rt";
-import { useAppSelector } from "@/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { toast } from "sonner";
 import { GenerateOutlineRequest, useLazyGenerateOutlineQuery } from "@/redux/api/api";
 import Loading from "../Loading";
 import { StepOutlineProps } from "@/types";
+import { TablesName } from "@/lib/utils";
+import { supabase } from "@/lib/supabaseClient";
+import { setUserLimit } from "@/redux/slices/currentUserSlice";
 
 
 
 const StepOutline = ({
   blogData,
-  outline,
   onOutlineChange,
   onNext,
   onBack
@@ -25,6 +27,7 @@ const StepOutline = ({
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [outLineGenerated, setOutLineGenerated] = useState<string>("");
   const [outlineMarkdown, setOutlineMarkdown] = useState<string>("");
+  const dispatch = useAppDispatch();
 
   const handleOpenUpdateOutlineDailog = () => {
     setDialogOpen(true);
@@ -37,16 +40,26 @@ const StepOutline = ({
 
 
   async function handleGenerateOutline() {
-    // if (!limitLeftState) {
-    //   toast("Your Limit reached. Please upgrade or contact org.");
-    //   return;
-    // }
+    if (userState.limitLeft === 0) {
+      toast("Limit reached!!!");
+      return;
+    }
     try {
       const value: GenerateOutlineRequest = { token: state?.blogToken || "", topic: blogData.topic, main_keyword: blogData.primaryKeywords, secondary_keywords: blogData.secondaryKeywords?.join(", "), tone: blogData.tone };
 
       const { data: outlineData, isSuccess } = await triggerGenerateOutline(
         value
       );
+
+      const { data: limit, error } = await supabase
+              .from(TablesName.PROFILE)
+              .update({ daily_limit: userState.limitLeft - 1 })
+              .eq("id", userState.id)
+              .select();
+      
+            if (!error) {
+              dispatch(setUserLimit({ limitLeft: limit[0]?.daily_limit }));
+            }
 
       if (isSuccess && outlineData) {
         setOutlineMarkdown(outlineData?.data?.outline);
@@ -84,8 +97,6 @@ const StepOutline = ({
       handleGenerateOutline();
     }
   }, [])
-
-  console.log("setOutlineMarkdown",outlineMarkdown)
 
   return (
     <div className=" relative">

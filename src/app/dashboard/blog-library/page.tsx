@@ -15,6 +15,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { resetCurrentBlogTopic } from "@/redux/slices/currentBlogTopic";
+import { TablesName } from "@/lib/utils";
 
 export interface Topics {
   id: string;
@@ -39,9 +40,9 @@ const BlogLibrary = () => {
     try {
       setTopicLoading(true);
       const { data: topics, error } = await supabase
-        .from("Topics")
+        .from(TablesName.TOPICS)
         .select("*")
-        .eq("user_id", userState.id);
+        .eq("profile_id", userState.id);
         if(error){
           throw new Error("Error in getting topics.")
         }
@@ -58,7 +59,7 @@ const BlogLibrary = () => {
   const handleDeleteTopic = async (id: string) => {
     try {
       const { data, error } = await supabase
-        .from('Topics')
+        .from(TablesName.TOPICS)
         .delete()
         .eq('id', id)
       if (error) {

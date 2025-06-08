@@ -46,7 +46,7 @@ const Navbar = () => {
               Success Stories
             </a>
             <Link
-              href="/login"
+              href="/auth/login"
               className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors"
             >
               Start Writing Now

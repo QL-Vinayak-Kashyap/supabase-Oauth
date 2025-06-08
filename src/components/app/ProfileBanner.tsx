@@ -14,13 +14,14 @@ import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { Timer } from "lucide-react";
 import { Progress } from "../ui/progress";
 import { resetCurrentUser } from "@/redux/slices/currentUserSlice";
+import useUser from "@/hooks/useUser";
 
 export default function ProfileBanner() {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [signOutLoading, setSignOutLoading] = useState<boolean>(false);
-  const [userData, setUserData] = useState<any>();
   const userState = useAppSelector((state) => state.currentUser);
+    const { user } = useUser();
 
   const dailyLimit = {
     used: 5 - userState.limitLeft,
@@ -34,21 +35,10 @@ export default function ProfileBanner() {
     if (!error) {
       dispatch(resetCurrentBlogTopic());
       dispatch(resetCurrentUser());
-      Cookies.remove("sb-access-token");
-      router.push("/login");
+      router.push("/auth/login");
       setSignOutLoading(false);
     }
   };
-  useEffect(() => {
-    const getUser = async () => {
-      const token = userState.token;
-      const {
-        data: { user },
-      } = await supabase.auth.getUser(token);
-      setUserData(user);
-    };
-    getUser();
-  }, []);
 
   return (
     <Popover>
@@ -59,27 +49,27 @@ export default function ProfileBanner() {
         >
           <Avatar className="h-8 w-8 border-2 border-grey-100 hover:border-grey-200 transition-colors">
             <AvatarImage src="/avatar.png" alt="User Avatar" />
-            <AvatarFallback className="bg-grey-100 text-grey-700 font-medium">
-              {userData?.identities[0]?.identity_data?.full_name?.charAt(0) ??
+            <AvatarFallback className="bg-grey-100 text-grey-700 font-medium capitalize">
+              {user?.identities[0]?.identity_data?.full_name?.charAt(0) ??
                 "A"}
             </AvatarFallback>
           </Avatar>
         </Button>
-      </PopoverTrigger>
+      </PopoverTrigger> 
       <PopoverContent className="w-64 p-4">
         <div className="flex flex-col items-center gap-2">
           <Avatar className="w-16 h-16">
             <AvatarImage src="/avatar.png" alt="User Avatar" />
             <AvatarFallback>
-              {userData?.identities[0]?.identity_data?.full_name?.charAt(0) ??
+              {user?.identities[0]?.identity_data?.full_name?.charAt(0) ??
                 "A"}
             </AvatarFallback>
           </Avatar>
           <h3 className="text-lg font-semibold">
-            {userData?.identities[0]?.identity_data?.full_name ?? "Admin"}
+            {user?.identities[0]?.identity_data?.full_name ?? "Admin"}
           </h3>
           <p className="text-sm text-gray-500">
-            {userData?.identities[0]?.identity_data?.email}
+            {user?.identities[0]?.identity_data?.email}
           </p>
           <div className="flex items-center gap-3 px-4 py-2 bg-grey-50 rounded-full">
             <Timer className="h-4 w-4 text-grey-600" />

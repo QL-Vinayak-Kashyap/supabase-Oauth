@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { FilePen, ArrowLeft } from "lucide-react";
 import GeneratedContentCard from "../GeneratedContentCard";
 import { MdEditor } from "md-editor-rt";
-import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "@/utils/customHooks/hooks";
 import { toast } from "sonner";
 import { GenerateOutlineRequest, useLazyGenerateOutlineQuery } from "@/redux/api/api";
 import Loading from "../Loading";

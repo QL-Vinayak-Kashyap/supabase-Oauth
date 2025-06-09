@@ -1,7 +1,7 @@
 "use client";
 
 import TopicCard from "@/components/app/TopicCard";
-import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "@/utils/customHooks/hooks";
 import { supabase } from "@/lib/supabaseClient";
 import { AppRoutes, TablesName } from "@/lib/utils";
 import { useLazyGenerateBlogWithFeedbackQuery } from "@/redux/api/api";

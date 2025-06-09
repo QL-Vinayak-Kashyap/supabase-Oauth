@@ -6,7 +6,7 @@ import { BookCheck, ArrowLeft, RefreshCw, FileText, Zap, Loader2, Save, PlusCirc
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "@/utils/customHooks/hooks";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabaseClient";
 import { useLazyGenerateBlogQuery } from "@/redux/api/api";

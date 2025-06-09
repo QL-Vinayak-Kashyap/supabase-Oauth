@@ -16,9 +16,12 @@ export enum AppRoutes {
   SIGNUP = "/sign-up",
   BLOG ="/blog",
 }
+export enum UserName{
+ADMIN = 'Admin'
+}
 
 export enum TablesName {
-  PROFILE="profiles",
+  PROFILE="profiles", 
   BLOGS = "Blogs",
   TOPICS = "Topics",
   ACCOUNTTYPE ="AccountTypes"

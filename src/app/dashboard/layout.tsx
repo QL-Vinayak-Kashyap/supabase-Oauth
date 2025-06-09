@@ -7,12 +7,13 @@ import {
 import React, { useEffect } from "react";
 import { useGetTokenQuery } from "@/redux/api/api";
 import { setBlogToken } from "@/redux/slices/currentBlogTopic";
-import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "@/utils/customHooks/hooks";
 
 import { AppSidebar } from "../../components/app/Blog/AppSidebar";
 import Navbar from "@/components/app/DashboardNavbar";
 import { setUser } from "@/redux/slices/currentUserSlice";
-import useUser from "@/hooks/useUser";
+import useUser from "@/utils/customHooks/useUser";
+import { UserName } from "@/lib/utils";
 
 export default function DashboardLayout({
   children,
@@ -21,7 +22,7 @@ export default function DashboardLayout({
 }>) {
   const dispatch = useAppDispatch();
   const userState = useAppSelector((state) => state.currentUser);
-  const { loading, error, user, session } = useUser();
+  const { loading, user, session } = useUser();
 
   const {
     isFetching,
@@ -41,10 +42,10 @@ export default function DashboardLayout({
       isLoggedIn: true,
       email: user?.email ?? "",
       token: session?.access_token,
-      full_name: user?.user_metadata?.full_name ?? 'Admin',
+      full_name: user?.user_metadata?.full_name ?? UserName.ADMIN,
       id: user?.id,
     }))
-  }, [loading])
+  }, [loading, user, session])
 
   return (
     <SidebarProvider>

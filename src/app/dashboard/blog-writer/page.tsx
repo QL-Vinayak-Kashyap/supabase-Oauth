@@ -11,7 +11,7 @@ import {
     updateBlogData,
     updateGenerationTypeState,
 } from "@/redux/slices/currentBlogTopic";
-import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "@/utils/customHooks/hooks";
 import { setUserLimit } from "@/redux/slices/currentUserSlice";
 import ReCAPTCHA from "react-google-recaptcha";
 import StepOutline from "@/components/app/Blog/StepOutline";

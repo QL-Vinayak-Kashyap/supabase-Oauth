@@ -10,11 +10,11 @@ import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { resetCurrentBlogTopic } from "@/redux/slices/currentBlogTopic";
-import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "@/utils/customHooks/hooks";
 import { Timer } from "lucide-react";
 import { Progress } from "../ui/progress";
 import { resetCurrentUser } from "@/redux/slices/currentUserSlice";
-import useUser from "@/hooks/useUser";
+import useUser from "@/utils/customHooks/useUser";
 
 export default function ProfileBanner() {
   const dispatch = useAppDispatch();

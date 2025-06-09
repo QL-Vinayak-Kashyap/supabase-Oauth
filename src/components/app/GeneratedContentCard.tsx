@@ -29,6 +29,7 @@ export default function GeneratedContentCard({
     setIsExporting(true);
 
     try {
+      console.log("topicName", topicName);
       await exportToWord(generatedContent, topicName ?? "");
     } catch (error) {
       toast(error);
@@ -80,7 +81,7 @@ export default function GeneratedContentCard({
             variant="outline"
             onClick={() => {
               navigator.clipboard.writeText(generatedContent);
-              toast("Copied!!!");
+              toast("Text copied successfully!!!");
             }}
           >
             <Copy className="mr-2 h-4 w-4" />

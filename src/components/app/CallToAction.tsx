@@ -1,6 +1,5 @@
-import { ArrowRight } from "lucide-react";
+import { AppRoutes } from "@/lib/utils";
 import Link from "next/link";
-import { Button } from "../ui/button";
 
 const CallToAction = () => {
   return (
@@ -13,9 +12,9 @@ const CallToAction = () => {
           <p className="text-xl mb-10 text-gray-700 max-w-2xl mx-auto">
             Join thousands of content creators who save time and increase traffic with WriteEasy's AI-powered blog writing.
           </p>
-          <Button className="glossy-button rounded-md px-8 py-6 text-lg font-medium">
+          <Link href={`${AppRoutes.DASHBOARD}/blog-writer`} className="glossy-button rounded px-8 py-4 text-lg font-medium">
             Start Writing Now
-          </Button>
+          </Link>
         </div>
       </div>
     </section>

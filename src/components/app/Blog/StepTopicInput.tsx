@@ -36,13 +36,10 @@ const StepTopicInput = ({ topic, onTopicChange, onNext }: StepTopicInputProps) =
           onChange={(e) => setLocalTopic(e.target.value)}
           className="w-full bg-gray-200 text-base p-4 h-12"
         />
-
         <div className="flex justify-end">
           <Button 
             type="submit" 
-            size="lg"
             disabled={!localTopic?.trim()}
-            className="rounded"
           >
             Next  
           </Button>

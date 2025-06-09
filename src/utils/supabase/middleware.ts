@@ -41,17 +41,25 @@ export async function updateSession(request: NextRequest) {
 
   // IMPORTANT: DO NOT REMOVE auth.getUser()
 
+
   const {
-    data: { user },
-  } = await supabase.auth.getUser();
+    data: { session },
+  } = await supabase.auth.getSession();
+  
+  const user = session?.user;
+  const pathname = request.nextUrl.pathname;
+
+  if (user && (pathname === "/auth/login" || pathname === "/auth/signup")) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/dashboard/blog-writer";
+    return NextResponse.redirect(url);
+  } 
 
   if (
-    request.nextUrl.pathname !== "/" &&
+    pathname.startsWith("/dashboard") &&
     !user &&
-    !request.nextUrl.pathname.startsWith("/login") &&
-    !request.nextUrl.pathname.startsWith("/auth")
+    !pathname.startsWith("/auth")
   ) {
-    // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone();
     url.pathname = "/auth/login";
     return NextResponse.redirect(url);
@@ -69,6 +77,8 @@ export async function updateSession(request: NextRequest) {
   //    return myNewResponse
   // If this is not done, you may be causing the browser and server to go out
   // of sync and terminate the user's session prematurely!
+
+  supabaseResponse.headers.set("Cache-Control", "no-store");
 
   return supabaseResponse;
 }

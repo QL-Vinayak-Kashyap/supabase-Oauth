@@ -43,9 +43,9 @@ const BlogLibrary = () => {
         .from(TablesName.TOPICS)
         .select("*")
         .eq("profile_id", userState.id);
-        if(error){
-          throw new Error("Error in getting topics.")
-        }
+      if (error) {
+        throw new Error("Error in getting topics.")
+      }
       if (topics) {
         setTopics(topics);
       }
@@ -119,43 +119,45 @@ const BlogLibrary = () => {
 
             {/* Table Body */}
             {
-              topicLoading ? <Loading /> : <> {filteredItems.map((item) => (
-                <div key={item.id} className="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 border-b hover:bg-gray-50 transition-colors">
-                  <div className="md:col-span-7">
-                    <div className="space-y-2">
-                      <h3 className="font-medium text-gray-900">{item.topic_name}</h3>
+              topicLoading ? <Loading /> : <>{filteredItems.map((item) => (
+                <Link href={`/blog/${item.id}`}>
+                  <div key={item.id} className="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 border-b hover:bg-gray-50 transition-colors">
+                    <div className="md:col-span-7">
+                      <div className="space-y-2">
+                        <h3 className="font-medium text-gray-900">{item.topic_name}</h3>
+                        <div className="flex gap-2">
+                          <span className="text-sm text-gray-600">{item.tone}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="md:col-span-3 text-sm text-gray-600">
+                      {moment(item.created_at).fromNow()}
+                    </div>
+                    <div className="md:col-span-1">
                       <div className="flex gap-2">
-                        <span className="text-sm text-gray-600">{item.tone}</span>
+                        {/* <Link href={`/blog/${item.id}`}>
+                        <Edit className="w-4 h-4" />
+                      </Link> */}
+                        <AlertDialog>
+                          <AlertDialogTrigger><Trash2 className="w-4 h-4" /></AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                This action cannot be undone. This will permanently delete your account
+                                and remove your data from our servers.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction onClick={() => handleDeleteTopic(item.id)}>Continue</AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
                       </div>
                     </div>
                   </div>
-                  <div className="md:col-span-3 text-sm text-gray-600">
-                    {moment(item.created_at).fromNow()}
-                  </div>
-                  <div className="md:col-span-1">
-                    <div className="flex gap-2">
-                      <Link href={`/blog/${item.id}`}>
-                        <Edit className="w-4 h-4" />
-                      </Link>
-                      <AlertDialog>
-                        <AlertDialogTrigger><Trash2 className="w-4 h-4" /></AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                            <AlertDialogDescription>
-                              This action cannot be undone. This will permanently delete your account
-                              and remove your data from our servers.
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction onClick={() => handleDeleteTopic(item.id)}>Continue</AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
-                    </div>
-                  </div>
-                </div>
+                </Link>
               ))}</>
             }
             {filteredItems.length === 0 && (

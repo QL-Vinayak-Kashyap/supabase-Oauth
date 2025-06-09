@@ -5,23 +5,23 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import Cookies from "js-cookie";
-import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { resetCurrentBlogTopic } from "@/redux/slices/currentBlogTopic";
 import { useAppDispatch, useAppSelector } from "@/utils/customHooks/hooks";
 import { Timer } from "lucide-react";
 import { Progress } from "../ui/progress";
 import { resetCurrentUser } from "@/redux/slices/currentUserSlice";
 import useUser from "@/utils/customHooks/useUser";
+import {createClient} from "@/utils/supabase/client";
 
 export default function ProfileBanner() {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [signOutLoading, setSignOutLoading] = useState<boolean>(false);
   const userState = useAppSelector((state) => state.currentUser);
-    const { user } = useUser();
+  const { user } = useUser();
+  const supabase =createClient();
 
   const dailyLimit = {
     used: 5 - userState.limitLeft,
@@ -36,6 +36,7 @@ export default function ProfileBanner() {
       dispatch(resetCurrentBlogTopic());
       dispatch(resetCurrentUser());
       router.push("/auth/login");
+      router.refresh();
       setSignOutLoading(false);
     }
   };
@@ -55,7 +56,7 @@ export default function ProfileBanner() {
             </AvatarFallback>
           </Avatar>
         </Button>
-      </PopoverTrigger> 
+      </PopoverTrigger>
       <PopoverContent className="w-64 p-4">
         <div className="flex flex-col items-center gap-2">
           <Avatar className="w-16 h-16">

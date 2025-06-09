@@ -36,8 +36,6 @@ const StepSecondaryKeywords = ({
     }
   };
 
-  console.log("secondaryKeywords?.length",secondaryKeywords?.length);
-
   return (
     <div className="max-w-full mx-auto p-4">
       <div className="flex flex-col space-y-4">

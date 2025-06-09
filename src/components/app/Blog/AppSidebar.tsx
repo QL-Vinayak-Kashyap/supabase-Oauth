@@ -51,7 +51,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 >
                   <Link href="/dashboard/blog-writer">
                     <PlusCircle className="h-4 w-4" />
-                    Add New Article
+                    Add New Blog
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>  

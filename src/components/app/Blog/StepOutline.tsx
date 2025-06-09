@@ -137,11 +137,11 @@ const StepOutline = ({
                 ✕
               </button>
             </div>
-            <div className="flex-1 h-[100vh] overflow">
+            <div className="flex-1 h-[90vh] overflow">
               <MdEditor
                 value={outlineMarkdown}
                 onChange={setOutlineMarkdown}
-                style={{ height: "100vh" }}
+                style={{ height: "75vh" }}
                 language="en-US"
               />
             </div>

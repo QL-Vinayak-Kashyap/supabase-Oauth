@@ -166,6 +166,8 @@ const StepGenerate = ({
     router.push(`${AppRoutes.DASHBOARD}/blog-writer`);
   }
 
+  console.log("blogGenerated",blogGenerated);
+
   return (
     <div className="space-y-4">
       {

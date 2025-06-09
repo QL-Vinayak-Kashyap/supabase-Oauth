@@ -11,7 +11,7 @@ import {
     updateBlogData,
     updateGenerationTypeState,
 } from "@/redux/slices/currentBlogTopic";
-import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "@/utils/customHooks/hooks";
 import { setUserLimit } from "@/redux/slices/currentUserSlice";
 import ReCAPTCHA from "react-google-recaptcha";
 import StepOutline from "@/components/app/Blog/StepOutline";
@@ -25,6 +25,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { setGenerationType } from "@/redux/slices/currentBlogTopic";
+import { TablesName } from "@/lib/utils";
 
 
 
@@ -104,9 +105,9 @@ const BlogWriter = () => {
 
     const checkLimit = async () => {
         const { data: limit, error } = await supabase
-            .from("users")
-            .select("daily_limit")
-            .eq("uuid", userState.id);
+            .from(TablesName.PROFILE)
+            .select("*")
+            .eq("id", userState.id);
         if (limit) {
             setLimitLeftState(limit[0]?.daily_limit);
             dispatch(setUserLimit({ limitLeft: limit[0]?.daily_limit }));
@@ -144,7 +145,7 @@ const BlogWriter = () => {
                         <h2 className="text-lg font-semibold mb-4">Choose your writing mode:</h2>
                     </div>
 
-                    <div className="px-24 grid grid-cols-1 md:grid-cols-2 gap-24">
+                    <div className="px-12 grid grid-cols-1 md:grid-cols-2 gap-12">
                         {/* 10-Steps Article */}
                         <Card className="relative overflow-hidden border-2 hover:shadow-lg transition-shadow">
                             <div className="absolute top-4 left-4">

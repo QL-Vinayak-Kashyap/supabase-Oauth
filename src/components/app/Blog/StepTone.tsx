@@ -14,7 +14,7 @@ import { StepToneProps } from "@/types";
 import { toneOptions } from "@/lib/utils";
 import { useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
-import { useAppDispatch } from "@/hooks/hooks";
+import { useAppDispatch } from "@/utils/customHooks/hooks";
 import { setCurrentStep } from "@/redux/slices/currentBlogTopic";
 
 

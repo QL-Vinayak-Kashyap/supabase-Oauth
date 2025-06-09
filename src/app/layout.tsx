@@ -7,7 +7,7 @@ import { ReduxProvider } from "@/redux/provider";
 export const metadata = {
   title: "WriteEasy - Boost Your Blog Traffic Today",
   description:
-    "Leverage WriteEasy's AI-driven SEO tools to enhance your blog's visibility and rank higher in search results.",
+  "Leverage WriteEasy's AI-driven SEO tools to enhance your blog's visibility and rank higher in search results.",
 };
 
 export default function RootLayout({

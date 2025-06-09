@@ -15,7 +15,7 @@ import { resetCurrentBlogTopic } from "@/redux/slices/currentBlogTopic";
 import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "@/utils/customHooks/hooks";
 import {
   DropdownMenu,
   DropdownMenuContent,

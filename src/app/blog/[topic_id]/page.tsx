@@ -1,7 +1,7 @@
 "use client";
 
 import TopicCard from "@/components/app/TopicCard";
-import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "@/utils/customHooks/hooks";
 import { supabase } from "@/lib/supabaseClient";
 import { AppRoutes, TablesName } from "@/lib/utils";
 import { useLazyGenerateBlogWithFeedbackQuery } from "@/redux/api/api";
@@ -17,7 +17,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
 import { setCurrentTopicBlogs } from "@/redux/slices/currentBlogs";
 import ProfileBanner from "@/components/app/ProfileBanner";
 import GeneratedContentCard from "@/components/app/GeneratedContentCard";
@@ -58,7 +57,6 @@ const BlogTopic = () => {
       return;
     }
     try {
-      console.log("handleGenerateAgain");
       setLoadingGeneratingBlogAgain(true);
       value["token"] = state?.blogToken || "";
       value["blog_content"] = generatedBlog[0]?.content;
@@ -71,9 +69,9 @@ const BlogTopic = () => {
       } = await triggerGenerateBlogWithFeedback(value);
 
       const { data: limit, error } = await supabase
-        .from("users")
+        .from(TablesName.PROFILE)
         .update({ daily_limit: userState.limitLeft - 1 })
-        .eq("uuid", userState.id)
+        .eq("id", userState.id)
         .select();
 
       if (!error) {
@@ -87,7 +85,7 @@ const BlogTopic = () => {
         throw new Error(errorBlogDataAfterFeedback);
       }
     } catch (error) {
-      console.error("Error in Generating Again:", error);
+      toast(error)
     } finally {
       setLoadingGeneratingBlogAgain(false);
       feedbackForm.reset();
@@ -152,8 +150,6 @@ const BlogTopic = () => {
   useEffect(() => {
     fetchTopicData();
   }, []);
-
-  console.log("loadingGeneratingBlogAgain",loadingGeneratingBlogAgain,generatedBlog);
 
 
   useEffect(() => {

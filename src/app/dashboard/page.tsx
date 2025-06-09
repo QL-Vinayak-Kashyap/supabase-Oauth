@@ -4,7 +4,7 @@ import { supabase } from "@/lib/supabaseClient";
 import { useState, useEffect } from "react";
 import { setCurrentBlog, setCurrentStep, updateBlogData } from "@/redux/slices/currentBlogTopic";
 import { useRouter } from "next/navigation";
-import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "@/utils/customHooks/hooks";
 import { setUserLimit } from "@/redux/slices/currentUserSlice";
 import ReCAPTCHA from "react-google-recaptcha";
 import StepOutline from "@/components/app/Blog/StepOutline";
@@ -13,19 +13,22 @@ import StepPrimaryKeywords from "@/components/app/Blog/StepPrimaryKeyword";
 import StepSecondaryKeywords from "@/components/app/Blog/StepSecondaryKeyword";
 import StepGenerate from "@/components/app/Blog/StepGenerate";
 import StepTone from "@/components/app/Blog/StepTone";
+import { TablesName } from "@/lib/utils";
 
 export default function Dashboard() {
   const dispatch = useAppDispatch();
   const userState = useAppSelector((state) => state.currentUser);
   const state = useAppSelector((state) => state.currentBlogTopic);
   const [limitLeftState, setLimitLeftState] = useState<number>();
+  
 
 
   const checkLimit = async () => {
     const { data: limit, error } = await supabase
-      .from("users")
+      .from(TablesName.PROFILE)
       .select("daily_limit")
-      .eq("uuid", userState.id);
+      .eq("id", userState.id);
+        
       if(limit){
         setLimitLeftState(limit[0]?.daily_limit);
         dispatch(setUserLimit({ limitLeft: limit[0]?.daily_limit }));

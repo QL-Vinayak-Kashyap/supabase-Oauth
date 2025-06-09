@@ -6,7 +6,7 @@ import { BookCheck, ArrowLeft, RefreshCw, FileText, Zap, Loader2, Save, PlusCirc
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "@/utils/customHooks/hooks";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabaseClient";
 import { useLazyGenerateBlogQuery } from "@/redux/api/api";
@@ -78,9 +78,9 @@ const StepGenerate = ({
         requestData
       );
       const { data: limit, error } = await supabase
-        .from("users")
+        .from(TablesName.PROFILE)
         .update({ daily_limit: userState.limitLeft - 1 })
-        .eq("uuid", userState.id)
+        .eq("id", userState.id)
         .select();
 
       if (!error) {
@@ -109,7 +109,7 @@ const StepGenerate = ({
     setIsGeneratingTopic(true);
     try {
       const datatoInsert = {
-        user_id: userState?.id,
+        profile_id: userState?.id,
         topic_name: blogData?.topic,
         word_count: "100",
         main_keyword: blogData?.primaryKeywords,
@@ -118,7 +118,7 @@ const StepGenerate = ({
         tone: blogData?.tone,
       };
       const { data: topicDataInserted, error: topicInsertError } =
-        await supabase.from("Topics").insert([datatoInsert]).select();
+        await supabase.from(TablesName.TOPICS).insert([datatoInsert]).select();
       if (topicDataInserted) {
         dispatch(setTopicId(topicDataInserted[0].id))
         handleGenerateBlog(topicDataInserted[0].id);

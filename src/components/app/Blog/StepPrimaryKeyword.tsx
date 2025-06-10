@@ -2,10 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Search, ArrowLeft, X, ArrowRightFromLine } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Search, ArrowLeft } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
 import { StepPrimaryKeywordsProps } from "@/types";
 
 

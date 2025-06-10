@@ -130,14 +130,18 @@ const BlogWriter = () => {
             dispatch(setCurrentBlog(dispatchData));
         }
     }, [reqOutlineData]);
+
+    const cardListItems = [
+        "Choose Article Type: Listicles, How-to Guides, News Articles, and more", "Select References or Competitor URLs", "Define Target Keywords", "Set your desired Word Count (500–2000+ words)", "Customize the Outline", "Pick preferred Writing Style and CTA"
+    ]
     return (
-        <div className="min-h-screen bg-gray-50 p-4 md:p-8">  
+        <div className="min-h-screen bg-gray-50 p-4 md:p-8">
             {
                 state.generationTypeComp ? <div className="mx-auto">
                     <div className="mb-6">
                         <h1 className="text-2xl md:text-3xl font-bold">Kickstart your content creation</h1>
                         <p className="text-gray-600 text-sm md:text-base">
-                        Select the writing mode that best suits your content needs and timeline.
+                            Select the writing mode that best suits your content needs and timeline.
                         </p>
                     </div>
 
@@ -165,7 +169,7 @@ const BlogWriter = () => {
 
                                 <div className="flex items-center justify-between mb-4">
                                     <h3 className="text-xl font-semibold">10-Step Article – Ready in 3 Minutes</h3>
-                                    <div className="flex items-center gap-1 text-teal-600">
+                                    <div className="flex items-center gap-1 text-teal-600 min-w-[70px]">
                                         <Clock className="w-4 h-4" />
                                         <span className="text-sm font-medium">3 mins</span>
                                     </div>
@@ -174,12 +178,7 @@ const BlogWriter = () => {
                                 <div className="mb-6">
                                     <p className="font-medium text-gray-900 mb-3">Gain full control over your content creation:</p>
                                     <ul className="space-y-2 text-sm text-gray-600">
-                                        <li>• Choose Article Type: Listicles, How-to Guides, News Articles, and more</li>
-                                        <li>• Select References or Competitor URLs</li>
-                                        <li>• Define Target Keywords</li>
-                                        <li>• Set your desired Word Count (500–2000+ words)</li>
-                                        <li>• Customize the Outline</li>
-                                        <li>• Pick preferred Writing Style and CTA</li>
+                                        {cardListItems.map((item)=>(<li>• {item}</li>))}
                                     </ul>
                                 </div>
 

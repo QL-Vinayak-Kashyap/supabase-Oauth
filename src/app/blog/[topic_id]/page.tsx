@@ -189,15 +189,6 @@ const BlogTopic = () => {
             </h1>
           </div>
         </Link>
-          {/* <Link href={`${AppRoutes.DASHBOARD}/blog-writer`}>Dashboard</Link> */}
-        {/* <div className="flex flex-row items-center gap-2">
-          <Button className="hover:bg-grey-700 text-white" onClick={() => handleCreateNewTopic()}>
-            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-            Create New Blog
-          </Button>
-        </div> */}
         <div className="flex flex-row items-center gap-8">
         <Button className="hover:bg-grey-700 text-white" onClick={() => handleCreateNewTopic()}>
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

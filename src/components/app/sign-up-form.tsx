@@ -82,8 +82,8 @@ export function SignUpForm({
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-grey-50">
-            <div className="w-full max-w-md px-6">
+        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+            <div className="w-full max-w-md">
                 <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
                     <div className="text-center mb-8">
                         <div className="mx-auto w-16 h-16 mb-4 rounded-ful">
@@ -176,14 +176,13 @@ export function SignUpForm({
                                 </div>
                             </div>
                         </div>
-                        <div className="flex flex-col gap-4">
+                        <div className="space-y-2">
                             <ReCAPTCHA
                                 sitekey={RECAPTCHA_SITE_KEY}
                                 onChange={handleRecaptchaOnChange}
                                 theme="light"
-                                className="w-full transform scale-[0.95] ml-3"
                             />
-                        </div>
+                        </div>  
                         <div className="pt-4">
                             <Button
                                 variant="default"

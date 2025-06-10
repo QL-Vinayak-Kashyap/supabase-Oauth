@@ -21,7 +21,6 @@ export function LoginForm({
 }: React.ComponentPropsWithoutRef<"div">) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const supabase = createClient();
@@ -42,7 +41,6 @@ export function LoginForm({
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setError(null);
 
     try {
       const { error, data } = await supabase.auth.signInWithPassword({
@@ -62,11 +60,11 @@ export function LoginForm({
             id: data.user.id,
           })
         )
-      }
+      } 
       // Update this route to redirect to an authenticated route. The user already has an active session.
       router.push(`${AppRoutes.DASHBOARD}/blog-writer`);
-    } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
+    } catch (error) {
+      toast(error?.message)
     } finally {
       setIsLoading(false);
     }

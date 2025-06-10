@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "../ui/dialog";
 import {
   Command,
   CommandInput,
@@ -7,8 +7,8 @@ import {
   CommandGroup,
   CommandItem,
   CommandEmpty,
-} from "@/components/ui/command";
-import { Button } from "@/components/ui/button";
+} from "../ui/command";
+import { Button } from "../ui/button";
 import { Edit, Trash2, Copy, ExternalLink, PenSquare } from "lucide-react";
 
 type ChatItem = {

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "../../ui/button";
 import { FilePen, ArrowLeft } from "lucide-react";
 import GeneratedContentCard from "../GeneratedContentCard";
 import { MdEditor } from "md-editor-rt";
@@ -10,9 +10,9 @@ import { toast } from "sonner";
 import { GenerateOutlineRequest, useLazyGenerateOutlineQuery } from "@/redux/api/api";
 import Loading from "../Loading";
 import { StepOutlineProps } from "@/types";
-import { TablesName } from "@/lib/utils";
-import { supabase } from "@/lib/supabaseClient";
+import { TablesName } from "../../../lib/utils";
 import { setUserLimit } from "@/redux/slices/currentUserSlice";
+import { createClient } from "../../../lib/supabase/client";
 
 
 
@@ -22,6 +22,7 @@ const StepOutline = ({
   onNext,
   onBack
 }: StepOutlineProps) => {
+  const supabase = createClient()
   const userState = useAppSelector((state) => state.currentUser);
   const state = useAppSelector((state) => state.currentBlogTopic);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);

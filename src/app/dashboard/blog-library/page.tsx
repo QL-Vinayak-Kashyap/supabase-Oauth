@@ -2,20 +2,19 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import { Edit, Search, Star, Trash2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { supabase } from "@/lib/supabaseClient";
+import {  Search, Trash2 } from "lucide-react";
+import { Button } from "../../../components/ui/button";
+import { Card, CardContent } from "../../../components/ui/card";
 import { toast } from "sonner";
 import { useAppDispatch, useAppSelector } from "@/utils/customHooks/hooks";
-import Loading from "@/components/app/Loading";
+import Loading from "../../../components/app/Loading";
 import moment from "moment";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../../../components/ui/alert-dialog";
 import { resetCurrentBlogTopic } from "@/redux/slices/currentBlogTopic";
-import { TablesName } from "@/lib/utils";
+import { TablesName } from "../../../lib/utils";
+import { createClient } from "../../../lib/supabase/client";
 
 export interface Topics {
   id: string;
@@ -25,6 +24,7 @@ export interface Topics {
 }
 
 const BlogLibrary = () => {
+  const supabase = createClient()
   const [searchTerm, setSearchTerm] = useState("");
   const dispatch = useAppDispatch();
   const userState = useAppSelector((state) => state.currentUser);
@@ -141,10 +141,9 @@ const BlogLibrary = () => {
                           </AlertDialogTrigger>
                           <AlertDialogContent >
                             <AlertDialogHeader>
-                              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                              <AlertDialogTitle>Are you sure you want to proceed?</AlertDialogTitle>
                               <AlertDialogDescription>
-                                This action cannot be undone. This will permanently delete your account
-                                and remove your data from our servers.
+                              This action is irreversible. It will permanently delete your blog. 
                               </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>

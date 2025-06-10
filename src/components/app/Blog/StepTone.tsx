@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from "@/components/ui/button";
+import { Button } from "../../ui/button";
 import { Volume2, ArrowLeft } from "lucide-react";
 import {
   Select,
@@ -8,10 +8,10 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
+} from "../../ui/select";
+import { Badge } from "../../ui/badge";
 import { StepToneProps } from "@/types";
-import { toneOptions } from "@/lib/utils";
+import { toneOptions } from "../../../lib/utils";
 import { useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useAppDispatch } from "@/utils/customHooks/hooks";

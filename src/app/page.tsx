@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect } from "react";
-import Navbar from "@/components/app/navbar";
-import Hero from "@/components/app/hero";
-import Features from "@/components/app/features";
-import CallToAction from "@/components/app/CallToAction";
-import Footer from "@/components/app/Footer";
-import Process from "@/components/app/Process";
-import Testimonials from "@/components/app/Testimonials";
-import Faq from "@/components/app/FAQ";
+import Navbar from "../components/app/navbar";
+import Hero from "../components/app/hero";
+import Features from "../components/app/features";
+import CallToAction from "../components/app/CallToAction";
+import Footer from "../components/app/Footer";
+import Process from "../components/app/Process";
+import Testimonials from "../components/app/Testimonials";
+import Faq from "../components/app/FAQ";
 
 export default function Home() {
   useEffect(() => {

@@ -2,9 +2,9 @@ import {
   Popover,
   PopoverTrigger,
   PopoverContent,
-} from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+} from "../ui/popover";
+import { Button } from "../ui/button";
+import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { resetCurrentBlogTopic } from "@/redux/slices/currentBlogTopic";
@@ -13,7 +13,7 @@ import { Timer } from "lucide-react";
 import { Progress } from "../ui/progress";
 import { resetCurrentUser } from "@/redux/slices/currentUserSlice";
 import useUser from "@/utils/customHooks/useUser";
-import {createClient} from "@/utils/supabase/client";
+import {createClient} from "../../lib/supabase/client";
 
 export default function ProfileBanner() {
   const dispatch = useAppDispatch();

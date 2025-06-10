@@ -1,10 +1,10 @@
 "use client"
 
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "../../ui/button";
 import { PenSquare, ArrowLeft, X } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
+import { Badge } from "../../ui/badge";
+import { Input } from "../../ui/input";
 import { StepSecondaryKeywordsProps } from "@/types";
 
 const StepSecondaryKeywords = ({

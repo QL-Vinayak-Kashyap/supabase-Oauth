@@ -1,8 +1,10 @@
 import "@/styles/globals.css";
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "../components/ui/toaster";
+import { Toaster as Sonner } from "../components/ui/toaster";
+import { TooltipProvider } from "../components/ui/tooltip";
 import { ReduxProvider } from "@/redux/provider";
+import  createClient  from "../lib/supabase/server";
+import { redirect } from "next/navigation";
 
 export const metadata = {
   title: "WriteEasy - Boost Your Blog Traffic Today",
@@ -10,7 +12,7 @@ export const metadata = {
   "Leverage WriteEasy's AI-driven SEO tools to enhance your blog's visibility and rank higher in search results.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

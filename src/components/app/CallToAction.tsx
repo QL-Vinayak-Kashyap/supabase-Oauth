@@ -1,4 +1,4 @@
-import { AppRoutes } from "@/lib/utils";
+import { AppRoutes } from "../../lib/utils";
 import Link from "next/link";
 
 const CallToAction = () => {

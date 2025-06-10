@@ -4,14 +4,14 @@ import {
   CardTitle,
   CardContent,
   CardFooter,
-} from "@/components/ui/card";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+} from "../ui/card";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "../ui/tabs";
+import { Button } from "../ui/button";
+import { Textarea } from "../ui/textarea";
+import { Form, FormControl, FormField, FormItem } from "../ui/form";
 import { Copy, FileEdit, FileIcon, Loader2 } from "lucide-react";
 import { MarkdownRenderer } from "./markdown-renderer";
-import { exportToWord } from "@/lib/export-to-word";
+import { exportToWord } from "../../lib/export-to-word";
 import React from "react";
 import { toast } from "sonner";
 // import { handleExportPDF } from "@/lib/exportToPDF";

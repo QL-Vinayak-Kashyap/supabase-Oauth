@@ -1,9 +1,9 @@
 "use client";
 
-import { AppRoutes } from "@/lib/utils";
-import { createClient } from "@/utils/supabase/client";
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input";
+import { AppRoutes } from "../../lib/utils";
+import { createClient } from "../../lib/supabase/client";
+import { Button } from "../ui/button"
+import { Input } from "../ui/input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -28,6 +28,8 @@ export function LoginForm({
   const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null);
   const [recaptchaError, setRecaptchaError] = useState(true);
   const dispatch =useDispatch()
+  // const searchParams = useSearchParams();
+  // const next = searchParams.get("next");
 
   const handleSubmit = (data: any) => {
     if (!recaptchaValue) {
@@ -50,7 +52,7 @@ export function LoginForm({
       if (error) throw error;
 
       if(data){
-        toast("Login Successful.")
+        toast("Logged in successfully")
         dispatch(
           setUser({
             isLoggedIn: true,
@@ -60,7 +62,7 @@ export function LoginForm({
             id: data.user.id,
           })
         )
-      } 
+      }
       // Update this route to redirect to an authenticated route. The user already has an active session.
       router.push(`${AppRoutes.DASHBOARD}/blog-writer`);
     } catch (error) {
@@ -77,7 +79,7 @@ export function LoginForm({
         options: {
           redirectTo: `${window.location.origin}/auth/callback`,
           queryParams: {
-            prompt: "consent", // forces consent screen even if already authenticated
+            prompt: "consent",
           },
         },
       });

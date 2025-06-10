@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { AuthError, Session, User } from "@supabase/supabase-js";
 
-import {createClient} from "@/utils/supabase/client";
+import {createClient} from "../../lib/supabase/client";
 
 export default function useUser() {
   const [user, setUser] = useState<User | null>(null);

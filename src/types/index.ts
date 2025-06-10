@@ -55,6 +55,7 @@ export interface BlogData {
   export interface StepTopicInputProps {
     topic: string;
     onTopicChange: (topic: string) => void;
+    onBack:()=> void;
     onNext: () => void;
   }
   export interface generatedBlogTypes {

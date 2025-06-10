@@ -1,4 +1,4 @@
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "../ui/skeleton";
 import StickySupportButton from "./StickySUpportButton";
 import { generatedBlogTypes } from "@/types";
 

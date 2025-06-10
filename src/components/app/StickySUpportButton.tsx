@@ -1,14 +1,16 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { Button } from "../ui/button";
+import { Dialog, DialogTrigger } from "../ui/dialog";
 import { FileText, Info } from "lucide-react";
 import TopicDescriptionDialog from "./TopicDescriptionDialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
-import { supabase } from "@/lib/supabaseClient";
-import { TablesName } from "@/lib/utils";
+import { TablesName } from "../../lib/utils";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { generatedBlogTypes } from "@/types";
+import { createClient } from "../../lib/supabase/client";
 
 interface StickySupportButtonProps {
   generatedBlogData: generatedBlogTypes[];
@@ -22,6 +24,7 @@ const StickySupportButton = ({
   id, feedbackUpdated,
   topicName
 }: StickySupportButtonProps) => {
+  const supabase = createClient()
   const { topic_id } = useParams();
   const [description, setDescription] =useState<any>({})
   const [loading, setLoading] =useState(false);

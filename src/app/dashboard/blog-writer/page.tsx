@@ -1,6 +1,4 @@
 "use client";
-
-import { supabase } from "@/lib/supabaseClient";
 import { useState, useEffect } from "react";
 import {
     GenerateOutlineRequest,
@@ -14,22 +12,24 @@ import {
 import { useAppDispatch, useAppSelector } from "@/utils/customHooks/hooks";
 import { setUserLimit } from "@/redux/slices/currentUserSlice";
 import ReCAPTCHA from "react-google-recaptcha";
-import StepOutline from "@/components/app/Blog/StepOutline";
-import StepTopicInput from "@/components/app/Blog/StepTopicInput";
-import StepPrimaryKeywords from "@/components/app/Blog/StepPrimaryKeyword";
-import StepSecondaryKeywords from "@/components/app/Blog/StepSecondaryKeyword";
-import StepGenerate from "@/components/app/Blog/StepGenerate";
-import StepTone from "@/components/app/Blog/StepTone";
+import StepOutline from "../../../components/app/Blog/StepOutline";
+import StepTopicInput from "../../../components/app/Blog/StepTopicInput";
+import StepPrimaryKeywords from "../../../components/app/Blog/StepPrimaryKeyword";
+import StepSecondaryKeywords from "../../../components/app/Blog/StepSecondaryKeyword";
+import StepGenerate from "../../../components/app/Blog/StepGenerate";
+import StepTone from "../../../components/app/Blog/StepTone";
 import { Clock, Zap } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Button } from "../../../components/ui/button";
+import { Card, CardContent } from "../../../components/ui/card";
+import { Badge } from "../../../components/ui/badge";
 import { setGenerationType } from "@/redux/slices/currentBlogTopic";
-import { TablesName } from "@/lib/utils";
+import { TablesName } from "../../../lib/utils";
+import { createClient } from "../../../lib/supabase/client";
 
 
 
 const BlogWriter = () => {
+    const supabase = createClient()
     const dispatch = useAppDispatch();
     const [reqOutlineData, setReqOutlineData] = useState<GenerateOutlineRequest>();
     const userState = useAppSelector((state) => state.currentUser);
@@ -43,6 +43,7 @@ const BlogWriter = () => {
                     <StepTopicInput
                         topic={state.blogData.topic}
                         onTopicChange={(topic) => dispatch(updateBlogData({ topic }))}
+                        onBack={()=> handleSetGenerationType(true)}
                         onNext={() => dispatch(setCurrentStep("primary"))}
                     />
                 );
@@ -182,7 +183,7 @@ const BlogWriter = () => {
                                     </ul>
                                 </div>
 
-                                <Button className="w-full" variant="outline" onClick={() => handleSetGenerationType(true)}>
+                                <Button className="w-full" variant="outline" onClick={() => handleSetGenerationType(false)}>
                                     Click to start
                                 </Button>
                             </CardContent>

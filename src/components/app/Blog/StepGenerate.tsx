@@ -1,29 +1,29 @@
 "use client"
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "../../ui/button";
 import { BookCheck, ArrowLeft, RefreshCw, FileText, Zap, Loader2, Save, PlusCircle, View, ViewIcon } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "../../ui/card";
+import { Separator } from "../../ui/separator";
+import { Badge } from "../../ui/badge";
 import { useAppDispatch, useAppSelector } from "@/utils/customHooks/hooks";
 import { toast } from "sonner";
-import { supabase } from "@/lib/supabaseClient";
 import { useLazyGenerateBlogQuery } from "@/redux/api/api";
-import { AppRoutes, TablesName } from "@/lib/utils";
+import { AppRoutes, TablesName } from "../../../lib/utils";
 import { setUserLimit } from "@/redux/slices/currentUserSlice";
-import { Input } from "@/components/ui/input";
+import { Input } from "../../ui/input";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { StepGenerateProps } from "@/types";
 import { resetCurrentBlogTopic, setTopicId, updateBlogData } from "@/redux/slices/currentBlogTopic";
 import Loading from "../Loading";
 import GeneratedContentCard from "../GeneratedContentCard";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { fireConfetti } from "@/lib/confetti";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../../ui/alert-dialog";
+import { fireConfetti } from "../../../lib/confetti";
+import { createClient } from "../../../lib/supabase/client";
 
 
 const blogFormSchema = z.object({
@@ -39,6 +39,7 @@ const StepGenerate = ({
   blogData,
   onBack
 }: StepGenerateProps) => {
+  const supabase = createClient()
   const userState = useAppSelector((state) => state.currentUser);
   const state = useAppSelector((state) => state.currentBlogTopic);
   const [isGeneratingTopic, setIsGeneratingTopic] = useState(false);

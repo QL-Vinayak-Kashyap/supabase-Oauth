@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { VersionSwitcher } from "@/components/app/version-switcher";
+import { VersionSwitcher } from "./version-switcher";
 import {
   Sidebar,
   SidebarContent,
@@ -9,10 +9,9 @@ import {
   SidebarGroupContent,
   SidebarHeader,
   SidebarRail,
-} from "@/components/ui/sidebar";
+} from "../ui/sidebar";
 import { Button } from "../ui/button";
 import { resetCurrentBlogTopic } from "@/redux/slices/currentBlogTopic";
-import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/utils/customHooks/hooks";
@@ -40,10 +39,10 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+} from "../ui/alert-dialog";
 
 import { toast } from "sonner";
-import { AppRoutes, cn } from "@/lib/utils";
+import { AppRoutes, cn } from "../../lib/utils";
 import { Skeleton } from "../ui/skeleton";
 import {
   Tooltip,
@@ -51,6 +50,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
+import { createClient } from "../../lib/supabase/client";
 
 interface Topics {
   id: string;
@@ -58,6 +58,7 @@ interface Topics {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const supabase = createClient()
   const [topicLoading, setTopicLoading] = React.useState<boolean>(false);
   const [topics, setTopics] = React.useState<Topics[]>([]);
   const [editingTopic, setEditingTopic] = React.useState("");

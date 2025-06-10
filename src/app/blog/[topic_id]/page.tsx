@@ -1,25 +1,25 @@
 "use client";
 
-import TopicCard from "@/components/app/TopicCard";
+import TopicCard from "../../../components/app/TopicCard";
 import { useAppDispatch, useAppSelector } from "@/utils/customHooks/hooks";
-import { supabase } from "@/lib/supabaseClient";
-import { AppRoutes, TablesName } from "@/lib/utils";
+import { createClient } from "../../../lib/supabase/client";
+import { AppRoutes, TablesName } from "../../../lib/utils";
 import { useLazyGenerateBlogWithFeedbackQuery } from "@/redux/api/api";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import "md-editor-rt/lib/style.css";
 import { setUserLimit } from "@/redux/slices/currentUserSlice";
-import Loading from "@/components/app/Loading";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import Loading from "../../../components/app/Loading";
+import { Form, FormControl, FormField, FormItem } from "../../../components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
+import { Textarea } from "../../../components/ui/textarea";
+import { Button } from "../../../components/ui/button";
 import { setCurrentTopicBlogs } from "@/redux/slices/currentBlogs";
-import ProfileBanner from "@/components/app/ProfileBanner";
-import GeneratedContentCard from "@/components/app/GeneratedContentCard";
+import ProfileBanner from "../../../components/app/ProfileBanner";
+import GeneratedContentCard from "../../../components/app/GeneratedContentCard";
 import Link from "next/link";
 import { resetCurrentBlogTopic } from "@/redux/slices/currentBlogTopic";
 
@@ -32,6 +32,7 @@ const schema = z.object({
 });
 
 const BlogTopic = () => {
+  const supabase = createClient()
   const router = useRouter()
   const { topic_id } = useParams();
   const [topicData, setTopicData] = useState<any>();

@@ -3,17 +3,17 @@
 import {
   SidebarInset,
   SidebarProvider,
-} from "@/components/ui/sidebar";
+} from "../../components/ui/sidebar";
 import React, { useEffect } from "react";
 import { useGetTokenQuery } from "@/redux/api/api";
 import { setBlogToken } from "@/redux/slices/currentBlogTopic";
 import { useAppDispatch, useAppSelector } from "@/utils/customHooks/hooks";
 
 import { AppSidebar } from "../../components/app/Blog/AppSidebar";
-import Navbar from "@/components/app/DashboardNavbar";
+import Navbar from "../../components/app/DashboardNavbar";
 import { setUser } from "@/redux/slices/currentUserSlice";
 import useUser from "@/utils/customHooks/useUser";
-import { UserName } from "@/lib/utils";
+import { UserName } from "../../lib/utils";
 
 export default function DashboardLayout({
   children,

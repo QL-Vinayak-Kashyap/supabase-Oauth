@@ -1,13 +1,13 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { FileText } from "lucide-react";
+import { Input } from "../../ui/input";
+import { Button } from "../../ui/button";
+import { ArrowLeft, FileText } from "lucide-react";
 import { StepTopicInputProps } from "@/types";
-import { fireConfetti } from "@/lib/confetti";
+import { fireConfetti } from "../../../lib/confetti";
 
-const StepTopicInput = ({ topic, onTopicChange, onNext }: StepTopicInputProps) => {
+const StepTopicInput = ({ topic, onTopicChange, onNext,onBack }: StepTopicInputProps) => {
   const [localTopic, setLocalTopic] = useState(topic);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -19,7 +19,7 @@ const StepTopicInput = ({ topic, onTopicChange, onNext }: StepTopicInputProps) =
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
       <div className="space-y-2">
         <div className="flex items-center space-x-2">
           <FileText className="w-5 h-5 text-primary" />
@@ -46,6 +46,10 @@ const StepTopicInput = ({ topic, onTopicChange, onNext }: StepTopicInputProps) =
           </Button>
         </div>
       </form>
+      <Button variant="ghost" onClick={()=> onBack()} className="flex items-center gap-1 absolute bottom-0">
+          <ArrowLeft className="h-4 w-4" />
+          Back
+        </Button>
     </div>
   );
 };

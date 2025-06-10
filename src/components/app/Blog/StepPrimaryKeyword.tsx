@@ -35,7 +35,7 @@ const StepPrimaryKeywords = ({
       <div className="space-y-2">
         <div className="flex items-center space-x-2">
           <Search className="w-5 h-5 text-primary" />
-          <h3 className="text-md font-medium">Select Primary Keywords</h3>
+          <h3 className="text-md font-medium">Enter Primary Keywords</h3>
         </div>
         <p className="text-sm text-gray-500">
           Enter a primary keyword that will be the main focus of your blog.

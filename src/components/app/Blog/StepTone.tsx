@@ -94,7 +94,7 @@ const StepTone = ({ topic, primaryKeywords, secondaryKeywords, tone, onToneChang
         {tone && (
           <div className="p-3 bg-gray-50 rounded">
             <p className="text-sm">
-              <span className="font-medium">Selected tone:</span> {toneOptions.find(t => t.value === tone)?.label}
+              <span className="font-medium capitalize">Selected tone:</span> {toneOptions.find(t => t.value === tone)?.label}
             </p>
           </div>
         )}
@@ -114,7 +114,7 @@ const StepTone = ({ topic, primaryKeywords, secondaryKeywords, tone, onToneChang
           <ArrowLeft className="h-4 w-4" />
           Back
         </Button>
-        <Button onClick={handleSubmit} disabled={recaptchaError || !tone }>
+        <Button onClick={handleSubmit} disabled={ recaptchaError || !tone }>
           Next
         </Button>
       </div>

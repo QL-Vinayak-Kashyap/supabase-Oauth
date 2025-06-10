@@ -41,7 +41,7 @@ const StepOutline = ({
 
   async function handleGenerateOutline() {
     if (userState.limitLeft === 0) {
-      toast("Limit reached!!!");
+      toast("Limit reached!");
       return;
     }
     try {

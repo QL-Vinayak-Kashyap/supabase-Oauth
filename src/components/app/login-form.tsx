@@ -52,6 +52,7 @@ export function LoginForm({
       if (error) throw error;
 
       if(data){
+        toast("Login Successful.")
         dispatch(
           setUser({
             isLoggedIn: true,
@@ -87,7 +88,7 @@ export function LoginForm({
         throw new Error(error.message);
       }
     } catch (error) {
-      toast("Please check you creds...");
+      toast("Please check you credentials.");
     }
   };
 

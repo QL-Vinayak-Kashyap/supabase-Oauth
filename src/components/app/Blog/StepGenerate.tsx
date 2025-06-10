@@ -19,17 +19,18 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { StepGenerateProps } from "@/types";
-import { resetBlogState, resetCurrentBlogTopic, setTopicId, updateBlogData } from "@/redux/slices/currentBlogTopic";
+import { resetCurrentBlogTopic, setTopicId, updateBlogData } from "@/redux/slices/currentBlogTopic";
 import Loading from "../Loading";
 import GeneratedContentCard from "../GeneratedContentCard";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { fireConfetti } from "@/lib/confetti";
 
 
 const blogFormSchema = z.object({
   word_count: z.coerce
     .number()
     .min(100, { message: "Minimum 100 words required" })
-    .max(1200, { message: "Maximum 1200 words allowed" }),
+    .max(2000, { message: "Maximum 2000 words allowed" }),
 });
 
 type BlogFormValues = z.infer<typeof blogFormSchema>;
@@ -44,7 +45,7 @@ const StepGenerate = ({
   const [blogGenerated, setBlogGenerated] = useState<string>(state.blogData?.generatedBlog?.data?.blog);
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const [showGeneratedContent, setShowGeneratedContent] = useState<boolean>(false);
+  const [showGeneratedContent, setShowGeneratedContent] = useState<boolean>(state.blogData?.generatedBlog?.data?.blog ? true : false);
   const [saveConfirmOpen, setSaveConfirmOpen] = useState(false);
 
   const blogForm = useForm<BlogFormValues>({  
@@ -61,7 +62,7 @@ const StepGenerate = ({
 
   async function handleGenerateBlog(topic_id: string) {
     if (userState.limitLeft === 0) {
-      toast("Limit reached!!!");
+      toast("Limit reached!");
       return;
     }
     try {
@@ -96,7 +97,7 @@ const StepGenerate = ({
       }
 
       if (isSuccess) {
-        // dispatch(resetBlogState())
+        fireConfetti();
         toast("Blog Generated");
       }
     } catch (error) {
@@ -135,17 +136,17 @@ const StepGenerate = ({
 
   const handleSaveBlog = async () => {
     try {
+      const dataToInsert ={
+        topic_id: state.topic_id,
+        content: generatedBlogData?.data?.blog ?? "Not Available",
+        feedback: generatedBlogData?.data?.feedback ?? "Not Available",
+        banner_description: generatedBlogData?.data?.banner_description ?? "Not Available",
+        meta_description: generatedBlogData?.data?.meta_description ?? "Not Available"
+      }
+      console.log("dataToInsert blog saving", dataToInsert);
       const { error: blogInsertError } = await supabase
         .from(TablesName.BLOGS)
-        .upsert([
-          {
-            topic_id: state.topic_id,
-            content: generatedBlogData?.data?.blog,
-            feedback: generatedBlogData?.data?.feedback ?? "",
-            banner_description: generatedBlogData?.data?.banner_description,
-            meta_description: generatedBlogData?.data?.meta_description
-          },
-        ])
+        .upsert([dataToInsert])
         .select();
       if (blogInsertError) {
         throw new Error("Error in saving blog, Please created again!")
@@ -165,8 +166,6 @@ const StepGenerate = ({
     dispatch(resetCurrentBlogTopic());
     router.push(`${AppRoutes.DASHBOARD}/blog-writer`);
   }
-
-  console.log("blogGenerated",blogGenerated);
 
   return (
     <div className="space-y-4">
@@ -190,19 +189,21 @@ const StepGenerate = ({
             <CardContent className="p-4 space-y-3">
               <div>
                 <p className="text-sm font-medium">Topic:</p>
-                <p className="text-sm">{blogData?.topic}</p>
+                <p className="text-sm capitalize">{blogData?.topic}</p>
               </div>
               <Separator />
               <div>
                 <p className="text-sm font-medium">Primary Keyword:</p>
-                <p className="text-sm">{blogData?.primaryKeywords}</p>
+                <div className="flex flex-wrap gap-1 mt-1">
+              <Badge variant="secondary" className="text-xs capitalize">{blogData?.primaryKeywords}</Badge>
+            </div>
               </div>
               <Separator />
               <div>
                 <p className="text-sm font-medium">Secondary Keywords:</p>
                 <div className="flex flex-wrap gap-1 mt-1">
                   {blogData?.secondaryKeywords.map((keyword, index) => (
-                    <Badge key={index} variant="secondary" className="text-xs">
+                    <Badge key={index} variant="secondary" className="text-xs capitalize">
                       {keyword}
                     </Badge>
                   ))}
@@ -211,7 +212,7 @@ const StepGenerate = ({
               <Separator />
               <div>
                 <p className="text-sm font-medium">Tone:</p>
-                <p className="text-sm">{blogData?.tone}</p>
+                <p className="text-sm capitalize">{blogData?.tone}</p>
               </div>
             </CardContent>
           </Card>

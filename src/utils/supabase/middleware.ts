@@ -49,6 +49,10 @@ export async function updateSession(request: NextRequest) {
   const user = session?.user;
   const pathname = request.nextUrl.pathname;
 
+  if (user && pathname === '/dashboard') {
+    return NextResponse.redirect(new URL('/dashboard/blog-writer', request.url))
+  }
+
   if (user && (pathname === "/auth/login" || pathname === "/auth/signup")) {
     const url = request.nextUrl.clone();
     url.pathname = "/dashboard/blog-writer";

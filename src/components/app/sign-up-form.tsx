@@ -72,7 +72,7 @@ export function SignUpForm({
                 },
             });
         } catch (error) {
-            toast("Please check you creds...");
+            toast("Please check you credentails.");
         }
     };
 

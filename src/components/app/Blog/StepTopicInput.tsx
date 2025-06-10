@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { FileText} from "lucide-react";
+import { FileText } from "lucide-react";
 import { StepTopicInputProps } from "@/types";
+import { fireConfetti } from "@/lib/confetti";
 
 const StepTopicInput = ({ topic, onTopicChange, onNext }: StepTopicInputProps) => {
   const [localTopic, setLocalTopic] = useState(topic);
@@ -37,11 +38,11 @@ const StepTopicInput = ({ topic, onTopicChange, onNext }: StepTopicInputProps) =
           className="w-full bg-gray-200 text-base p-4 h-12"
         />
         <div className="flex justify-end">
-          <Button 
-            type="submit" 
+          <Button
+            type="submit"
             disabled={!localTopic?.trim()}
           >
-            Next  
+            Next
           </Button>
         </div>
       </form>

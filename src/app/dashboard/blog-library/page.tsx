@@ -49,14 +49,15 @@ const BlogLibrary = () => {
       if (topics) {
         setTopics(topics);
       }
-    } catch (error) {
+    } catch (error) { 
       toast(error)
     } finally {
       setTopicLoading(false);
     }
   };
 
-  const handleDeleteTopic = async (id: string) => {
+  const handleDeleteTopic = async (e, id: string) => {
+    e.stopPropagation();
     try {
       const { data, error } = await supabase
         .from(TablesName.TOPICS)
@@ -66,7 +67,7 @@ const BlogLibrary = () => {
         throw new Error(error.message);
       } else {
         getTopics();
-        toast("Topic Deleted Succesfully");
+        toast("Topic Deleted Succesfully.");
       }
     } catch (error) {
       toast(error);
@@ -103,7 +104,7 @@ const BlogLibrary = () => {
               <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
-              Write New Blog
+              Create New Blog
             </Button>
           </div>
         </div>
@@ -119,28 +120,26 @@ const BlogLibrary = () => {
 
             {/* Table Body */}
             {
-              topicLoading ? <Loading /> : <>{filteredItems.map((item) => (
-                <Link href={`/blog/${item.id}`}>
-                  <div key={item.id} className="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 border-b hover:bg-gray-50 transition-colors">
-                    <div className="md:col-span-7">
+              topicLoading ? <Loading /> : <>{filteredItems.toReversed().map((item) => (
+                <div key={item.id} className="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 border-b hover:bg-gray-50 transition-colors">
+                    <Link href={`/blog/${item.id}`} className="md:col-span-7">
                       <div className="space-y-2">
                         <h3 className="font-medium text-gray-900">{item.topic_name}</h3>
                         <div className="flex gap-2">
-                          <span className="text-sm text-gray-600">{item.tone}</span>
+                          <span className="text-sm text-gray-600 capitalize">{item.tone}</span>
                         </div>
                       </div>
-                    </div>
+                    </Link>
                     <div className="md:col-span-3 text-sm text-gray-600">
                       {moment(item.created_at).fromNow()}
                     </div>
                     <div className="md:col-span-1">
                       <div className="flex gap-2">
-                        {/* <Link href={`/blog/${item.id}`}>
-                        <Edit className="w-4 h-4" />
-                      </Link> */}
                         <AlertDialog>
-                          <AlertDialogTrigger><Trash2 className="w-4 h-4" /></AlertDialogTrigger>
-                          <AlertDialogContent>
+                          <AlertDialogTrigger>
+                            <Trash2 className="w-6 h-6" />
+                          </AlertDialogTrigger>
+                          <AlertDialogContent >
                             <AlertDialogHeader>
                               <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                               <AlertDialogDescription>
@@ -150,14 +149,13 @@ const BlogLibrary = () => {
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                               <AlertDialogCancel>Cancel</AlertDialogCancel>
-                              <AlertDialogAction onClick={() => handleDeleteTopic(item.id)}>Continue</AlertDialogAction>
+                              <AlertDialogAction onClick={(e) => handleDeleteTopic(e, item.id)}>Delete</AlertDialogAction>
                             </AlertDialogFooter>
                           </AlertDialogContent>
                         </AlertDialog>
                       </div>
                     </div>
                   </div>
-                </Link>
               ))}</>
             }
             {filteredItems.length === 0 && (

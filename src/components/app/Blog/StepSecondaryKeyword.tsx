@@ -43,10 +43,10 @@ const StepSecondaryKeywords = ({
         <div className="space-y-2">
           <div className="flex items-center space-x-2">
             <PenSquare className="w-5 h-5 text-primary" />
-            <h3 className="text-md font-medium">Select Secondary Keywords</h3>
+            <h3 className="text-md font-medium">Enter Secondary Keywords</h3>
           </div>
           <p className="text-sm text-gray-500">
-            Choose 5-10 secondary keywords to support your primary keywords.
+            Enter 5-10 secondary keywords to support your primary keywords.
           </p>
         </div>
 

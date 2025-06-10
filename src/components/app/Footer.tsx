@@ -12,7 +12,7 @@ const Footer = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (email) {
-      toast.success("Thanks for subscribing!");
+      toast.success("Thanks for subscribing.");
       setEmail("");
     }
   };

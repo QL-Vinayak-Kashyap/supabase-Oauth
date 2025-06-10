@@ -114,9 +114,9 @@ const BlogWriter = () => {
         }
     };
 
-    const handleSetGenerationType = () => {
+    const handleSetGenerationType = (val: boolean) => {
         dispatch(setGenerationType());
-        dispatch(updateGenerationTypeState(false));
+        dispatch(updateGenerationTypeState(val));
     }
 
     useEffect(() => {
@@ -135,9 +135,9 @@ const BlogWriter = () => {
             {
                 state.generationTypeComp ? <div className="mx-auto">
                     <div className="mb-6">
-                        <h1 className="text-2xl md:text-3xl font-bold">Start Your Article Journey</h1>
+                        <h1 className="text-2xl md:text-3xl font-bold">Kickstart your content creation</h1>
                         <p className="text-gray-600 text-sm md:text-base">
-                            Select the writing mode that best fits your needs and time constraints
+                        Select the writing mode that best suits your content needs and timeline.
                         </p>
                     </div>
 
@@ -164,7 +164,7 @@ const BlogWriter = () => {
                                 </div>
 
                                 <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-xl font-semibold">10-Steps Article</h3>
+                                    <h3 className="text-xl font-semibold">10-Step Article – Ready in 3 Minutes</h3>
                                     <div className="flex items-center gap-1 text-teal-600">
                                         <Clock className="w-4 h-4" />
                                         <span className="text-sm font-medium">3 mins</span>
@@ -172,18 +172,18 @@ const BlogWriter = () => {
                                 </div>
 
                                 <div className="mb-6">
-                                    <p className="font-medium text-gray-900 mb-3">Full control over:</p>
+                                    <p className="font-medium text-gray-900 mb-3">Gain full control over your content creation:</p>
                                     <ul className="space-y-2 text-sm text-gray-600">
-                                        <li>• Article Type (Listicles, How-to Guides, news articles, etc.)</li>
-                                        <li>• Reference/Competitor Selection</li>
-                                        <li>• Keywords</li>
-                                        <li>• Word Length (500-2000 words)</li>
-                                        <li>• Outline</li>
-                                        <li>• Writing Style, CTA</li>
+                                        <li>• Choose Article Type: Listicles, How-to Guides, News Articles, and more</li>
+                                        <li>• Select References or Competitor URLs</li>
+                                        <li>• Define Target Keywords</li>
+                                        <li>• Set your desired Word Count (500–2000+ words)</li>
+                                        <li>• Customize the Outline</li>
+                                        <li>• Pick preferred Writing Style and CTA</li>
                                     </ul>
                                 </div>
 
-                                <Button className="w-full" variant="outline" onClick={() => handleSetGenerationType()}>
+                                <Button className="w-full" variant="outline" onClick={() => handleSetGenerationType(true)}>
                                     Click to start
                                 </Button>
                             </CardContent>

@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "@/utils/customHooks/hooks";
 import { supabase } from "@/lib/supabaseClient";
 import { AppRoutes, TablesName } from "@/lib/utils";
 import { useLazyGenerateBlogWithFeedbackQuery } from "@/redux/api/api";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import "md-editor-rt/lib/style.css";
@@ -21,6 +21,7 @@ import { setCurrentTopicBlogs } from "@/redux/slices/currentBlogs";
 import ProfileBanner from "@/components/app/ProfileBanner";
 import GeneratedContentCard from "@/components/app/GeneratedContentCard";
 import Link from "next/link";
+import { resetCurrentBlogTopic } from "@/redux/slices/currentBlogTopic";
 
 type FeedbackTypes = {
   feedback: string;
@@ -31,6 +32,7 @@ const schema = z.object({
 });
 
 const BlogTopic = () => {
+  const router = useRouter()
   const { topic_id } = useParams();
   const [topicData, setTopicData] = useState<any>();
   const [isTopicDataLoading, setIsTopicDataLoading] = useState<boolean>(false);
@@ -39,7 +41,7 @@ const BlogTopic = () => {
   const { generatedBlog } = useAppSelector((state) => state.currentBlog);
   const dispatch = useAppDispatch();
   const [feedbackRequestData, setFeedbackRequestData] = useState<FeedbackTypes>();
-  const [loadingGeneratingBlogAgain, setLoadingGeneratingBlogAgain] =useState<boolean>(false);
+  const [loadingGeneratingBlogAgain, setLoadingGeneratingBlogAgain] = useState<boolean>(false);
 
   const feedbackForm = useForm({
     resolver: zodResolver(schema),
@@ -137,7 +139,7 @@ const BlogTopic = () => {
         .from(TablesName.BLOGS)
         .update([dataToBeSent]).eq("topic_id", topic_id);
       if (insertionError) {
-        throw new Error("Error in insertion of blog")
+        throw new Error("Error in insertion of blog.")
       }
       if (insertedBlog) {
         getContentFromSupabase()
@@ -151,6 +153,10 @@ const BlogTopic = () => {
     fetchTopicData();
   }, []);
 
+  const handleCreateNewTopic = () => {
+    dispatch(resetCurrentBlogTopic())
+    router.push('/dashboard/blog-writer');
+  }
 
   useEffect(() => {
     if (feedbackData) {
@@ -183,10 +189,22 @@ const BlogTopic = () => {
             </h1>
           </div>
         </Link>
-        <div className="flex flex-row items-center gap-2">
-        <Link href={`${AppRoutes.DASHBOARD}/blog-writer`}>Dashboard</Link>
-        </div>
-        <div className="flex flex-row items-center gap-2">
+          {/* <Link href={`${AppRoutes.DASHBOARD}/blog-writer`}>Dashboard</Link> */}
+        {/* <div className="flex flex-row items-center gap-2">
+          <Button className="hover:bg-grey-700 text-white" onClick={() => handleCreateNewTopic()}>
+            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            Create New Blog
+          </Button>
+        </div> */}
+        <div className="flex flex-row items-center gap-8">
+        <Button className="hover:bg-grey-700 text-white" onClick={() => handleCreateNewTopic()}>
+            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            Create New Blog
+          </Button>
           <ProfileBanner />
         </div>
       </header>
@@ -195,14 +213,14 @@ const BlogTopic = () => {
           {/* data for the topic */}
           <TopicCard topicData={topicData} generatedBlogData={generatedBlog} isLoading={isTopicDataLoading} feedbackUpdated={1} />
           <div className="min-h-[60vh]">
-          {isTopicDataLoading || loadingGeneratingBlogAgain ?
-            <Loading /> :
-            <GeneratedContentCard
-              // index={index}
-              generatedContent={generatedBlog[0]?.content}
-              topicName={topicData?.topic_name}
-            />
-          }
+            {isTopicDataLoading || loadingGeneratingBlogAgain ?
+              <Loading /> :
+              <GeneratedContentCard
+                // index={index}
+                generatedContent={generatedBlog[0]?.content}
+                topicName={topicData?.topic_name}
+              />
+            }
           </div>
           <div className="sticky bottom-0 w-full mx-auto p-4 border rounded-lg shadow-md bg-white">
             <h2 className="text-xl font-semibold mb-2">
@@ -232,12 +250,12 @@ const BlogTopic = () => {
                   type="submit"
                   disabled={loadingGeneratingBlogAgain}
                 >
-                Regenerate Content
+                  Regenerate Content
                 </Button>
               </form>
             </Form>
           </div>
-        </div>  
+        </div>
       </div>
     </>
   );

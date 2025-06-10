@@ -6,11 +6,9 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-// import { useToast } from "@/components/ui/use-toast"
 
 export function ContactForm() {
   const [isLoading, setIsLoading] = useState(false);
-  // const { toast } = useToast()
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -21,10 +19,6 @@ export function ContactForm() {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     setIsLoading(false);
-    // toast({
-    //   title: "Success!",
-    //   description: "Your message has been sent. We'll get back to you soon.",
-    // })
   }
 
   return (

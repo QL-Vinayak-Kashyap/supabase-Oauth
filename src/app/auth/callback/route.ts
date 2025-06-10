@@ -9,12 +9,13 @@ export async function GET(request: Request) {
   let next = searchParams.get('next') ?? '/'
   if (!next.startsWith('/')) {
     // if "next" is not a relative URL, use the default
-    next = '/'
+    next = '/dashboard/blog-writer'
   }
 
   if (code) {
     const supabase = await createClient()
     const { error } = await supabase.auth.exchangeCodeForSession(code)
+    console.log("error", error, code, origin);
     if (!error) {
       // const forwardedHost = request.headers.get('x-forwarded-host') // original origin before load balancer
       // const isLocalEnv = process.env.NODE_ENV === 'development'

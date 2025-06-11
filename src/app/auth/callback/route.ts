@@ -45,11 +45,13 @@ export async function GET(request: Request) {
   const code = searchParams.get("code");
   const next = searchParams.get("next") ?? "/";
 
+  
   if (code) {
     const supabase = await createClient();
-
+    
     // Exchange the auth code for a session
     const { error } = await supabase.auth.exchangeCodeForSession(code);
+    console.log("call back", code, next, origin, error)
 
     if (!error) {
       // Redirect to the intended path or fallback to homepage

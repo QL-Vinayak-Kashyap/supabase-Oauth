@@ -45,24 +45,11 @@ export function LoginForm({
     setIsLoading(true);
 
     try {
-      const { error, data } = await supabase.auth.signInWithPassword({
+      const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
       if (error) throw error;
-
-      if(data){
-        toast("Logged in successfully")
-        dispatch(
-          setUser({
-            isLoggedIn: true,
-            email: data.user.email ?? "",
-            token: data.session?.access_token,
-            full_name: data.user.user_metadata?.full_name ?? 'Admin',
-            id: data.user.id,
-          })
-        )
-      }
       // Update this route to redirect to an authenticated route. The user already has an active session.
       router.push(`${AppRoutes.DASHBOARD}/blog-writer`);
     } catch (error) {
@@ -74,10 +61,10 @@ export function LoginForm({
 
   const handleGoogleSignIn = async () => {
     try {
-      const { data ,error } = await supabase.auth.signInWithOAuth({
+      const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: `${process.env.NEXT_PUBLIC_ORIGIN}/auth/callback`,
           queryParams: {
             prompt: "consent",
           },

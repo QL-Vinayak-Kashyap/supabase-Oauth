@@ -11,18 +11,22 @@ import { useAppDispatch, useAppSelector } from "@/utils/customHooks/hooks";
 
 import { AppSidebar } from "../../components/app/Blog/AppSidebar";
 import Navbar from "../../components/app/DashboardNavbar";
-import { setUser } from "@/redux/slices/currentUserSlice";
+import { setUser, setUserLimit } from "@/redux/slices/currentUserSlice";
 import useUser from "@/utils/customHooks/useUser";
-import { UserName } from "../../lib/utils";
+import { TablesName, UserName } from "../../lib/utils";
+import { createClient } from "@/lib/supabase/client";
 
 export default function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const supabase = createClient()
   const dispatch = useAppDispatch();
   const userState = useAppSelector((state) => state.currentUser);
   const { loading, user, session } = useUser();
+
+
 
   const {
     isFetching,
@@ -37,7 +41,19 @@ export default function DashboardLayout({
     }
   }, [isSuccess, isFetching, isError, tokenData, dispatch]);
 
+  const checkLimit = async () => {
+    const { data: limit, error } = await supabase
+      .from(TablesName.PROFILE)
+      .select("*")
+      .eq("id", userState.id);
+    if (limit) {
+      // setLimitLeftState(limit[0]?.daily_limit);
+      dispatch(setUserLimit({ limitLeft: limit[0]?.daily_limit }));
+    }
+  };
+
   useEffect(() => {
+    checkLimit()
     dispatch(setUser({
       isLoggedIn: true,
       email: user?.email ?? "",
@@ -51,7 +67,7 @@ export default function DashboardLayout({
     <SidebarProvider>
       <AppSidebar variant="inset" />
       <SidebarInset>
-        <Navbar/>
+        <Navbar />
         <main className="flex-1">{children}</main>
       </SidebarInset>
     </SidebarProvider>

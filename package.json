@@ -6,8 +6,9 @@
     "dev": "cross-env dotenv -e .env.local next dev",
     "dev:prod": "cross-env dotenv -e .env.prod next dev",
     "dev:stage": "cross-env dotenv -e .env.stage next dev",
-    "build": "cross-env dotenv -e .env.prod next build",
-    "start": "cross-env dotenv -e .env.prod next start",
+    "build:dev": "cross-env dotenv -e .env.dev next build",
+    "build:prod": "cross-env dotenv -e .env.prod next build",
+    "start": "cross-env dotenv -e .env.dev next start",
     "lint": "next lint"
   },
   "dependencies": {

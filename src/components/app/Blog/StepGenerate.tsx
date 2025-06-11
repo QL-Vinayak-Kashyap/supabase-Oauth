@@ -137,18 +137,18 @@ const StepGenerate = ({
 
   const handleSaveBlog = async () => {
     try {
-      const dataToInsert ={
+      const dataToInsert = {
         topic_id: state.topic_id,
         content: generatedBlogData?.data?.blog ?? "Not Available",
         feedback: generatedBlogData?.data?.feedback ?? "Not Available",
         banner_description: generatedBlogData?.data?.banner_description ?? "Not Available",
         meta_description: generatedBlogData?.data?.meta_description ?? "Not Available"
       }
-      console.log("dataToInsert blog saving", dataToInsert);
-      const { error: blogInsertError } = await supabase
+      const { error: blogInsertError, data } = await supabase
         .from(TablesName.BLOGS)
         .upsert([dataToInsert])
         .select();
+
       if (blogInsertError) {
         throw new Error("Error in saving blog, Please created again!")
       }
@@ -290,7 +290,7 @@ const StepGenerate = ({
             <AlertDialogTrigger onClick={() => handleSaveBlog()} className="glossy-button px-4 py-2 rounded">Save & Continue</AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader> 
-                <AlertDialogTitle>Do you want to edit it or create a new Blog?</AlertDialogTitle>
+                <AlertDialogTitle>Do you want to view this or create a new Blog?</AlertDialogTitle>
                 <AlertDialogDescription>
                   This blog has been saved 
                 </AlertDialogDescription>

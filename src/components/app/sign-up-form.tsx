@@ -51,7 +51,7 @@ export function SignUpForm({
                 password,
                 options: {
                     data:{full_name:fullName, account_id : crypto.randomUUID() ,total_limit_left: 20, daily_limit: 5},
-                    emailRedirectTo: `${window.location.origin}/dashboard/blog-writer`,
+                    emailRedirectTo: `${process.env.NEXT_PUBLIC_ORIGIN}/dashboard/blog-writer`,
                 },
             });     
             if (error) throw error;
@@ -68,7 +68,7 @@ export function SignUpForm({
             const { data } = await supabase.auth.signInWithOAuth({
                 provider: "google",
                 options: {
-                    redirectTo: `${window.location.origin}/auth/callback`,
+                    redirectTo: `${process.env.NEXT_PUBLIC_ORIGIN}/auth/callback`,
                     queryParams: {
                         prompt: 'consent',
                       },

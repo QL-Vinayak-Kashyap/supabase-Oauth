@@ -12,7 +12,7 @@
 //     next = '/dashboard/blog-writer'
 //   }
 
-//   if (code) { 
+//   if (code) {  
 //     const supabase = await createClient()
 //     const { error } = await supabase.auth.exchangeCodeForSession(code)
 //     console.log("error", error, code, origin, next);

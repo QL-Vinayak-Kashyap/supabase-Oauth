@@ -1,11 +1,10 @@
 'use client'
 
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { Input } from "../../ui/input";
 import { Button } from "../../ui/button";
 import { ArrowLeft, FileText } from "lucide-react";
 import { StepTopicInputProps } from "@/types";
-import { fireConfetti } from "../../../lib/confetti";
 
 const StepTopicInput = ({ topic, onTopicChange, onNext,onBack }: StepTopicInputProps) => {
   const [localTopic, setLocalTopic] = useState(topic);

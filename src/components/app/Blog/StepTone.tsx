@@ -14,8 +14,9 @@ import { StepToneProps } from "@/types";
 import { toneOptions } from "../../../lib/utils";
 import { useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
-import { useAppDispatch } from "@/utils/customHooks/hooks";
+import { useAppDispatch, useAppSelector } from "@/utils/customHooks/hooks";
 import { setCurrentStep } from "@/redux/slices/currentBlogTopic";
+import { toast } from "sonner";
 
 
 const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
@@ -24,6 +25,7 @@ const StepTone = ({ topic, primaryKeywords, secondaryKeywords, tone, onToneChang
 
   const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null);
   const [recaptchaError, setRecaptchaError] = useState(true);
+  const userState = useAppSelector((state) => state.currentUser);
   const dispatch = useAppDispatch()
 
   const handleRecaptchaOnChange = (value) => {
@@ -32,6 +34,10 @@ const StepTone = ({ topic, primaryKeywords, secondaryKeywords, tone, onToneChang
   };
 
   const handleSubmit = () => {
+    if (userState.limitLeft === 0) {
+      toast("Limit reached!");
+      return;
+    }
 
     if (!recaptchaValue) {
       setRecaptchaError(true);
@@ -55,8 +61,8 @@ const StepTone = ({ topic, primaryKeywords, secondaryKeywords, tone, onToneChang
         <div>
           <p className="text-sm font-medium">Secondary Keywords:</p>
           <div className="flex flex-wrap gap-1 mt-1">
-            {secondaryKeywords?.map((item,index)=>
-                <Badge key={index} variant="secondary" className="text-xs">{item}
+            {secondaryKeywords?.map((item, index) =>
+              <Badge key={index} variant="secondary" className="text-xs">{item}
               </Badge>
             )
             }
@@ -114,7 +120,7 @@ const StepTone = ({ topic, primaryKeywords, secondaryKeywords, tone, onToneChang
           <ArrowLeft className="h-4 w-4" />
           Back
         </Button>
-        <Button onClick={handleSubmit} disabled={ recaptchaError || !tone }>
+        <Button onClick={handleSubmit} disabled={recaptchaError || !tone}>
           Next
         </Button>
       </div>

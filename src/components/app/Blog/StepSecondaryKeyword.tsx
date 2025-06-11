@@ -19,7 +19,7 @@ const StepSecondaryKeywords = ({
 
   const addKeyword = (keyword: string) => {
     keyword = keyword.trim();
-    if (keyword && !secondaryKeywords?.includes(keyword) && !primaryKeywords.includes(keyword)) {
+    if (keyword && !secondaryKeywords?.includes(keyword)) {
       onKeywordsChange([...secondaryKeywords, keyword]);
       setNewKeyword("");
     }

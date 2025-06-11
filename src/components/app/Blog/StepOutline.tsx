@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import { Button } from "../../ui/button";
 import { FilePen, ArrowLeft } from "lucide-react";
 import GeneratedContentCard from "../GeneratedContentCard";
-import { MdEditor } from "md-editor-rt";
+import dynamic from "next/dynamic";
+// import { MdEditor } from "md-editor-rt";
 import { useAppDispatch, useAppSelector } from "@/utils/customHooks/hooks";
 import { toast } from "sonner";
 import { GenerateOutlineRequest, useLazyGenerateOutlineQuery } from "@/redux/api/api";
@@ -27,8 +28,12 @@ const StepOutline = ({
   const state = useAppSelector((state) => state.currentBlogTopic);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [outLineGenerated, setOutLineGenerated] = useState<string>("");
-  const [outlineMarkdown, setOutlineMarkdown] = useState<string>("");
+  const [outlineMarkdown, setOutlineMarkdown] = useState<string>("### Hello Markdown");
   const dispatch = useAppDispatch();
+
+  const MdEditor = dynamic(() => import("@uiw/react-md-editor"), {
+    ssr: false,
+  });
 
   const handleOpenUpdateOutlineDailog = () => {
     setDialogOpen(true);
@@ -53,14 +58,14 @@ const StepOutline = ({
       );
 
       const { data: limit, error } = await supabase
-              .from(TablesName.PROFILE)
-              .update({ daily_limit: userState.limitLeft - 1 })
-              .eq("id", userState.id)
-              .select();
-      
-            if (!error) {
-              dispatch(setUserLimit({ limitLeft: limit[0]?.daily_limit }));
-            }
+        .from(TablesName.PROFILE)
+        .update({ daily_limit: userState.limitLeft - 1 })
+        .eq("id", userState.id)
+        .select();
+
+      if (!error) {
+        dispatch(setUserLimit({ limitLeft: limit[0]?.daily_limit }));
+      }
 
       if (isSuccess && outlineData) {
         setOutlineMarkdown(outlineData?.data?.outline);
@@ -74,7 +79,7 @@ const StepOutline = ({
   }
 
   const handleSaveOutline = async () => {
-    onOutlineChange(outLineGenerated);
+    onOutlineChange(outlineMarkdown);
 
     const datatoInsert = {
       user_id: userState?.id,
@@ -82,7 +87,7 @@ const StepOutline = ({
       word_count: "100",
       main_keyword: blogData?.primaryKeywords,
       secondary_keywords: blogData?.secondaryKeywords,
-      outline: outLineGenerated,
+      outline: outlineMarkdown,
       tone: blogData?.tone,
     };
 
@@ -138,16 +143,17 @@ const StepOutline = ({
                 ✕
               </button>
             </div>
-            <div className="flex-1 h-[90vh] overflow">
+            <div data-color-mode="light" className="flex-1 h-[80vh] overflow">
               <MdEditor
                 value={outlineMarkdown}
                 onChange={setOutlineMarkdown}
-                style={{ height: "75vh" }}
-                language="en-US"
+                height="100%"
+                preview="live"
               />
             </div>
             <div className="p-4 border-t flex justify-end gap-2">
               <Button
+              type="button"
                 variant="secondary"
                 onClick={() => setDialogOpen(false)}
                 className="mr-2"
@@ -155,6 +161,7 @@ const StepOutline = ({
                 Cancel
               </Button>
               <Button
+              type="button"
                 onClick={() => {
                   setDialogOpen(false);
                 }}

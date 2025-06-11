@@ -15,7 +15,7 @@ const initialState: CurrentUser = {
   token: "",
   full_name: "",
   id: "",
-  limitLeft: 0,
+  limitLeft: 5,
 };
 
 const currentUserSlice = createSlice({

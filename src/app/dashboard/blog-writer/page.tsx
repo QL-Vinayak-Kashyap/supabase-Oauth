@@ -179,7 +179,7 @@ const BlogWriter = () => {
                                 <div className="mb-6">
                                     <p className="font-medium text-gray-900 mb-3">Gain full control over your content creation:</p>
                                     <ul className="space-y-2 text-sm text-gray-600">
-                                        {cardListItems.map((item)=>(<li>• {item}</li>))}
+                                        {cardListItems.map((item)=>(<li key={item}>• {item}</li>))}
                                     </ul>
                                 </div>
 
@@ -222,7 +222,7 @@ const BlogWriter = () => {
                                         <li>• Article Type (Listicles, How-to Guides, news articles, etc.)</li>
                                         <li>• Keywords (Optional)</li>
                                         <li>• Reference/Competitor Selection</li>
-                                        <li>• We Handle the Rest!</li>
+                                        <li>• We'll handle the rest!</li>
                                     </ul>
                                 </div>
 
@@ -238,7 +238,7 @@ const BlogWriter = () => {
                             <div className="mx-auto">
                                 <div className="mb-8">
                                     <h2 className="text-2xl font-bold mb-2">
-                                        AI-Powered Blog Creator
+                                    AI-Driven Blog Generator
                                     </h2>
                                     <p className="text-gray-600">
                                         Complete the steps below to generate high-quality blog content

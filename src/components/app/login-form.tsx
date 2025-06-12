@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/redux/slices/currentUserSlice";
+import { signinWithGoogle } from "@/utils/actions";
 
 const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
@@ -27,7 +28,7 @@ export function LoginForm({
   const [showPassword, setShowPassword] = useState(false);
   const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null);
   const [recaptchaError, setRecaptchaError] = useState(true);
-  const dispatch =useDispatch()
+  const dispatch = useDispatch()
   // const searchParams = useSearchParams();
   // const next = searchParams.get("next");
 
@@ -84,157 +85,161 @@ export function LoginForm({
     setRecaptchaError(false);
   };
 
-  return (    
+  return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
-    <div className="w-full max-w-md">
-      <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
-        {/* Logo and Header */}
-        <div className="text-center mb-8">
-          <div className="mx-auto w-16 h-16 mb-4 rounded-ful">
-          <img 
-            src="/writeeasy.png" 
-            alt="WriteEasy Logo" 
-            className=""  
-          />
-          </div>
-          <h1 className="text-3xl font-bold text-grey-700 mb-1">
-            Welcome Back
-          </h1>
-          <p className="text-gray-500">Log in to your WriteEasy account</p>
-        </div>
-
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="space-y-2">
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Email
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Mail className="h-5 w-5 text-gray-400" />
-              </div>
-              <Input
-                id="email"
-                type="email"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="pl-10 border-gray-300"
-                required
+      <div className="w-full max-w-md">
+        <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+          {/* Logo and Header */}
+          <div className="text-center mb-8">
+            <div className="mx-auto w-16 h-16 mb-4 rounded-ful">
+              <img
+                src="/writeeasy.png"
+                alt="WriteEasy Logo"
+                className=""
               />
-            </div>  
+            </div>
+            <h1 className="text-3xl font-bold text-grey-700 mb-1">
+              Welcome Back
+            </h1>
+            <p className="text-gray-500">Log in to your WriteEasy account</p>
           </div>
 
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="space-y-2">
               <label
-                htmlFor="password"
+                htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
               >
-                Password
+                Email
               </label>
-            </div>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Lock className="h-5 w-5 text-gray-400" />
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Mail className="h-5 w-5 text-gray-400" />
+                </div>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="pl-10 border-gray-300"
+                  required
+                />
               </div>
-              <Input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="pl-10 pr-10 border-gray-300"
-                required
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Password
+                </label>
+              </div>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Lock className="h-5 w-5 text-gray-400" />
+                </div>
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="pl-10 pr-10 border-gray-300"
+                  required
+                />
+                <div
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                  ) : (
+                    <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col gap-4">
+              <ReCAPTCHA
+                sitekey={RECAPTCHA_SITE_KEY}
+                onChange={handleRecaptchaOnChange}
+                theme="light"
+                className="w-full"
               />
-              <div
-                className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
-                onClick={() => setShowPassword(!showPassword)}
+            </div>
+            <div className="pt-2">
+              <Button
+                variant="default"
+                disabled={isLoading || recaptchaError}
+                type="submit"
+                className="w-full py-6 font-medium rounded-lg transition-colors"
               >
-                {showPassword ? (
-                  <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                ) : (
-                  <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                )}
+                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {isLoading ? "Checking..." : "Submit"}
+              </Button>
+            </div>
+          </form>
+          {/* Social Login Options */}
+          <div className="mt-6">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white text-gray-500">
+                  Or continue with
+                </span>
               </div>
             </div>
-          </div>
-          <div className="flex flex-col gap-4">
-            <ReCAPTCHA
-              sitekey={RECAPTCHA_SITE_KEY}
-              onChange={handleRecaptchaOnChange}
-              theme="light"
-              className="w-full"
-            />
-          </div>
-          <div className="pt-2">
-            <Button 
-            variant="default"
-              disabled={isLoading || recaptchaError}
-              type="submit"
-              className="w-full py-6 font-medium rounded-lg transition-colors"
-            >
-              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {isLoading ? "Checking..." : "Submit"}
-            </Button>
-          </div>
-        </form>
-        {/* Social Login Options */}
-        <div className="mt-6">
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">
-                Or continue with
-              </span>
+
+            <div className="mt-6 grid grid-cols-1 gap-3">
+              <form>
+                <Button
+                  formAction={signinWithGoogle}
+                  // onClick={handleGoogleSignIn}
+                  type="submit"
+                  variant="outline"
+                  className="flex items-center justify-center gap-3 w-full py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white hover:bg-gray-50 transition"
+                >
+                  <img
+                    src="https://developers.google.com/identity/images/g-logo.png"
+                    alt="Google"
+                    className="h-5 w-5"
+                  />
+                  <span className="text-sm font-medium text-gray-700">
+                    Continue with Google
+                  </span>
+                </Button>
+              </form>
+
             </div>
           </div>
 
-          <div className="mt-6 grid grid-cols-1 gap-3">
-            <Button
-              onClick={handleGoogleSignIn}
-              type="button"
-              variant="outline"
-              className="flex items-center justify-center gap-3 w-full py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white hover:bg-gray-50 transition"
-            >
-              <img
-                src="https://developers.google.com/identity/images/g-logo.png"
-                alt="Google"
-                className="h-5 w-5"
-              />
-              <span className="text-sm font-medium text-gray-700">
-                Continue with Google
-              </span>
-            </Button>
+          {/* Sign Up Link */}
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-600">
+              Don't have an account?{" "}
+              <Link
+                href={`/auth/${AppRoutes.SIGNUP}`}
+                className="font-medium text-grey-600 hover:text-rey-800"
+              >
+                Sign up
+              </Link>
+            </p>
           </div>
         </div>
 
-        {/* Sign Up Link */}
+        {/* Footer */}
         <div className="mt-6 text-center">
-          <p className="text-sm text-gray-600">
-            Don't have an account?{" "}
-            <Link
-              href={`/auth/${AppRoutes.SIGNUP}`}
-              className="font-medium text-grey-600 hover:text-rey-800"
-            >
-              Sign up
-            </Link>
+          <p className="text-xs text-gray-500">
+            &copy; 2025 WriteEasy. All rights reserved.
           </p>
         </div>
       </div>
-
-      {/* Footer */}
-      <div className="mt-6 text-center">
-        <p className="text-xs text-gray-500">
-          &copy; 2025 WriteEasy. All rights reserved.
-        </p>
-      </div>
     </div>
-  </div>
   );
 }

@@ -59,7 +59,7 @@ export async function GET(request: Request) {
         // Redirect to the intended path or fallback to homepage
         // return NextResponse.redirect(`${origin}${next}`);
         // https://ai.qkkalabs.com/
-        return NextResponse.redirect(`https://ai.qkkalabs.com`);
+        return NextResponse.redirect(`https://supabase-oauth-six.vercel.app`);
       }
 
     }catch(error){

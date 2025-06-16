@@ -57,8 +57,11 @@ export async function GET(request: Request) {
   
       if (!error) {
         // Redirect to the intended path or fallback to homepage
-        return NextResponse.redirect(`${origin}${next}`);
+        // return NextResponse.redirect(`${origin}${next}`);
+        // https://ai.qkkalabs.com/
+        return NextResponse.redirect(`https://ai.qkkalabs.com`);
       }
+
     }catch(error){
       console.log('error-----------------------',error)
     }

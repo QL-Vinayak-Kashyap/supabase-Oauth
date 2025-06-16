@@ -61,6 +61,7 @@ export function LoginForm({
   };
 
   const handleGoogleSignIn = async () => {
+    
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",

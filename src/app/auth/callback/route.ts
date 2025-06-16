@@ -11,7 +11,6 @@
 //     // if "next" is not a relative URL, use the default
 //     next = '/dashboard/blog-writer'
 //   }
-
 //   if (code) {  
 //     const supabase = await createClient()
 //     const { error } = await supabase.auth.exchangeCodeForSession(code)
@@ -49,15 +48,19 @@ export async function GET(request: Request) {
 
   
   if (code) {
-    const supabase = await createClient();
+    try{
+      const supabase = await createClient();
     
-    // Exchange the auth code for a session
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
-    console.log("call back", code, next, origin, error)
-
-    if (!error) {
-      // Redirect to the intended path or fallback to homepage
-      return NextResponse.redirect(`${origin}${next}`);
+      // Exchange the auth code for a session
+      const { error } = await supabase.auth.exchangeCodeForSession(code);
+      console.log("call back", code, next, origin, error)
+  
+      if (!error) {
+        // Redirect to the intended path or fallback to homepage
+        return NextResponse.redirect(`${origin}${next}`);
+      }
+    }catch(error){
+      console.log('error-----------------------',error)
     }
   }
 

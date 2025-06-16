@@ -4,6 +4,7 @@ import  createClient  from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
 const signInWith = provider => async () => {
+  
   const supabase = await createClient()
 
   const auth_callback_url = `${process.env.NEXT_PUBLIC_ORIGIN}/auth/callback`

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "cross-env dotenv -e .env.local next dev",
+    "dev": "cross-env dotenv -e .env.dev next dev",
     "dev:prod": "cross-env dotenv -e .env.prod next dev",
     "dev:stage": "cross-env dotenv -e .env.stage next dev",
     "build:dev": "cross-env dotenv -e .env.dev next build",

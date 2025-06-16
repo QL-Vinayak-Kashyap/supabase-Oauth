@@ -40,7 +40,9 @@ import createClient from "@/lib/supabase/server";
 export async function GET(request: Request) {
 
   console.log("request",request);
-  const { searchParams, origin } = new URL(request.url);
+  // const { searchParams, origin } = new URL(request.url);
+  const { searchParams } = new URL(request.url);
+const origin = process.env.NEXT_PUBLIC_ORIGIN ?? "https://ai.qkkalabs.com";
 
   // Extract auth code and optional redirect path
   const code = searchParams.get("code");
@@ -57,9 +59,9 @@ export async function GET(request: Request) {
   
       if (!error) {
         // Redirect to the intended path or fallback to homepage
-        // return NextResponse.redirect(`${origin}${next}`);
+        return NextResponse.redirect(`${origin}${next}`);
         // https://ai.qkkalabs.com/
-        return NextResponse.redirect(`https://supabase-oauth-six.vercel.app`);
+        // return NextResponse.redirect(`https://supabase-oauth-six.vercel.app`);
       }
 
     }catch(error){

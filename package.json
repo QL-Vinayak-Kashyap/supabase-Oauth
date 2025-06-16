@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "cross-env dotenv -e .env.dev next dev",
+    "dev": "cross-env dotenv -e .env.local next dev",
     "dev:prod": "cross-env dotenv -e .env.prod next dev",
     "dev:stage": "cross-env dotenv -e .env.stage next dev",
-    "build": "cross-env dotenv -e .env.dev next build",
+    "build": "rm -rf .next && cross-env dotenv -e .env.dev next build",
     "build:prod": "cross-env dotenv -e .env.prod next build",
-    "start": "cross-env dotenv -e .env.dev next start",
+    "start": "dotenv -e .env.dev next start",
     "lint": "next lint"
   },
   "dependencies": {
